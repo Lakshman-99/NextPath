@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 NextPath – Graph Algorithm Visualizer
 
-## Getting Started
+**NextPath** is an interactive, beautifully animated **graph algorithm visualizer** built with **Next.js**, **React Flow**, and **Tailwind CSS**. Designed as a learning + portfolio project, it helps visualize complex graph traversal algorithms step by step.
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- 🎯 **Single Page Application** (SPA) using Next.js 14 (App Router)
+- 🎨 **Dark / Light Mode** toggle
+- ⏯️ **Play / Pause / Next Step** traversal controls
+- ⚡ **Speed Slider** to control animation pace
+- 📊 **Grid-based** and **Graph-node-based** visualization styles
+- 🧠 Supports algorithms like **BFS**, **DFS**, and **Dijkstra** (more coming!)
+- 💾 **Save / Export** graph configuration
+- ⚙️ Left panel for **settings**, right for interactive **workspace**
+- 💫 **Framer Motion** powered animations
+
+---
+
+## 📸 Preview
+
+> *(Add screenshots or GIF here once ready)*
+
+---
+
+## 🔧 Tech Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/), [React Flow](https://reactflow.dev), [Tailwind CSS](https://tailwindcss.com)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/)
+- **State Management**: React hooks + [Zustand](https://zustand-demo.pmnd.rs/) (planned)
+- **Deployment**: Vercel
+
+---
+
+## 📦 Setup Instructions
 
 ```bash
+# 1. Clone the repo
+git clone https://github.com/your-username/nextpath.git
+cd nextpath
+
+# 2. Install dependencies
+npm install
+
+# 3. Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open in browser at http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🗺️ Roadmap
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [x] Next.js + Tailwind setup
+- [x] Left-right panel layout
+- [x] Theme toggle
+- [ ] BFS & DFS animations
+- [ ] Grid editor (for m×n visualization)
+- [ ] Dijkstra + weighted graphs
+- [ ] Save/export graphs
+- [ ] Deployment on Vercel
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! If you’d like to suggest a feature, fix a bug, or collaborate on algo logic — feel free to open an issue or PR.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📬 Contact
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Built with ❤️ by [Lakshman Siva](https://www.linkedin.com/in/lakshman18/)  
+Check out my [portfolio](https://lakshman-io.vercel.app) or say hi on [GitHub](https://github.com/Lakshman-99)!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📄 License
+
+MIT License
+
+---
+
+Let me know once you have a logo or screenshot — I can update the preview section too. Want me to create a simple **logo** for NextPath as well?
