@@ -1,7 +1,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
-import { Share } from 'lucide-react';
+import { ExportGraph } from "./export-graph";
 
 export function Header() {
     return (
@@ -9,10 +8,7 @@ export function Header() {
             <SidebarTrigger className="-ml-1" />
             <h1 className="font-semibold text-foreground ml-2">Dashboard</h1>
             <div className="flex items-center gap-2 ml-auto">
-                <Button variant="outline" size="sm" className="cursor-pointer">
-                    <Share className="mr-2 h-4 w-4" />
-                    Export
-                </Button>
+                <ExportGraph />
                 <ModeToggle />
             </div>
         </header>
