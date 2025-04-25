@@ -32,8 +32,28 @@ import UseAnimations from "react-useanimations";
 import Image from "next/image";
 
 import logo from "@/assets/image/logo.png";
+import { useGraphStore } from "@/app/store/store";
+import { getGridDefaults, getRowColBasedCellSize } from "../../util";
+import { useEffect } from "react";
+
 
 export function AppSidebar() {
+    const { rows, cols, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize } = useGraphStore();
+
+    const updateCell = (newRows: number, newCols: number) => {
+        setSize(newRows, newCols);
+        const newCellSize = getRowColBasedCellSize(defaultRows, defaultCols, newRows, newCols, defaultCellSize);
+        setCellSize(newCellSize);
+    }
+
+    useEffect(() => {
+        const { defRows, defCols, defCellSize } = getGridDefaults();
+        setDefaultSize(defRows, defCols, defCellSize);
+        setSize(defRows, defCols);
+        setCellSize(defCellSize);
+
+    }, [setDefaultSize, setCellSize, setSize]);
+    
     return (
         <Sidebar>
             <SidebarHeader className="flex shrink-0 items-center justify-center px-4">
@@ -50,11 +70,11 @@ export function AppSidebar() {
                 <SidebarGroup>
                     <Tabs defaultValue="grid" className="w-full p-2">
                         <TabsList className="grid grid-cols-2 w-full">
-                            <TabsTrigger value="grid">
+                            <TabsTrigger value="grid" onClick={() => setType("grid")}>
                                 <Grid3x3 className="h-4 w-4" />
                                 Grid-Based
                             </TabsTrigger>
-                            <TabsTrigger value="node">
+                            <TabsTrigger value="node" onClick={() => setType("node")}>
                                 <Waypoints className="h-4 w-4" />
                                 Node-Based
                             </TabsTrigger>
@@ -78,7 +98,10 @@ export function AppSidebar() {
                                             <Input
                                                 type="number"
                                                 placeholder="e.g., 10"
-                                                defaultValue={10}
+                                                defaultValue={rows}
+                                                min={2}
+                                                max={25}
+                                                onChange={(e) => updateCell(Number(+e.target.value), cols)}
                                             />
                                         </div>
                                         <div className="flex flex-col space-y-2.5">
@@ -88,7 +111,10 @@ export function AppSidebar() {
                                             <Input
                                                 type="number"
                                                 placeholder="e.g., 15"
-                                                defaultValue={15}
+                                                defaultValue={cols}
+                                                min={2}
+                                                max={50}
+                                                onChange={(e) => updateCell(rows, Number(+e.target.value))}
                                             />
                                         </div>
                                     </div>

@@ -2,9 +2,11 @@
 
 import { GridBasedGraph } from "./grid-based";
 import { NodeBasedGraph } from "./node-based";
+import { useGraphStore } from "../../store/store";
 
 export function Main() {
-    const isMatrix = true; // This should be determined based on your application logic
+    const { type } = useGraphStore();
+    const isMatrix = type === "grid";
 
     return (
         <>
