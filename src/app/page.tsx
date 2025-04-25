@@ -1,6 +1,7 @@
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
-import { AppSidebar } from "./components/sidebar"
-import { Header } from "./components/sidebar-header"
+import { AppSidebar } from "./components/sidebar/sidebar-main"
+import { Header } from "./components/header/header-main"
+import { Main } from "./components/workarea/main"
 import { cookies } from "next/headers"
 
 export default async function Home() {
@@ -12,6 +13,7 @@ export default async function Home() {
       <AppSidebar />
       <SidebarInset>
         <Header />
+        <Main />
       </SidebarInset>
     </SidebarProvider>
   )
