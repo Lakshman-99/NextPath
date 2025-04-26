@@ -48,7 +48,7 @@ interface GraphStore {
     initializeGrid: () => void;
 }
 
-const initializeGrid = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): Node[][] => {
+const initializeGrid = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): { grid: Node[][]; validStartNode: Position; validEndNode: Position } => {
     const validStartNode: Position = {
         row: startNode.row >= 0 && startNode.row < rows ? startNode.row : 0,
         col: startNode.col >= 0 && startNode.col < cols ? startNode.col : 0,
@@ -70,7 +70,7 @@ const initializeGrid = (rows: number, cols: number, startNode: Position, endNode
             weight: 1,
         }))
     );
-    return grid;
+    return { grid, validStartNode, validEndNode };
 };
 
 export const useGraphStore = create<GraphStore>((set) => ({
@@ -85,7 +85,7 @@ export const useGraphStore = create<GraphStore>((set) => ({
     startNode: { row: 2, col: 2 }, // Top-left corner
     endNode: { row: 7, col: 17 }, // Bottom-right corner
     walls: [],
-    grid: initializeGrid(10, 20, { row: 2, col: 2 }, { row: 7, col: 17 }, []),
+    grid: initializeGrid(10, 20, { row: 2, col: 2 }, { row: 7, col: 17 }, []).grid,
 
     defaultRows: 10,
     defaultCols: 20,
@@ -93,11 +93,19 @@ export const useGraphStore = create<GraphStore>((set) => ({
 
     setType: (type) => set({ type }),
     setSize: (rows, cols) =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             state.rows = rows;
             state.cols = cols;
-            state.grid = initializeGrid(rows, cols, state.startNode, state.endNode, state.walls);
+            const { grid, validStartNode, validEndNode } = initializeGrid(
+                rows,
+                cols,
+                state.startNode,
+                state.endNode,
+                state.walls
+            );
+            state.grid = grid;
+            state.startNode = validStartNode;
+            state.endNode = validEndNode;
         })
     ),
     setAlgorithm: (algo) => set({ algorithm: algo }),

@@ -11,12 +11,10 @@ import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react";
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
-    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, setCellSize, setStartNode, setEndNode, clearWalls, setMaze } = useGraphStore();
+    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, setCellSize, clearWalls, setMaze } = useGraphStore();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const clearGrid = () => {
-        setStartNode(-1, -1);
-        setEndNode(-1, -1);
         setMaze("none");
         clearWalls();
     }
