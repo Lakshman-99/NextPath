@@ -3,21 +3,27 @@
 import { useState, useMemo, useEffect } from "react";
 import { useGraphStore, createGridMatrix } from "../../store/store";
 import { GridCell } from "./grid-cell";
-import { calculateCellSize, getRowColBasedCellSize } from "../../util";
+import { calculateCellSize, getRowColBasedCellSize } from "../../utils/util";
 import { useMediaQuery } from "usehooks-ts"
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Settings,Eye,EyeOff, Route } from "lucide-react"
+import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react"
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
-    const { rows, cols, isWeighted, defaultRows, defaultCols, startNode, endNode, walls, setCellSize, setStartNode, setEndNode, clearWalls } = useGraphStore();
+    const { rows, cols, isWeighted, defaultRows, defaultCols, startNode, endNode, walls, setCellSize, setStartNode, setEndNode, clearWalls, setMaze } = useGraphStore();
     const matrix = useMemo(() => createGridMatrix(rows, cols, startNode, endNode, walls), [rows, cols, startNode, endNode, walls]);
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const clearGrid = () => {
         setStartNode(-1, -1);
         setEndNode(-1, -1);
+        setMaze("none");
+        clearWalls();
+    }
+
+    const clearObstacle = () => {
+        setMaze("none");
         clearWalls();
     }
 
@@ -53,6 +59,10 @@ export function GridBasedGraph() {
                                     <Route className="h-4 w-4" />
                                     Clear Grid
                                 </DropdownMenuItem>
+                                <DropdownMenuItem onClick={clearObstacle}>
+                                    <CloudOff className="h-4 w-4" />
+                                    Clear Obstacle
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted}>
                                     {showWeight ? 
                                         <>
@@ -73,6 +83,10 @@ export function GridBasedGraph() {
                             <Button variant="outline" onClick={clearGrid}>
                                 <Route className="h-4 w-4" />
                                 Clear Grid
+                            </Button>
+                            <Button variant="outline" onClick={clearObstacle}>
+                                <CloudOff className="h-4 w-4" />
+                                Clear Obstacle
                             </Button>
                             <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted}>
                                 {showWeight ? 

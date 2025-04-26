@@ -33,12 +33,14 @@ import Image from "next/image";
 
 import logo from "@/assets/image/logo.png";
 import { useGraphStore, Maze, Algorithm } from "@/app/store/store";
-import { getGridDefaults, getRowColBasedCellSize } from "../../util";
-import { useEffect } from "react";
+import { getGridDefaults, getRowColBasedCellSize } from "../../utils/util";
+import { applyRandomMage } from "@/app/utils/maze";
+import { useEffect, useState } from "react";
 
 
 export function AppSidebar() {
-    const { rows, cols, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze } = useGraphStore();
+    const [isMazeDisabled, setIsMazeDisabled] = useState(false);
+    const { rows, cols, speed, maze, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze } = useGraphStore();
 
     const updateCell = (newRows: number, newCols: number) => {
         if (newRows < 2 || newCols < 2) return;
@@ -47,6 +49,19 @@ export function AppSidebar() {
         const newCellSize = getRowColBasedCellSize(defaultRows, defaultCols, newRows, newCols, defaultCellSize);
         setCellSize(newCellSize);
     }
+
+    const updateMaze = async (value: Maze) => {
+        setMaze(value);
+        setIsMazeDisabled(true);
+        
+        let isMazed;
+        if(value === "random") {
+            isMazed = await applyRandomMage();
+            console.log("Random Maze applied:", isMazed);
+        }
+
+        setIsMazeDisabled(!isMazed);
+    };
 
     useEffect(() => {
         const { defRows, defCols, defCellSize } = getGridDefaults();
@@ -171,7 +186,7 @@ export function AppSidebar() {
                                         <Label>
                                             <TableCellsSplit className="h-4 w-4"/>
                                             Maze Generator</Label>
-                                        <Select onValueChange={(value) => setMaze(value as Maze)}>
+                                        <Select onValueChange={(value) => updateMaze(value as Maze)} value={maze} disabled={isMazeDisabled}>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Choose a maze type" />
                                             </SelectTrigger>
@@ -210,10 +225,10 @@ export function AppSidebar() {
                                             <Gauge className="h-4 w-4"/>
                                             Animation Speed</Label>
                                         <Slider
-                                            defaultValue={[2.4]}
-                                            min={0.4}
-                                            max={3}
-                                            step={0.2}
+                                            value={[speed]}
+                                            min={0.2}
+                                            max={1}
+                                            step={0.1}
                                             onValueChange={(value) => setSpeed(value[0])}
                                         />
                                     </div>

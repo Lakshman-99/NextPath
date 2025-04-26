@@ -35,6 +35,7 @@ interface GraphStore {
     addWall: (row: number, col: number) => void;
     removeWall: (row: number, col: number) => void;
     clearWalls: () => void;
+    setWalls: (walls: Position[]) => void;
 }
 
 export type Node = {
@@ -55,7 +56,7 @@ export const useGraphStore = create<GraphStore>((set) => ({
     cellSize: 55,
     algorithm: "bfs",
     maze: "none",
-    speed: 80,
+    speed: 1,
     isWeighted: false,
     startNode: { row: 2, col: 2 }, // Top-left corner
     endNode: { row: 7, col: 17 }, // Bottom-right corner
@@ -78,6 +79,7 @@ export const useGraphStore = create<GraphStore>((set) => ({
     addWall: (row, col) => set((state) => ({ walls: [...state.walls, { row, col }] })),
     removeWall: (row, col) => set((state) => ({ walls: state.walls.filter((wall) => wall.row !== row || wall.col !== col) })),
     clearWalls: () => set({ walls: [] }),
+    setWalls: (walls) => set({ walls: walls.map((wall) => ({ row: wall.row, col: wall.col })) }),
 }));
 
 export const createGridMatrix = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): Node[][] => {
