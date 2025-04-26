@@ -143,3 +143,16 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+@theme {
+  --animate-spin3x: spin3x 5s ease infinite;
+
+  @keyframes spin3x {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(720deg); /* Hold at 3 spins */
+    }
+  }
+}
