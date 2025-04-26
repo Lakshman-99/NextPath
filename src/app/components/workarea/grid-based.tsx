@@ -1,18 +1,17 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { useGraphStore, createGridMatrix } from "../../store/store";
+import { useState, useEffect } from "react";
+import { useGraphStore } from "../../store/store";
 import { GridCell } from "./grid-cell";
 import { calculateCellSize, getRowColBasedCellSize } from "../../utils/util";
 import { useMediaQuery } from "usehooks-ts"
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react";
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
-    const { rows, cols, isWeighted, defaultRows, defaultCols, startNode, endNode, walls, setCellSize, setStartNode, setEndNode, clearWalls, setMaze } = useGraphStore();
-    const matrix = useMemo(() => createGridMatrix(rows, cols, startNode, endNode, walls), [rows, cols, startNode, endNode, walls]);
+    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, setCellSize, setStartNode, setEndNode, clearWalls, setMaze } = useGraphStore();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
     const clearGrid = () => {
@@ -108,14 +107,12 @@ export function GridBasedGraph() {
 
             <div className={`flex ${ !isMobile ? "h-full" : "" } w-full flex-col items-center justify-center overflow-auto p-0`}>
                 <div className="outline-none" tabIndex={0}>
-                    {matrix.map((row, rowIndex) => (
+                    {grid.map((row, rowIndex) => (
                         <div key={rowIndex} className="flex">
                             {row.map((node) => (
                                 <GridCell
                                     key={`${node.row}-${node.col}`}
                                     node={node}
-                                    isSelected={false} // Replace with actual selection logic
-                                    showWeight={showWeight} // Replace with actual weight visibility logic
                                 />
                             ))}
                         </div>

@@ -24,7 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
-import { Grid3x3, Waypoints, Gauge, TableCellsSplit, Workflow, Columns2, Rows2, Weight } from "lucide-react";
+import { Grid3x3, Waypoints, Gauge, TableCellsSplit, Workflow, Columns2, Rows2, Weight, Clapperboard } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Button } from "@/components/ui/button";
 import loading2 from "react-useanimations/lib/loading2";
@@ -34,33 +34,48 @@ import Image from "next/image";
 import logo from "@/assets/image/logo.png";
 import { useGraphStore, Maze, Algorithm } from "@/app/store/store";
 import { getGridDefaults, getRowColBasedCellSize } from "../../utils/util";
-import { applyRandomMage } from "@/app/utils/maze";
+import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
 import { useEffect, useState } from "react";
 
 
 export function AppSidebar() {
+    const [isLoading, setIsLoading] = useState(false);
     const [isMazeDisabled, setIsMazeDisabled] = useState(false);
-    const { rows, cols, speed, maze, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze } = useGraphStore();
+    const { rows, cols, speed, maze, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls } = useGraphStore();
 
     const updateCell = (newRows: number, newCols: number) => {
         if (newRows < 2 || newCols < 2) return;
         if (newRows > 25 || newCols > 50) return;
         setSize(newRows, newCols);
         const newCellSize = getRowColBasedCellSize(defaultRows, defaultCols, newRows, newCols, defaultCellSize);
-        setCellSize(newCellSize);
+        setCellSize(newCellSize); 
     }
 
     const updateMaze = async (value: Maze) => {
         setMaze(value);
+        clearWalls();
         setIsMazeDisabled(true);
+        setIsLoading(true);
         
         let isMazed;
-        if(value === "random") {
+        if(value === "none") {
+            isMazed = true;
+        }
+        else if(value === "random") {
             isMazed = await applyRandomMage();
-            console.log("Random Maze applied:", isMazed);
+        }
+        else if(value === "recursive") {
+            isMazed = await applyRecursiveDivision("none");
+        }
+        else if(value === "recursive-vertical") {
+            isMazed = await applyRecursiveDivision("vertical");
+        }
+        else if(value === "recursive-horizontal") {
+            isMazed = await applyRecursiveDivision("horizontal");
         }
 
         setIsMazeDisabled(!isMazed);
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -226,8 +241,8 @@ export function AppSidebar() {
                                             Animation Speed</Label>
                                         <Slider
                                             value={[speed]}
-                                            min={0.2}
-                                            max={1}
+                                            min={0.6}
+                                            max={1.5}
                                             step={0.1}
                                             onValueChange={(value) => setSpeed(value[0])}
                                         />
@@ -242,12 +257,17 @@ export function AppSidebar() {
 
                                 <CardFooter>
                                     <Button className="w-full cursor-pointer">
-                                        <UseAnimations 
-                                            animation={loading2} 
-                                            size={28}
-                                            fillColor="#fff"
-                                            className="dark:invert"
-                                        />
+                                        {isLoading ?
+                                            <UseAnimations 
+                                                animation={loading2} 
+                                                size={28}
+                                                fillColor="#fff"
+                                                className="dark:invert"
+                                            />
+                                            :
+                                            <Clapperboard className="h-4 w-4" />
+                                        }
+                                        
                                         Visualize
                                     </Button>
                                 </CardFooter>

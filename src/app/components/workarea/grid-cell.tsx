@@ -1,58 +1,38 @@
+import { memo } from "react";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
-import { Node } from "../../store/store"
-import { useGraphStore } from "../../store/store";
 import { Plane, LandPlot, Cloudy, CloudOff } from "lucide-react";
+import { useGraphStore, Node } from "../../store/store";
 
 interface GridCellProps {
-    node: Node
-    isSelected: boolean
-    showWeight: boolean
+    node: Node;
 }
 
-export function GridCell({ node, isSelected, showWeight }: GridCellProps) {
-    const { row, col, weight, isStart, isEnd, isWall } = node;
-    const { isWeighted, cellSize, setStartNode, setEndNode, addWall, removeWall } = useGraphStore();
-
-    let cellTypeIcon = null;
-    if (isStart) {
-        cellTypeIcon = <Plane className="h-6 w-6" />;
-    } else if (isEnd) {
-        cellTypeIcon = <LandPlot className="h-6 w-6" />;
-    } else if (isWall) {
-        cellTypeIcon = <Cloudy className="h-6 w-6" />;
-    }
-
-    const updateCellType = (newType: string) => {
-        if (newType === "start") {
-            if (isWall) {
-                removeWall(row, col);
-            }
+export const GridCell = memo(function GridCell({ node } : GridCellProps) {
+    const { row, col, isStart, isEnd, isWall, weight } = node;
+    const { cellSize, isWeighted, setStartNode, setEndNode, toggleWall } = useGraphStore.getState();
+    const updateCellType = (type: "start" | "end" | "wall") => {
+        if (type === "start") {
             setStartNode(row, col);
-        } else if (newType === "end") {
-            if (isWall) {
-                removeWall(row, col);
-            }
+        } else if (type === "end") {
             setEndNode(row, col);
-        } else if (newType === "wall") {
-            if (isWall) {
-                removeWall(row, col);
-            } else {
-                addWall(row, col);
-            }
-        }
-    }
-
-    const setCloudOnClick = () => {
-        if(isStart || isEnd) {
-            return;
-        }
-
-        if (isWall) {
-            removeWall(row, col);
         } else {
-            addWall(row, col);
+            toggleWall(row, col);
         }
-    }
+    };
+
+    const cellTypeIcon = isStart ? (
+        <Plane className="h-4 w-4" />
+    ) : isEnd ? (
+        <LandPlot className="h-4 w-4" />
+    ) : isWall ? (
+        <Cloudy className="h-4 w-4" />
+    ) : null;
+
+    const toggleWallOnClick = () => {
+        if (!isStart && !isEnd) {
+            toggleWall(row, col);
+        }
+    };
 
     return (
         <ContextMenu>
@@ -64,8 +44,7 @@ export function GridCell({ node, isSelected, showWeight }: GridCellProps) {
                         transition-all duration-300 ease-in-out 
                         hover:bg-[var(--accent)]/100 hover:scale-110 hover:shadow-lg 
                         dark:border-[var(--border)] 
-                        dark:hover:bg-[var(--accent)]/100 dark:hover:scale-110 dark:hover:shadow-lg 
-                        ${isSelected ? "ring-2 ring-[var(--primary)] ring-offset-1" : ""}
+                        dark:hover:bg-[var(--accent)]/100 dark:hover:scale-110 dark:hover:shadow-lg
                     `}
                     style={{
                         width: `${cellSize}px`,
@@ -73,35 +52,34 @@ export function GridCell({ node, isSelected, showWeight }: GridCellProps) {
                         fontSize: `${Math.max(8, cellSize / 2)}px`,
                     }}
                     title={`Cell (${row}, ${col})`}
-                    onClick={setCloudOnClick}
+                    onClick={toggleWallOnClick}
                 >
-                    {showWeight && isWeighted ? weight : cellTypeIcon}
+                    {isWeighted && weight > 1 ? weight : cellTypeIcon}
                 </div>
             </ContextMenuTrigger>
-            <ContextMenuContent>
-                <ContextMenuItem onClick={() => updateCellType("start")}>
-                    <Plane className="h-4 w-4" />
-                    Set as Start
-                </ContextMenuItem>
-                <ContextMenuItem onClick={() => updateCellType("end")}>
-                    <LandPlot className="h-4 w-4" />
-                    Set as End
-                </ContextMenuItem>
-                <ContextMenuItem onClick={() => updateCellType("wall")}>
-                    {isWall ? ( 
-                        <>
-                            <CloudOff className="h-4 w-4" />
-                            Remove Obstacle
-                        </>
-                    ) : (
-                        <>
-                            <Cloudy className="h-4 w-4" />
-                            Mark as Obstacle
-                        </>
-                    )}
-                    
-                </ContextMenuItem>
-            </ContextMenuContent>
-        </ContextMenu>
+        <ContextMenuContent>
+            <ContextMenuItem onClick={() => updateCellType("start")}>
+                <Plane className="h-4 w-4 mr-2" />
+                Set as Start
+            </ContextMenuItem>
+            <ContextMenuItem onClick={() => updateCellType("end")}>
+                <LandPlot className="h-4 w-4 mr-2" />
+                Set as End
+            </ContextMenuItem>
+            <ContextMenuItem onClick={() => updateCellType("wall")}>
+                {isWall ? (
+                    <>
+                        <CloudOff className="h-4 w-4 mr-2" />
+                        Remove Obstacle
+                    </>
+                ) : (
+                    <>
+                        <Cloudy className="h-4 w-4 mr-2" />
+                        Mark as Obstacle
+                    </>
+                )}
+            </ContextMenuItem>
+        </ContextMenuContent>
+    </ContextMenu>
     );
-}
+});

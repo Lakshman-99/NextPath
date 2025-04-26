@@ -1,3 +1,4 @@
+
 // Utility to calculate grid defaults based on screen size
 export const calculateCellSize = () => {
     const screenWidth = window.innerWidth;

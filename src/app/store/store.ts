@@ -1,9 +1,19 @@
 import { create } from "zustand";
+import { produce } from "immer";
 
 export type GraphType = "grid" | "node";
 export type Algorithm = "bfs" | "dfs" | "dijkstra";
 export type Maze = "none" | "random" | "recursive" | "recursive-vertical" | "recursive-horizontal";
 export type Position = { row: number; col: number };
+export type Node = {
+    row: number;
+    col: number;
+    isStart?: boolean;
+    isEnd?: boolean;
+    visited: boolean;
+    isWall: boolean;
+    weight: number;
+};
 
 interface GraphStore {
     type: GraphType;
@@ -17,6 +27,7 @@ interface GraphStore {
     startNode: Position;
     endNode: Position;
     walls: Position[];
+    grid: Node[][];
 
     defaultRows: number;
     defaultCols: number;
@@ -32,21 +43,34 @@ interface GraphStore {
     setDefaultSize: (rows: number, cols: number, cellSize: number) => void;
     setStartNode: (row: number, col: number) => void;
     setEndNode: (row: number, col: number) => void;
-    addWall: (row: number, col: number) => void;
-    removeWall: (row: number, col: number) => void;
+    toggleWall: (row: number, col: number) => void;
     clearWalls: () => void;
-    setWalls: (walls: Position[]) => void;
+    initializeGrid: () => void;
 }
 
-export type Node = {
-    row: number;
-    col: number;
-    isStart?: boolean;
-    isEnd?: boolean;
-    visited: boolean;
-    isWall: boolean;
-    weight: number;
-    color: string;
+const initializeGrid = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): Node[][] => {
+    const validStartNode: Position = {
+        row: startNode.row >= 0 && startNode.row < rows ? startNode.row : 0,
+        col: startNode.col >= 0 && startNode.col < cols ? startNode.col : 0,
+    };
+
+    const validEndNode: Position = {
+        row: endNode.row >= 0 && endNode.row < rows ? endNode.row : rows - 1,
+        col: endNode.col >= 0 && endNode.col < cols ? endNode.col : cols - 1,
+    };
+
+    const grid: Node[][] = Array.from({ length: rows }, (_, row) =>
+        Array.from({ length: cols }, (_, col) => ({
+            row,
+            col,
+            isStart: row === validStartNode.row && col === validStartNode.col,
+            isEnd: row === validEndNode.row && col === validEndNode.col,
+            isWall: walls.some((wall) => wall.row === row && wall.col === col),
+            visited: false,
+            weight: 1,
+        }))
+    );
+    return grid;
 };
 
 export const useGraphStore = create<GraphStore>((set) => ({
@@ -61,50 +85,76 @@ export const useGraphStore = create<GraphStore>((set) => ({
     startNode: { row: 2, col: 2 }, // Top-left corner
     endNode: { row: 7, col: 17 }, // Bottom-right corner
     walls: [],
+    grid: initializeGrid(10, 20, { row: 2, col: 2 }, { row: 7, col: 17 }, []),
 
     defaultRows: 10,
     defaultCols: 20,
     defaultCellSize: 55,
 
     setType: (type) => set({ type }),
-    setSize: (rows, cols) => set({ rows, cols }),
-    setAlgorithm: (algorithm) => set({ algorithm }),
+    setSize: (rows, cols) =>
+        set(
+        produce((state) => {
+            state.rows = rows;
+            state.cols = cols;
+            state.grid = initializeGrid(rows, cols, state.startNode, state.endNode, state.walls);
+        })
+    ),
+    setAlgorithm: (algo) => set({ algorithm: algo }),
     setMaze: (maze) => set({ maze }),
     setSpeed: (speed) => set({ speed }),
-    setCellSize: (cellSize) => set({ cellSize }),
+    setCellSize: (size) => set({ cellSize: size }),
     setWeighted: (isWeighted) => set({ isWeighted }),
-    setDefaultSize: (defaultRows, defaultCols, defaultCellSize) => set({ defaultRows, defaultCols, defaultCellSize }),
-    setStartNode: (row, col) => set({ startNode: { row, col } }),
-    setEndNode: (row, col) => set({ endNode: { row, col } }),
-    addWall: (row, col) => set((state) => ({ walls: [...state.walls, { row, col }] })),
-    removeWall: (row, col) => set((state) => ({ walls: state.walls.filter((wall) => wall.row !== row || wall.col !== col) })),
-    clearWalls: () => set({ walls: [] }),
-    setWalls: (walls) => set({ walls: walls.map((wall) => ({ row: wall.row, col: wall.col })) }),
+    setDefaultSize: (rows, cols, cellSize) => set({ defaultRows: rows, defaultCols: cols, defaultCellSize: cellSize }),
+
+    setStartNode: (row, col) =>
+        set(
+        produce((state) => {
+            const prevStart = state.startNode;
+            state.grid[prevStart.row][prevStart.col].isStart = false;
+            state.grid[row][col].isStart = true;
+            state.startNode = { row, col };
+        })
+    ),
+
+    setEndNode: (row, col) =>
+        set(
+        produce((state) => {
+            const prevEnd = state.endNode;
+            state.grid[prevEnd.row][prevEnd.col].isEnd = false;
+            state.grid[row][col].isEnd = true;
+            state.endNode = { row, col };
+        })
+    ),
+
+    toggleWall: (row, col) =>
+        set(
+        produce((state) => {
+            const isWall = state.grid[row][col].isWall;
+            state.grid[row][col].isWall = !isWall;
+            if (!isWall) {
+            state.walls.push({ row, col });
+            } else {
+            state.walls = state.walls.filter((wall: Node) => !(wall.row === row && wall.col === col));
+            }
+        })
+    ),
+
+    clearWalls: () =>
+        set(
+        produce((state) => {
+            state.walls = [];
+            state.grid.forEach((row: Node[]) => row.forEach((node) => (node.isWall = false)));
+        })
+    ),
+
+    initializeGrid: () =>
+        set(
+        produce((state) => {
+            state.grid = initializeGrid(state.rows, state.cols, state.startNode, state.endNode, state.walls);
+        })
+    ),
+
+    // updateStartNode: (row, col) => set((state) => ({ grid: state.grid.map((r) => r.map((c) => (c.row === row && c.col === col ? { ...c, isStart: true } : { ...c, isStart: false}))) })),
+    // updateEndNode: (row, col) => set((state) => ({ grid: state.grid.map((r) => r.map((c) => (c.row === row && c.col === col ? { ...c, isEnd: true } : { ...c, isEnd: false}))) })),
 }));
-
-export const createGridMatrix = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): Node[][] => {
-    const matrix: Node[][] = [];
-
-    for (let row = 0; row < rows; row++) {
-        const currentRow: Node[] = [];
-        for (let col = 0; col < cols; col++) {
-            const isStart = row === startNode.row && col === startNode.col; // Top-left corner
-            const isEnd = row === endNode.row && col === endNode.col; // Bottom-right corner
-            const isWall = walls.some((wall) => wall.row === row && wall.col === col); // Check if the cell is a wall
-
-            currentRow.push({
-                row,
-                col,
-                isStart: isStart,
-                isEnd: isEnd,
-                isWall: isWall,
-                color: "none",
-                visited: false,
-                weight: 1,
-            });
-        }
-        matrix.push(currentRow);
-    }
-
-    return matrix;
-};
