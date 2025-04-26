@@ -40,7 +40,7 @@ import { useEffect, useState } from "react";
 
 export function AppSidebar() {
     const [isLoading, setIsLoading] = useState(false);
-    const [isMazeDisabled, setIsMazeDisabled] = useState(false);
+    const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
     const { rows, cols, speed, maze, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls } = useGraphStore();
 
     const updateCell = (newRows: number, newCols: number) => {
@@ -54,7 +54,7 @@ export function AppSidebar() {
     const updateMaze = async (value: Maze) => {
         setMaze(value);
         clearWalls();
-        setIsMazeDisabled(true);
+        setIsSettingsDisabled(true);
         setIsLoading(true);
         
         let isMazed;
@@ -74,7 +74,7 @@ export function AppSidebar() {
             isMazed = await applyRecursiveDivision("horizontal");
         }
 
-        setIsMazeDisabled(!isMazed);
+        setIsSettingsDisabled(!isMazed);
         setIsLoading(false);
     };
 
@@ -101,7 +101,7 @@ export function AppSidebar() {
             <SidebarContent>
                 <SidebarGroup>
                     <Tabs defaultValue="grid" className="w-full p-2">
-                        <TabsList className="grid grid-cols-2 w-full">
+                        <TabsList className={`grid grid-cols-2 w-full ${isSettingsDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
                             <TabsTrigger value="grid" onClick={() => setType("grid")}>
                                 <Grid3x3 className="h-4 w-4" />
                                 Grid-Based
@@ -119,7 +119,7 @@ export function AppSidebar() {
                                 </CardHeader>
                                 <CardContent>
 
-                                <TabsContent value="grid" className="space-y-6">
+                                <TabsContent value="grid" className={`space-y-6 ${isSettingsDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
                                     <div className="grid w-full items-center gap-4 space-y-2.5">
                                     {/* Grid Size */}
                                     <div className="flex gap-4 justify-between">
@@ -201,7 +201,7 @@ export function AppSidebar() {
                                         <Label>
                                             <TableCellsSplit className="h-4 w-4"/>
                                             Maze Generator</Label>
-                                        <Select onValueChange={(value) => updateMaze(value as Maze)} value={maze} disabled={isMazeDisabled}>
+                                        <Select onValueChange={(value) => updateMaze(value as Maze)} value={maze}>
                                             <SelectTrigger className="w-full">
                                                 <SelectValue placeholder="Choose a maze type" />
                                             </SelectTrigger>

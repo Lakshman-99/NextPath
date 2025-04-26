@@ -5,10 +5,11 @@ import { useGraphStore, Node } from "../../store/store";
 
 interface GridCellProps {
     node: Node;
+    showWeight: boolean;
 }
 
-export const GridCell = memo(function GridCell({ node } : GridCellProps) {
-    const { row, col, isStart, isEnd, isWall, weight } = node;
+export const GridCell = memo(function GridCell({ node, showWeight } : GridCellProps) {
+    const { row, col, isStart, isEnd, isWall, weight, visited } = node;
     const { cellSize, isWeighted, setStartNode, setEndNode, toggleWall } = useGraphStore.getState();
     const updateCellType = (type: "start" | "end" | "wall") => {
         if (type === "start") {
@@ -20,12 +21,27 @@ export const GridCell = memo(function GridCell({ node } : GridCellProps) {
         }
     };
 
+    const weightText = (
+        <span className="text-sm text-black dark:text-white">{weight}</span>
+    );
+
+    const baseColor =
+        isStart
+        ? "bg-[#ADF7B6] dark:bg-[#C1FF9B]"
+        : isEnd
+            ? "bg-[#FF7477] dark:bg-[#F25757]"
+            : isWall
+            ? "bg-[#DEDEDE] dark:bg-[#999999]"
+            : visited
+                ? "bg-[#BFD8FF] dark:bg-[#7FA7D5]"
+                : "bg-transparent";
+
     const cellTypeIcon = isStart ? (
-        <Plane className="h-4 w-4" />
+        <Plane className="h-4 w-4 animate-pulse" color="#000000" />
     ) : isEnd ? (
-        <LandPlot className="h-4 w-4" />
+        <LandPlot className="h-4 w-4 animate-pulse" color="#000000"/>
     ) : isWall ? (
-        <Cloudy className="h-4 w-4" />
+        <Cloudy className="h-4 w-4" color="#000000"/>
     ) : null;
 
     const toggleWallOnClick = () => {
@@ -39,12 +55,13 @@ export const GridCell = memo(function GridCell({ node } : GridCellProps) {
             <ContextMenuTrigger>
                 <div
                     className={`
+                        ${baseColor}
                         flex items-center justify-center 
                         border border-[var(--border)] 
                         transition-all duration-300 ease-in-out 
-                        hover:bg-[var(--accent)]/100 hover:scale-110 hover:shadow-lg 
+                        hover: hover:scale-110 hover:shadow-lg 
                         dark:border-[var(--border)] 
-                        dark:hover:bg-[var(--accent)]/100 dark:hover:scale-110 dark:hover:shadow-lg
+                        dark:hover: dark:hover:scale-110 dark:hover:shadow-lg
                     `}
                     style={{
                         width: `${cellSize}px`,
@@ -54,7 +71,7 @@ export const GridCell = memo(function GridCell({ node } : GridCellProps) {
                     title={`Cell (${row}, ${col})`}
                     onClick={toggleWallOnClick}
                 >
-                    {isWeighted && weight > 1 ? weight : cellTypeIcon}
+                    {isWeighted && showWeight ? weightText : cellTypeIcon}
                 </div>
             </ContextMenuTrigger>
         <ContextMenuContent>

@@ -111,6 +111,7 @@ export function GridBasedGraph() {
                                 <GridCell
                                     key={`${node.row}-${node.col}`}
                                     node={node}
+                                    showWeight={showWeight}
                                 />
                             ))}
                         </div>

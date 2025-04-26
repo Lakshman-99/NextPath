@@ -54,7 +54,7 @@ async function addWallsWithDelay(walls: Position[], speed: number, toggleWall: (
 
     let batch = 1;
     if(adjustedSpeed > 0) {
-        batch += adjustedSpeed * 10;
+        batch += Math.floor(adjustedSpeed * 10);
     }
 
     walls = removeDuplicatePositions(walls);
