@@ -35,13 +35,14 @@ import logo from "@/assets/image/logo.png";
 import { useGraphStore, Maze, Algorithm } from "@/app/store/store";
 import { getGridDefaults, getRowColBasedCellSize } from "../../utils/util";
 import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
+import { applyBFSAlgorithm } from "@/app/utils/grid-algorithms";
 import { useEffect, useState } from "react";
 
 
 export function AppSidebar() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
     const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
-    const { rows, cols, speed, maze, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls } = useGraphStore();
+    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading } = useGraphStore();
 
     const updateCell = (newRows: number, newCols: number) => {
         if (newRows < 2 || newCols < 2) return;
@@ -53,9 +54,10 @@ export function AppSidebar() {
 
     const updateMaze = async (value: Maze) => {
         setMaze(value);
-        clearWalls();
         setIsSettingsDisabled(true);
-        setIsLoading(true);
+        setLoading(true);
+        clearWalls();
+        clearPaths();
         
         let isMazed;
         if(value === "none") {
@@ -75,7 +77,34 @@ export function AppSidebar() {
         }
 
         setIsSettingsDisabled(!isMazed);
-        setIsLoading(false);
+        setLoading(false);
+    };
+
+    const onAlgorithmChange = (value: Algorithm) => {
+        setAlgorithm(value);
+        setHighlightAlgorithm(false);
+    };
+
+    const handleVisualize = async () => {
+        if (algorithm === undefined) {
+            setHighlightAlgorithm(true);
+            return;
+        }
+        setLoading(true);
+        setIsSettingsDisabled(true);
+        clearPaths();
+        
+        let isVisualized = false;
+        if (algorithm === "bfs") {
+            isVisualized = await applyBFSAlgorithm();
+        } else if (algorithm === "dfs") {
+            isVisualized = true; // applyDFSAlgorithm();
+        } else if (algorithm === "dijkstra") {
+            isVisualized = true; // applyDijkstraAlgorithm();
+        }
+
+        setLoading(false);
+        setIsSettingsDisabled(!isVisualized);
     };
 
     useEffect(() => {
@@ -178,8 +207,11 @@ export function AppSidebar() {
                                         <Label>
                                             <Workflow className="h-4 w-4"/>
                                             Algorithm</Label>
-                                        <Select onValueChange={(value) => setAlgorithm(value as Algorithm)}>
-                                            <SelectTrigger className="w-full">
+                                        <Select onValueChange={(value) => onAlgorithmChange(value as Algorithm)} value={algorithm}>
+                                            <SelectTrigger className={`
+                                                    w-full transition-all duration-300
+                                                    ${highlightAlgorithm ? "ring-3 ring-red-400" : ""}
+                                                `}>
                                                 <SelectValue placeholder="Choose an algorithm" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -256,7 +288,7 @@ export function AppSidebar() {
                                 </CardContent>
 
                                 <CardFooter>
-                                    <Button className="w-full cursor-pointer">
+                                    <Button className="w-full cursor-pointer" onClick={handleVisualize}>
                                         {isLoading ?
                                             <UseAnimations 
                                                 animation={loading2} 

@@ -9,7 +9,7 @@ interface GridCellProps {
 }
 
 export const GridCell = memo(function GridCell({ node, showWeight } : GridCellProps) {
-    const { row, col, isStart, isEnd, isWall, weight, visited } = node;
+    const { row, col, isStart, isEnd, isWall, weight, visited, isPath } = node;
     const { cellSize, isWeighted, setStartNode, setEndNode, toggleWall } = useGraphStore.getState();
     const updateCellType = (type: "start" | "end" | "wall") => {
         if (type === "start") {
@@ -27,14 +27,16 @@ export const GridCell = memo(function GridCell({ node, showWeight } : GridCellPr
 
     const baseColor =
         isStart
-        ? "bg-[#ADF7B6] dark:bg-[#C1FF9B]"
+        ? "bg-[#ADF7B6] dark:bg-[#C1FF9B] "
         : isEnd
-            ? "bg-[#FF7477] dark:bg-[#F25757]"
+            ? "bg-[#FF7477] dark:bg-[#F25757] "
             : isWall
-            ? "bg-[#DEDEDE] dark:bg-[#999999]"
+            ? "bg-[#DEDEDE] dark:bg-[#999999] "
+            : isPath
+            ? "bg-[#FAE588] dark:bg-[#F9DC5C] "
             : visited
-                ? "bg-[#BFD8FF] dark:bg-[#7FA7D5]"
-                : "bg-transparent";
+                ? "bg-[#BFD8FF] dark:bg-[#7FA7D5] animate-wave dark:animate-wave-dark"
+                : "bg-transparent ";
 
     const cellTypeIcon = isStart ? (
         <Plane className="h-4 w-4 animate-pulse" color="#000000" />
@@ -58,7 +60,7 @@ export const GridCell = memo(function GridCell({ node, showWeight } : GridCellPr
                         ${baseColor}
                         flex items-center justify-center 
                         border border-[var(--border)] 
-                        transition-all duration-300 ease-in-out 
+                        transition-all ${visited ? "duration-500 ease-out" : "duration-300 ease-in-out"}
                         hover: hover:scale-110 hover:shadow-lg 
                         dark:border-[var(--border)] 
                         dark:hover: dark:hover:scale-110 dark:hover:shadow-lg

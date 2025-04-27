@@ -11,12 +11,12 @@ import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react";
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
-    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, setCellSize, clearWalls, setMaze } = useGraphStore();
+    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, isLoading, setCellSize, clearWalls, setMaze, clearPaths } = useGraphStore();
     const isMobile = useMediaQuery('(max-width: 768px)');
 
-    const clearGrid = () => {
+    const clearPath = () => {
         setMaze("none");
-        clearWalls();
+        clearPaths();
     }
 
     const clearObstacle = () => {
@@ -52,11 +52,11 @@ export function GridBasedGraph() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-40">
-                                <DropdownMenuItem onClick={clearGrid}>
+                                <DropdownMenuItem onClick={clearPath} disabled={isLoading}>
                                     <Route className="h-4 w-4" />
-                                    Clear Grid
+                                    Clear Path
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={clearObstacle}>
+                                <DropdownMenuItem onClick={clearObstacle} disabled={isLoading}>
                                     <CloudOff className="h-4 w-4" />
                                     Clear Obstacle
                                 </DropdownMenuItem>
@@ -77,15 +77,15 @@ export function GridBasedGraph() {
                         </DropdownMenu>
                     ) : (
                         <div className="flex gap-1">
-                            <Button variant="outline" onClick={clearGrid}>
+                            <Button variant="outline" onClick={clearPath} disabled={isLoading}>
                                 <Route className="h-4 w-4" />
-                                Clear Grid
+                                Clear Path
                             </Button>
-                            <Button variant="outline" onClick={clearObstacle}>
+                            <Button variant="outline" onClick={clearObstacle} disabled={isLoading}>
                                 <CloudOff className="h-4 w-4" />
                                 Clear Obstacle
                             </Button>
-                            <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted}>
+                            <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted || isLoading}>
                                 {showWeight ? 
                                     <>
                                         <EyeOff className="h-4 w-4" />

@@ -2,16 +2,17 @@ import { create } from "zustand";
 import { produce } from "immer";
 
 export type GraphType = "grid" | "node";
-export type Algorithm = "bfs" | "dfs" | "dijkstra";
-export type Maze = "none" | "random" | "recursive" | "recursive-vertical" | "recursive-horizontal";
+export type Algorithm = undefined | "bfs" | "dfs" | "dijkstra";
+export type Maze = undefined | "none" | "random" | "recursive" | "recursive-vertical" | "recursive-horizontal";
 export type Position = { row: number; col: number };
 export type Node = {
     row: number;
     col: number;
-    isStart?: boolean;
-    isEnd?: boolean;
+    isStart: boolean;
+    isEnd: boolean;
     visited: boolean;
     isWall: boolean;
+    isPath: boolean;
     weight: number;
 };
 
@@ -28,6 +29,7 @@ interface GraphStore {
     endNode: Position;
     walls: Position[];
     grid: Node[][];
+    isLoading: boolean;
 
     defaultRows: number;
     defaultCols: number;
@@ -45,7 +47,11 @@ interface GraphStore {
     setEndNode: (row: number, col: number) => void;
     toggleWall: (row: number, col: number) => void;
     clearWalls: () => void;
+    toggleVisited: (row: number, col: number) => void;
+    togglePath: (row: number, col: number) => void;
     initializeGrid: () => void;
+    clearPaths: () => void;
+    setLoading: (isLoading: boolean) => void;
 }
 
 const initializeGrid = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): { grid: Node[][]; validStartNode: Position; validEndNode: Position } => {
@@ -67,6 +73,7 @@ const initializeGrid = (rows: number, cols: number, startNode: Position, endNode
             isEnd: row === validEndNode.row && col === validEndNode.col,
             isWall: walls.some((wall) => wall.row === row && wall.col === col),
             visited: false,
+            isPath: false,
             weight: 1,
         }))
     );
@@ -78,14 +85,15 @@ export const useGraphStore = create<GraphStore>((set) => ({
     rows: 10,
     cols: 20,
     cellSize: 55,
-    algorithm: "bfs",
-    maze: "none",
+    algorithm: undefined,
+    maze: undefined,
     speed: 1,
     isWeighted: false,
     startNode: { row: 2, col: 2 }, // Top-left corner
     endNode: { row: 7, col: 17 }, // Bottom-right corner
     walls: [],
     grid: initializeGrid(10, 20, { row: 2, col: 2 }, { row: 7, col: 17 }, []).grid,
+    isLoading: false,
 
     defaultRows: 10,
     defaultCols: 20,
@@ -114,10 +122,10 @@ export const useGraphStore = create<GraphStore>((set) => ({
     setCellSize: (size) => set({ cellSize: size }),
     setWeighted: (isWeighted) => set({ isWeighted }),
     setDefaultSize: (rows, cols, cellSize) => set({ defaultRows: rows, defaultCols: cols, defaultCellSize: cellSize }),
+    setLoading: (isLoading) => set({ isLoading }),
 
     setStartNode: (row, col) =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             const prevStart = state.startNode;
             state.grid[prevStart.row][prevStart.col].isStart = false;
             state.grid[row][col].isStart = true;
@@ -126,8 +134,7 @@ export const useGraphStore = create<GraphStore>((set) => ({
     ),
 
     setEndNode: (row, col) =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             const prevEnd = state.endNode;
             state.grid[prevEnd.row][prevEnd.col].isEnd = false;
             state.grid[row][col].isEnd = true;
@@ -136,30 +143,48 @@ export const useGraphStore = create<GraphStore>((set) => ({
     ),
 
     toggleWall: (row, col) =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             const isWall = state.grid[row][col].isWall;
             state.grid[row][col].isWall = !isWall;
             if (!isWall) {
-            state.walls.push({ row, col });
+                state.walls.push({ row, col });
             } else {
-            state.walls = state.walls.filter((wall: Node) => !(wall.row === row && wall.col === col));
+                state.walls = state.walls.filter((wall: Node) => !(wall.row === row && wall.col === col));
             }
         })
     ),
 
+    toggleVisited: (row, col) =>
+        set(produce((state) => {
+            state.grid[row][col].visited = !state.grid[row][col].visited;
+        })
+    ),
+
+    togglePath: (row, col) =>
+        set(produce((state) => {
+            state.grid[row][col].isPath = !state.grid[row][col].isPath;
+        })
+    ),
+
     clearWalls: () =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             state.walls = [];
             state.grid.forEach((row: Node[]) => row.forEach((node) => (node.isWall = false)));
         })
     ),
 
     initializeGrid: () =>
-        set(
-        produce((state) => {
+        set(produce((state) => {
             state.grid = initializeGrid(state.rows, state.cols, state.startNode, state.endNode, state.walls);
+        })
+    ),
+
+    clearPaths: () =>
+        set(produce((state) => {
+            state.grid.forEach((row: Node[]) => row.forEach((node) => {
+                node.isPath = false
+                node.visited = false;
+            }));
         })
     ),
 
