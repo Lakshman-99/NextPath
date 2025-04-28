@@ -85,7 +85,7 @@ export function GridBasedGraph() {
                                 <CloudOff className="h-4 w-4" />
                                 Clear Obstacle
                             </Button>
-                            <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted || isLoading}>
+                            <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={isLoading}>
                                 {showWeight ? 
                                     <>
                                         <EyeOff className="h-4 w-4" />

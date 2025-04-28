@@ -52,6 +52,8 @@ interface GraphStore {
     initializeGrid: () => void;
     clearPaths: () => void;
     setLoading: (isLoading: boolean) => void;
+    setRandomWeights: () => void;
+    setWeightsToOne: () => void;
 }
 
 const initializeGrid = (rows: number, cols: number, startNode: Position, endNode: Position, walls: Position[]): { grid: Node[][]; validStartNode: Position; validEndNode: Position } => {
@@ -184,6 +186,22 @@ export const useGraphStore = create<GraphStore>((set) => ({
             state.grid.forEach((row: Node[]) => row.forEach((node) => {
                 node.isPath = false
                 node.visited = false;
+            }));
+        })
+    ),
+
+    setRandomWeights: () =>
+        set(produce((state) => {
+            state.grid.forEach((row: Node[]) => row.forEach((node) => {
+                node.weight = Math.floor(Math.random() * 10) + 1; // Random weight between 1 and 10
+            }));
+        })
+    ),
+
+    setWeightsToOne: () =>
+        set(produce((state) => {
+            state.grid.forEach((row: Node[]) => row.forEach((node) => {
+                node.weight = 1; // Set weight to 1
             }));
         })
     ),

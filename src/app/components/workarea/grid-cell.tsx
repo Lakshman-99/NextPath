@@ -10,7 +10,7 @@ interface GridCellProps {
 
 export const GridCell = memo(function GridCell({ node, showWeight } : GridCellProps) {
     const { row, col, isStart, isEnd, isWall, weight, visited, isPath } = node;
-    const { cellSize, isWeighted, setStartNode, setEndNode, toggleWall } = useGraphStore.getState();
+    const { cellSize, setStartNode, setEndNode, toggleWall } = useGraphStore.getState();
     const updateCellType = (type: "start" | "end" | "wall") => {
         if (type === "start") {
             setStartNode(row, col);
@@ -74,7 +74,7 @@ export const GridCell = memo(function GridCell({ node, showWeight } : GridCellPr
                     title={`Cell (${row}, ${col})`}
                     onClick={toggleWallOnClick}
                 >
-                    {isWeighted && showWeight ? weightText : cellTypeIcon}
+                    {showWeight ? weightText : cellTypeIcon}
                 </div>
             </ContextMenuTrigger>
         <ContextMenuContent>

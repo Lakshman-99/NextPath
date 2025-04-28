@@ -39,12 +39,13 @@ import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
 import { applyBFSAlgorithm } from "@/app/utils/algorithms/bfs";
 import { applyDFSAlgorithm } from "@/app/utils/algorithms/dfs";
 import { useEffect, useState } from "react";
+import { applyDijkstraAlgorithm } from "@/app/utils/algorithms/dijkstra";
 
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
     const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
-    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading } = useGraphStore();
+    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading, setRandomWeights, setWeightsToOne } = useGraphStore();
     const { isMobile, setOpenMobile } = useSidebar();
     
     const updateCell = (newRows: number, newCols: number) => {
@@ -107,12 +108,24 @@ export function AppSidebar() {
         } else if (algorithm === "dfs") {
             isVisualized = await applyDFSAlgorithm();
         } else if (algorithm === "dijkstra") {
-            isVisualized = true; // applyDijkstraAlgorithm();
+            isVisualized = await applyDijkstraAlgorithm();
         }
 
         setLoading(false);
         setIsSettingsDisabled(!isVisualized);
     };
+
+    const handleWeighted = (value: string) => {
+        const isWeighted = value === "weighted";
+        setWeighted(isWeighted);
+        if (isWeighted) {
+            setRandomWeights();
+        }
+        else {
+            setWeightsToOne();
+        }
+    };
+
 
     useEffect(() => {
         const { defRows, defCols, defCellSize } = getGridDefaults();
@@ -261,13 +274,13 @@ export function AppSidebar() {
                                             <Weight className="h-4 w-4"/>
                                             Type
                                         </Label>
-                                        <RadioGroup defaultValue="unweighted" className="flex gap-4">
+                                        <RadioGroup defaultValue="unweighted" className="flex gap-4" onValueChange={handleWeighted}>
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="unweighted" id="unweighted" onClick={() => setWeighted(false)} />
+                                                <RadioGroupItem value="unweighted" id="unweighted" />
                                                 <Label htmlFor="unweighted">Un-Weighted</Label>
                                             </div>
                                             <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="weighted" id="weighted" onClick={() => setWeighted(true)} />
+                                                <RadioGroupItem value="weighted" id="weighted" />
                                                 <Label htmlFor="weighted">Weighted</Label>
                                             </div>
                                         </RadioGroup>
