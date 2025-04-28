@@ -35,7 +35,8 @@ import logo from "@/assets/image/logo.png";
 import { useGraphStore, Maze, Algorithm } from "@/app/store/store";
 import { getGridDefaults, getRowColBasedCellSize } from "../../utils/util";
 import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
-import { applyBFSAlgorithm, applyDFSAlgorithm } from "@/app/utils/grid-algorithms";
+import { applyBFSAlgorithm } from "@/app/utils/algorithms/bfs";
+import { applyDFSAlgorithm } from "@/app/utils/algorithms/dfs";
 import { useEffect, useState } from "react";
 
 
@@ -86,6 +87,7 @@ export function AppSidebar() {
     };
 
     const handleVisualize = async () => {
+        if (isLoading) return;
         if (algorithm === undefined) {
             setHighlightAlgorithm(true);
             return;

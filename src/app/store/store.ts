@@ -84,7 +84,7 @@ export const useGraphStore = create<GraphStore>((set) => ({
     type: "grid",
     rows: 10,
     cols: 20,
-    cellSize: 55,
+    cellSize: 50,
     algorithm: undefined,
     maze: undefined,
     speed: 1,

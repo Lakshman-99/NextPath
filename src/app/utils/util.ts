@@ -1,3 +1,13 @@
+export const directions = [
+    { row: 0, col: 1 }, // Right
+    { row: 1, col: 0 }, // Down
+    { row: 0, col: -1 }, // Left
+    { row: -1, col: 0 }, // Up
+];
+
+export function isValidPosition(row: number, col: number, rows: number, cols: number): boolean {
+    return row >= 0 && row < rows && col >= 0 && col < cols;
+};
 
 // Utility to calculate grid defaults based on screen size
 export const calculateCellSize = () => {
@@ -33,8 +43,8 @@ export const getGridDefaults = () => {
     const screenWidth = window.innerWidth;
 
     if (screenWidth < 640) {
-        return { defRows: 8, defCols: 8, defCellSize: 40 };
+        return { defRows: 8, defCols: 8, defCellSize: 35 };
     }
 
-    return { defRows: 10, defCols: 20, defCellSize: 55 };
+    return { defRows: 10, defCols: 20, defCellSize: 50 };
 };

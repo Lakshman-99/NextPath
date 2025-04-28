@@ -69,6 +69,7 @@ export const GridCell = memo(function GridCell({ node, showWeight } : GridCellPr
                         width: `${cellSize}px`,
                         height: `${cellSize}px`,
                         fontSize: `${Math.max(8, cellSize / 2)}px`,
+                        margin: "1px"
                     }}
                     title={`Cell (${row}, ${col})`}
                     onClick={toggleWallOnClick}
