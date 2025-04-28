@@ -8,8 +8,10 @@ import { useGraphStore } from './store/store';
 
 export default function ClientSidebar() {
     const { sidebarOpen } = useGraphStore();
+    const defaultValue = true;
+
     return (
-        <SidebarProvider open={sidebarOpen}>
+        <SidebarProvider defaultOpen={defaultValue} open={sidebarOpen}>
         <AppSidebar />
         <SidebarInset>
             <Header />
