@@ -4,7 +4,8 @@ import {
     Sidebar,
     SidebarContent,
     SidebarHeader,
-    SidebarGroup
+    SidebarGroup,
+    useSidebar
 } from "@/components/ui/sidebar";
 import {
     Card,
@@ -39,16 +40,13 @@ import { applyBFSAlgorithm } from "@/app/utils/algorithms/bfs";
 import { applyDFSAlgorithm } from "@/app/utils/algorithms/dfs";
 import { useEffect, useState } from "react";
 
-const canToggleSidebar = () => {
-    const screenWidth = window.innerWidth;
-    return screenWidth < 640 ? true : false;
-}
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
     const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
-    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading, toggleSidebar } = useGraphStore();
-
+    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading } = useGraphStore();
+    const { isMobile, setOpenMobile } = useSidebar();
+    
     const updateCell = (newRows: number, newCols: number) => {
         if (newRows < 2 || newCols < 2) return;
         if (newRows > 25 || newCols > 50) return;
@@ -95,8 +93,8 @@ export function AppSidebar() {
             setHighlightAlgorithm(true);
             return;
         }
-        if (canToggleSidebar()) {
-            toggleSidebar();
+        if (isMobile) {
+            setOpenMobile(false);
         }
         if (isLoading) return;
         setLoading(true);
@@ -121,11 +119,8 @@ export function AppSidebar() {
         setDefaultSize(defRows, defCols, defCellSize);
         setSize(defRows, defCols);
         setCellSize(defCellSize);
-        if (canToggleSidebar()) {
-            toggleSidebar();
-        }
 
-    }, [setDefaultSize, setCellSize, setSize, toggleSidebar]);
+    }, [setDefaultSize, setCellSize, setSize]);
     
     return (
         <Sidebar>

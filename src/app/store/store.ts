@@ -35,9 +35,6 @@ interface GraphStore {
     defaultCols: number;
     defaultCellSize: number;
 
-    sidebarOpen: boolean;
-    toggleSidebar: () => void;
-
     setType: (type: GraphType) => void;
     setSize: (rows: number, cols: number) => void;
     setAlgorithm: (algo: Algorithm) => void;
@@ -101,9 +98,6 @@ export const useGraphStore = create<GraphStore>((set) => ({
     defaultRows: 10,
     defaultCols: 20,
     defaultCellSize: 55,
-
-    sidebarOpen: true,
-    toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 
     setType: (type) => set({ type }),
     setSize: (rows, cols) =>
