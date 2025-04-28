@@ -1,10 +1,10 @@
 "use client";
 
-import { Position } from "../store/store";
+import { Position, Node } from "../store/store";
 import { useGraphStore } from "../store/store";
 
 export async function applyRandomMage(): Promise<boolean> {
-    const { rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
+    const { grid, rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
 
     const wallDensity = 0.25; // Adjust this value to control the density of walls (0 to 1)
     const newWalls: Position[] = [];
@@ -23,7 +23,7 @@ export async function applyRandomMage(): Promise<boolean> {
         }
     }
 
-    await addWallsWithDelay(shuffleArray(newWalls), speed, toggleWall);
+    await addWallsWithDelay(grid, shuffleArray(newWalls), speed, toggleWall);
     return true;
 }
 
@@ -50,7 +50,7 @@ export function removeDuplicatePositions(positions: Position[]): Position[] {
     return result;
 }
 
-async function addWallsWithDelay(walls: Position[], speed: number, toggleWall: (row: number, col: number) => void) {
+async function addWallsWithDelay(grid: Node[][], walls: Position[], speed: number, toggleWall: (row: number, col: number) => void) {
     const curSpeed = 1000 * (1 - speed);
     const adjustedSpeed = speed - 1;
 
@@ -63,6 +63,10 @@ async function addWallsWithDelay(walls: Position[], speed: number, toggleWall: (
     for (let i = 0; i < walls.length; i += batch) {
         for (let j = i; j < Math.min(i + batch, walls.length); j++) {
             const { row, col } = walls[j];
+            if (grid[row][col].isStart || grid[row][col].isEnd) {
+                continue; // Skip start and end nodes
+            }
+            
             toggleWall(row, col);
         }
         await delay(curSpeed);
@@ -74,7 +78,7 @@ async function delay(ms: number) {
 }
 
 export async function applyRecursiveDivision(orientation: string): Promise<boolean> {
-    const { rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
+    const { grid, rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
     const walls: Position[] = [];
 
     function recursiveDivision(rowStart: number, rowEnd: number, colStart: number, colEnd: number, orientation: string, surroundingWalls = false) {
@@ -189,7 +193,7 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
     Math.random() < 0.5 ? "horizontal" : "vertical";
 
     recursiveDivision(1, rows - 2, 1, cols - 2, initialOrientation, false);
-    await addWallsWithDelay(walls, speed, toggleWall);
+    await addWallsWithDelay(grid, walls, speed, toggleWall);
 
     return true;
 }
