@@ -40,16 +40,21 @@ export const getRowColBasedCellSize = (defaultRows: number, defaultCols: number,
 };
 
 export const getGridDefaults = () => {
-    const screenWidth = window.innerWidth;
+    // on the server, return whatever "default" makes sense
+    if (typeof window === "undefined") {
+        return { defRows: 10, defCols: 20, defCellSize: 50 };
+    }
 
+    const screenWidth = window.innerWidth;
     if (screenWidth < 640) {
         return { defRows: 8, defCols: 8, defCellSize: 35 };
     }
-
     return { defRows: 10, defCols: 20, defCellSize: 50 };
 };
 
 export const canToggleSidebar = () => {
-    const screenWidth = window.innerWidth;
-    return screenWidth < 640 ? true : false;
-}
+    if (typeof window === "undefined") {
+        return false;
+    }
+    return window.innerWidth < 640;
+};
