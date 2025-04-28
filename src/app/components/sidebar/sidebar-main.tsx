@@ -35,7 +35,7 @@ import logo from "@/assets/image/logo.png";
 import { useGraphStore, Maze, Algorithm } from "@/app/store/store";
 import { getGridDefaults, getRowColBasedCellSize } from "../../utils/util";
 import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
-import { applyBFSAlgorithm } from "@/app/utils/grid-algorithms";
+import { applyBFSAlgorithm, applyDFSAlgorithm } from "@/app/utils/grid-algorithms";
 import { useEffect, useState } from "react";
 
 
@@ -98,7 +98,7 @@ export function AppSidebar() {
         if (algorithm === "bfs") {
             isVisualized = await applyBFSAlgorithm();
         } else if (algorithm === "dfs") {
-            isVisualized = true; // applyDFSAlgorithm();
+            isVisualized = await applyDFSAlgorithm();
         } else if (algorithm === "dijkstra") {
             isVisualized = true; // applyDijkstraAlgorithm();
         }
