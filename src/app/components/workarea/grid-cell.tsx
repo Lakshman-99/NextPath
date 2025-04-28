@@ -33,7 +33,7 @@ export const GridCell = memo(function GridCell({ node, showWeight } : GridCellPr
             : isWall
             ? "bg-[#DEDEDE] dark:bg-[#999999] "
             : isPath
-            ? "bg-[#FAE588] dark:bg-[#F9DC5C] "
+            ? "bg-[#FAE588] dark:bg-[#F9DC5C] animate-short-path dark:animate-short-path-dark"
             : visited
                 ? "bg-[#BFD8FF] dark:bg-[#7FA7D5] animate-wave dark:animate-wave-dark"
                 : "bg-transparent ";

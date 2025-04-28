@@ -194,3 +194,39 @@
     }
   }
 }
+
+@theme {
+  --animate-short-path: short-path 0.7s ease-in-out forwards;
+
+  @keyframes short-path {
+    0% {
+      background-color: transparent;
+      transform: scale(0);
+    }
+    50% {
+      background-color: #FFD54D;
+    }
+    100% {
+      background-color: #FAE588;
+      transform: scale(1);
+    }
+  }
+}
+
+@theme {
+  --animate-short-path-dark: short-path 0.7s ease-in-out forwards;
+
+  @keyframes short-path-dark {
+    0% {
+      background-color: transparent;
+      transform: scale(0);
+    }
+    50% {
+      background-color: #FFD54D;
+    }
+    100% {
+      background-color: #F9DC5C;
+      transform: scale(1);
+    }
+  }
+}
