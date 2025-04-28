@@ -6,11 +6,8 @@ import { Header } from './components/header/header-main';
 import { Main } from './components/workarea/main';
 import { useGraphStore } from './store/store';
 
-export default function ClientSidebar({ defaultOpen }: { defaultOpen: boolean }) {
-    const { sidebarOpen } = useGraphStore((state) => ({
-        sidebarOpen: state.sidebarOpen ?? defaultOpen,
-    }));
-
+export default function ClientSidebar() {
+    const { sidebarOpen } = useGraphStore();
     return (
         <SidebarProvider open={sidebarOpen}>
         <AppSidebar />
