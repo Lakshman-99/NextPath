@@ -48,3 +48,8 @@ export const getGridDefaults = () => {
 
     return { defRows: 10, defCols: 20, defCellSize: 50 };
 };
+
+export const canToggleSidebar = () => {
+    const screenWidth = window.innerWidth;
+    return screenWidth < 640 ? true : false;
+}

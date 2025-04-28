@@ -1,15 +1,16 @@
+"use client";
+
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "./components/sidebar/sidebar-main"
 import { Header } from "./components/header/header-main"
 import { Main } from "./components/workarea/main"
-import { cookies } from "next/headers"
+import { useGraphStore } from "./store/store"
 
-export default async function Home() {
-  const cookieStore = await cookies()
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
+export default function Home() {
+  const { sidebarOpen } = useGraphStore()
 
   return (
-    <SidebarProvider defaultOpen={defaultOpen}>
+    <SidebarProvider open={sidebarOpen}>
       <AppSidebar />
       <SidebarInset>
         <Header />

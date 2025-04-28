@@ -38,12 +38,13 @@ import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
 import { applyBFSAlgorithm } from "@/app/utils/algorithms/bfs";
 import { applyDFSAlgorithm } from "@/app/utils/algorithms/dfs";
 import { useEffect, useState } from "react";
+import { canToggleSidebar } from "../../utils/util";
 
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
     const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
-    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading } = useGraphStore();
+    const { rows, cols, speed, maze, isLoading, algorithm, defaultRows, defaultCols, defaultCellSize, setSize, setType, setCellSize, setDefaultSize, setWeighted, setAlgorithm, setSpeed, setMaze, clearWalls, clearPaths, setLoading, toggleSidebar } = useGraphStore();
 
     const updateCell = (newRows: number, newCols: number) => {
         if (newRows < 2 || newCols < 2) return;
@@ -87,11 +88,14 @@ export function AppSidebar() {
     };
 
     const handleVisualize = async () => {
-        if (isLoading) return;
         if (algorithm === undefined) {
             setHighlightAlgorithm(true);
             return;
         }
+        if (canToggleSidebar()) {
+            toggleSidebar();
+        }
+        if (isLoading) return;
         setLoading(true);
         setIsSettingsDisabled(true);
         clearPaths();
@@ -114,8 +118,11 @@ export function AppSidebar() {
         setDefaultSize(defRows, defCols, defCellSize);
         setSize(defRows, defCols);
         setCellSize(defCellSize);
+        if (canToggleSidebar()) {
+            toggleSidebar();
+        }
 
-    }, [setDefaultSize, setCellSize, setSize]);
+    }, [setDefaultSize, setCellSize, setSize, toggleSidebar]);
     
     return (
         <Sidebar>

@@ -48,8 +48,6 @@ export async function applyDFSAlgorithm(): Promise<boolean> {
         }
         path.length = 0; // Clear path for next iteration
     }
-    console.log("DFS Path: ", path);
-    console.log("DFS Visited: ", visitedNodesInOrder);
     
     await addVisitedWithDelay(visitedNodesInOrder, speed, toggleVisited);
     if (isEndReached) {

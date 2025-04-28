@@ -6,14 +6,14 @@ import { ExportGraph } from "./export-graph";
 import { useGraphStore } from "@/app/store/store";
 
 export function Header() {
-    const { type } = useGraphStore();
+    const { type, toggleSidebar } = useGraphStore();
     const isMatrix = type === "grid";
 
     return (
         <header className="flex h-16 md:h-20 shrink-0 items-center justify-between border-b px-4 backdrop-blur-md bg-background/80">
             {/* Left: Sidebar + Heading */}
             <div className="flex items-center gap-3 overflow-hidden">
-                <SidebarTrigger className="-ml-1" />
+                <SidebarTrigger className="-ml-1" onClick={toggleSidebar}/>
 
                 <div className="flex flex-col overflow-hidden">
                     <h1 className="text-lg md:text-2xl font-extrabold tracking-tight truncate text-foreground max-w-[10rem] sm:max-w-[16rem] md:max-w-none">
