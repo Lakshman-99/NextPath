@@ -1,3 +1,5 @@
+"use client";
+
 import { Position } from "../store/store";
 import { useGraphStore } from "../store/store";
 

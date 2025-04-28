@@ -1,3 +1,5 @@
+"use client";
+
 import { Position, useGraphStore, Node } from "@/app/store/store";
 import { addPathsWithDelay, addVisitedWithDelay } from "../animation";
 import { directions, isValidPosition } from "../util";

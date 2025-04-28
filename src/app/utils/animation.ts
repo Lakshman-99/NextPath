@@ -1,3 +1,5 @@
+"use client";
+
 import { Position } from "../store/store";
 
 async function delay(ms: number) {
