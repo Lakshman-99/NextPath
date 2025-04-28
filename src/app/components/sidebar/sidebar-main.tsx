@@ -95,6 +95,10 @@ export function AppSidebar() {
             setHighlightAlgorithm(true);
             return;
         }
+        if (canToggleSidebar()) {
+            toggleSidebar();
+        }
+        if (isLoading) return;
         setLoading(true);
         setIsSettingsDisabled(true);
         clearPaths();
