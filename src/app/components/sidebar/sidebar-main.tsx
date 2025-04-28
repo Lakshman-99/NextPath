@@ -38,8 +38,11 @@ import { applyRandomMage, applyRecursiveDivision } from "@/app/utils/maze";
 import { applyBFSAlgorithm } from "@/app/utils/algorithms/bfs";
 import { applyDFSAlgorithm } from "@/app/utils/algorithms/dfs";
 import { useEffect, useState } from "react";
-import { canToggleSidebar } from "../../utils/util";
 
+const canToggleSidebar = () => {
+    const screenWidth = window.innerWidth;
+    return screenWidth < 640 ? true : false;
+}
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
