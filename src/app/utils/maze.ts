@@ -1,10 +1,11 @@
 "use client";
 
-import { Position, Node } from "../store/store";
-import { useGraphStore } from "../store/store";
+import { Position, Node } from "../store/gridStore";
+import { useGraphStore } from "../store/gridStore";
 
 export async function applyRandomMage(): Promise<boolean> {
-    const { grid, rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
+    const { grid, rows, cols, startNode, endNode, speed, toggleWall } =
+        useGraphStore.getState();
 
     const wallDensity = 0.25; // Adjust this value to control the density of walls (0 to 1)
     const newWalls: Position[] = [];
@@ -12,7 +13,10 @@ export async function applyRandomMage(): Promise<boolean> {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             // Skip the start and end nodes
-            if ((row === startNode.row && col === startNode.col) || (row === endNode.row && col === endNode.col)) {
+            if (
+                (row === startNode.row && col === startNode.col) ||
+                (row === endNode.row && col === endNode.col)
+            ) {
                 continue;
             }
 
@@ -50,12 +54,17 @@ export function removeDuplicatePositions(positions: Position[]): Position[] {
     return result;
 }
 
-async function addWallsWithDelay(grid: Node[][], walls: Position[], speed: number, toggleWall: (row: number, col: number) => void) {
+async function addWallsWithDelay(
+    grid: Node[][],
+    walls: Position[],
+    speed: number,
+    toggleWall: (row: number, col: number) => void
+) {
     const curSpeed = 1000 * (1 - speed);
     const adjustedSpeed = speed - 1;
 
     let batch = 1;
-    if(adjustedSpeed > 0) {
+    if (adjustedSpeed > 0) {
         batch += Math.floor(adjustedSpeed * 10);
     }
 
@@ -66,7 +75,7 @@ async function addWallsWithDelay(grid: Node[][], walls: Position[], speed: numbe
             if (grid[row][col].isStart || grid[row][col].isEnd) {
                 continue; // Skip start and end nodes
             }
-            
+
             toggleWall(row, col);
         }
         await delay(curSpeed);
@@ -77,11 +86,21 @@ async function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function applyRecursiveDivision(orientation: string): Promise<boolean> {
-    const { grid, rows, cols, startNode, endNode, speed, toggleWall } = useGraphStore.getState();
+export async function applyRecursiveDivision(
+    orientation: string
+): Promise<boolean> {
+    const { grid, rows, cols, startNode, endNode, speed, toggleWall } =
+        useGraphStore.getState();
     const walls: Position[] = [];
 
-    function recursiveDivision(rowStart: number, rowEnd: number, colStart: number, colEnd: number, orientation: string, surroundingWalls = false) {
+    function recursiveDivision(
+        rowStart: number,
+        rowEnd: number,
+        colStart: number,
+        colEnd: number,
+        orientation: string,
+        surroundingWalls = false
+    ) {
         if (rowEnd < rowStart || colEnd < colStart) {
             return;
         }
@@ -90,7 +109,7 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
         if (!surroundingWalls) {
             // top & bottom edges
             for (let c = 0; c < cols; c++) {
-                walls.push({ row: 0,     col: c });
+                walls.push({ row: 0, col: c });
                 walls.push({ row: rows - 1, col: c });
             }
             // left & right edges
@@ -114,15 +133,20 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
                 possibleCols.push(c);
             }
 
-            const wallRow   = possibleRows[Math.floor(Math.random() * possibleRows.length)];
-            const passageCol = possibleCols[Math.floor(Math.random() * possibleCols.length)];
+            const wallRow =
+                possibleRows[Math.floor(Math.random() * possibleRows.length)];
+            const passageCol =
+                possibleCols[Math.floor(Math.random() * possibleCols.length)];
 
             // build the wall on wallRow, skipping passageCol
             for (let c = colStart - 1; c <= colEnd + 1; c++) {
                 if (c === passageCol) {
                     continue;
                 }
-                if ((wallRow === startNode.row && c === startNode.col) || (wallRow === endNode.row   && c === endNode.col)) {
+                if (
+                    (wallRow === startNode.row && c === startNode.col) ||
+                    (wallRow === endNode.row && c === endNode.col)
+                ) {
                     continue;
                 }
                 if (wallRow >= 0 && wallRow < rows && c >= 0 && c < cols) {
@@ -131,21 +155,34 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
             }
 
             // recurse into top & bottom subregions
-            const topEnd    = wallRow - 2;
-            const botStart  = wallRow + 2;
-            const regionW   = colEnd - colStart;
-            const topH      = topEnd - rowStart;
-            const botH      = rowEnd - botStart;
+            const topEnd = wallRow - 2;
+            const botStart = wallRow + 2;
+            const regionW = colEnd - colStart;
+            const topH = topEnd - rowStart;
+            const botH = rowEnd - botStart;
             const topOrient = topH > regionW ? orientation : "vertical";
             const botOrient = botH > regionW ? orientation : "vertical";
 
             if (topEnd >= rowStart) {
-                recursiveDivision(rowStart, topEnd, colStart, colEnd, orientation === "horizontal" ? topOrient : "vertical", true);
+                recursiveDivision(
+                    rowStart,
+                    topEnd,
+                    colStart,
+                    colEnd,
+                    orientation === "horizontal" ? topOrient : "vertical",
+                    true
+                );
             }
             if (botStart <= rowEnd) {
-                recursiveDivision(botStart, rowEnd, colStart, colEnd, orientation === "horizontal" ? botOrient : "vertical", true);
+                recursiveDivision(
+                    botStart,
+                    rowEnd,
+                    colStart,
+                    colEnd,
+                    orientation === "horizontal" ? botOrient : "vertical",
+                    true
+                );
             }
-
         } else {
             // vertical split
             const possibleCols: number[] = [];
@@ -158,15 +195,20 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
                 possibleRows.push(r);
             }
 
-            const wallCol   = possibleCols[Math.floor(Math.random() * possibleCols.length)];
-            const passageRow = possibleRows[Math.floor(Math.random() * possibleRows.length)];
+            const wallCol =
+                possibleCols[Math.floor(Math.random() * possibleCols.length)];
+            const passageRow =
+                possibleRows[Math.floor(Math.random() * possibleRows.length)];
 
             // build the wall on wallCol, skipping passageRow
             for (let r = rowStart - 1; r <= rowEnd + 1; r++) {
                 if (r === passageRow) {
                     continue;
                 }
-                if ((r === startNode.row && wallCol === startNode.col) || (r === endNode.row   && wallCol === endNode.col)) {
+                if (
+                    (r === startNode.row && wallCol === startNode.col) ||
+                    (r === endNode.row && wallCol === endNode.col)
+                ) {
                     continue;
                 }
                 if (r >= 0 && r < rows && wallCol >= 0 && wallCol < cols) {
@@ -175,22 +217,43 @@ export async function applyRecursiveDivision(orientation: string): Promise<boole
             }
 
             // recurse into left & right subregions
-            const leftEnd   = wallCol - 2;
-            const rightStart= wallCol + 2;
-
+            const leftEnd = wallCol - 2;
+            const rightStart = wallCol + 2;
 
             if (leftEnd >= colStart) {
-                recursiveDivision(rowStart, rowEnd, colStart, leftEnd,  "vertical", true);
+                recursiveDivision(
+                    rowStart,
+                    rowEnd,
+                    colStart,
+                    leftEnd,
+                    "vertical",
+                    true
+                );
             }
             if (rightStart <= colEnd) {
-                recursiveDivision(rowStart, rowEnd, rightStart, colEnd,  "horizontal", true);
+                recursiveDivision(
+                    rowStart,
+                    rowEnd,
+                    rightStart,
+                    colEnd,
+                    "horizontal",
+                    true
+                );
             }
         }
     }
 
     // start the recursive build on the inner area
-    const initialOrientation = orientation !== "none" ? orientation : cols < rows ? "horizontal" : rows < cols ? "vertical" :
-    Math.random() < 0.5 ? "horizontal" : "vertical";
+    const initialOrientation =
+        orientation !== "none"
+            ? orientation
+            : cols < rows
+            ? "horizontal"
+            : rows < cols
+            ? "vertical"
+            : Math.random() < 0.5
+            ? "horizontal"
+            : "vertical";
 
     recursiveDivision(1, rows - 2, 1, cols - 2, initialOrientation, false);
     await addWallsWithDelay(grid, walls, speed, toggleWall);

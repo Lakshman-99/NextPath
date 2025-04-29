@@ -3,7 +3,7 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
 import { ExportGraph } from "./export-graph";
-import { useGraphStore } from "@/app/store/store";
+import { useGraphStore } from "@/app/store/gridStore";
 
 export function Header() {
     const { type } = useGraphStore();

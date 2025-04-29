@@ -1,34 +1,56 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGraphStore } from "../../store/store";
+import { useGraphStore } from "../../store/gridStore";
 import { GridCell } from "./grid-cell";
 import { calculateCellSize, getRowColBasedCellSize } from "../../utils/util";
-import { useMediaQuery } from "usehooks-ts"
+import { useMediaQuery } from "usehooks-ts";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Settings,Eye,EyeOff, Route, CloudOff } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Settings, Eye, EyeOff, Route, CloudOff } from "lucide-react";
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
-    const { grid, rows, cols, isWeighted, defaultRows, defaultCols, isLoading, setCellSize, clearWalls, setMaze, clearPaths } = useGraphStore();
-    const isMobile = useMediaQuery('(max-width: 768px)');
+    const {
+        grid,
+        rows,
+        cols,
+        isWeighted,
+        defaultRows,
+        defaultCols,
+        isLoading,
+        setCellSize,
+        clearWalls,
+        setMaze,
+        clearPaths,
+    } = useGraphStore();
+    const isMobile = useMediaQuery("(max-width: 768px)");
 
     const clearPath = () => {
         setMaze("none");
         clearPaths();
-    }
+    };
 
     const clearObstacle = () => {
         setMaze("none");
         clearWalls();
-    }
-
+    };
 
     useEffect(() => {
         const handleResize = () => {
             const newCellSize = calculateCellSize();
-            const cellSize = getRowColBasedCellSize(defaultRows, defaultCols, rows, cols, newCellSize);
+            const cellSize = getRowColBasedCellSize(
+                defaultRows,
+                defaultCols,
+                rows,
+                cols,
+                newCellSize
+            );
             setCellSize(cellSize);
         };
 
@@ -52,58 +74,87 @@ export function GridBasedGraph() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-40">
-                                <DropdownMenuItem onClick={clearPath} disabled={isLoading}>
+                                <DropdownMenuItem
+                                    onClick={clearPath}
+                                    disabled={isLoading}
+                                >
                                     <Route className="h-4 w-4" />
                                     Clear Path
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={clearObstacle} disabled={isLoading}>
+                                <DropdownMenuItem
+                                    onClick={clearObstacle}
+                                    disabled={isLoading}
+                                >
                                     <CloudOff className="h-4 w-4" />
                                     Clear Obstacle
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => setShowWeight(!showWeight)} disabled={!isWeighted}>
-                                    {showWeight ? 
+                                <DropdownMenuItem
+                                    onClick={() => setShowWeight(!showWeight)}
+                                    disabled={!isWeighted}
+                                >
+                                    {showWeight ? (
                                         <>
                                             <EyeOff className="h-4 w-4" />
-                                            <span className="">Hide Weights</span>
+                                            <span className="">
+                                                Hide Weights
+                                            </span>
                                         </>
-                                    : 
-                                    <>
-                                        <Eye className="h-4 w-4" />
-                                        <span className="">Show Weights</span>
-                                    </>                                   
-                                    }
+                                    ) : (
+                                        <>
+                                            <Eye className="h-4 w-4" />
+                                            <span className="">
+                                                Show Weights
+                                            </span>
+                                        </>
+                                    )}
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
                         <div className="flex gap-1">
-                            <Button variant="outline" onClick={clearPath} disabled={isLoading}>
+                            <Button
+                                variant="outline"
+                                onClick={clearPath}
+                                disabled={isLoading}
+                            >
                                 <Route className="h-4 w-4" />
                                 Clear Path
                             </Button>
-                            <Button variant="outline" onClick={clearObstacle} disabled={isLoading}>
+                            <Button
+                                variant="outline"
+                                onClick={clearObstacle}
+                                disabled={isLoading}
+                            >
                                 <CloudOff className="h-4 w-4" />
                                 Clear Obstacle
                             </Button>
-                            <Button variant="outline" onClick={() => setShowWeight(!showWeight)} disabled={isLoading}>
-                                {showWeight ? 
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowWeight(!showWeight)}
+                                disabled={isLoading}
+                            >
+                                {showWeight ? (
                                     <>
                                         <EyeOff className="h-4 w-4" />
                                         <span className="">Hide Weights</span>
                                     </>
-                                : 
-                                <>
-                                    <Eye className="h-4 w-4" />
-                                    <span className="">Show Weights</span>
-                                </>                                   
-                                }
+                                ) : (
+                                    <>
+                                        <Eye className="h-4 w-4" />
+                                        <span className="">Show Weights</span>
+                                    </>
+                                )}
                             </Button>
                         </div>
                     )}
                 </div>
             </div>
 
-            <div className={`flex ${ !isMobile ? "h-full" : "" } w-full flex-col items-center justify-center overflow-auto p-0`}>
+            <div
+                className={`flex ${
+                    !isMobile ? "h-full" : ""
+                } w-full flex-col items-center justify-center overflow-auto p-0`}
+            >
                 <div className="outline-none" tabIndex={0}>
                     {grid.map((row, rowIndex) => (
                         <div key={rowIndex} className="flex">

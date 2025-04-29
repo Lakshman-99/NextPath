@@ -1,17 +1,22 @@
 "use client";
 
-import { Position } from "../store/store";
+import { Position } from "../store/gridStore";
 
 async function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function addPathsWithDelay(path: Position[], speed: number, toggleVisited: (row: number, col: number) => void, togglePath: (row: number, col: number) => void) {
+export async function addPathsWithDelay(
+    path: Position[],
+    speed: number,
+    toggleVisited: (row: number, col: number) => void,
+    togglePath: (row: number, col: number) => void
+) {
     const curSpeed = 1000 * (1 - speed);
     const adjustedSpeed = speed - 1;
 
     let batch = 1;
-    if(adjustedSpeed > 0) {
+    if (adjustedSpeed > 0) {
         batch += Math.floor(adjustedSpeed * 10);
     }
 
@@ -25,12 +30,16 @@ export async function addPathsWithDelay(path: Position[], speed: number, toggleV
     }
 }
 
-export async function addVisitedWithDelay(walls: Position[], speed: number, toggleVisited: (row: number, col: number) => void) {
+export async function addVisitedWithDelay(
+    walls: Position[],
+    speed: number,
+    toggleVisited: (row: number, col: number) => void
+) {
     const curSpeed = 1000 * (1 - speed);
     const adjustedSpeed = speed - 1;
 
     let batch = 1;
-    if(adjustedSpeed > 0) {
+    if (adjustedSpeed > 0) {
         batch += Math.floor(adjustedSpeed * 10);
     }
 

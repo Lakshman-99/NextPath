@@ -205,7 +205,4 @@ export const useGraphStore = create<GraphStore>((set) => ({
             }));
         })
     ),
-
-    // updateStartNode: (row, col) => set((state) => ({ grid: state.grid.map((r) => r.map((c) => (c.row === row && c.col === col ? { ...c, isStart: true } : { ...c, isStart: false}))) })),
-    // updateEndNode: (row, col) => set((state) => ({ grid: state.grid.map((r) => r.map((c) => (c.row === row && c.col === col ? { ...c, isEnd: true } : { ...c, isEnd: false}))) })),
 }));
