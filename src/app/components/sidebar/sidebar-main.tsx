@@ -59,6 +59,7 @@ export function AppSidebar() {
         cols,
         speed,
         maze,
+        type,
         isLoading,
         algorithm,
         defaultRows,
@@ -180,7 +181,7 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                    <Tabs defaultValue="grid" className="w-full p-2">
+                    <Tabs className="w-full p-2" value={type}>
                         <TabsList
                             className={`grid grid-cols-2 w-full ${
                                 isSettingsDisabled
