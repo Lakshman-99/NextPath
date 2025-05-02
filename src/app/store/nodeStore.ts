@@ -19,7 +19,7 @@ interface NodeStore {
 };
 
 export const useNodeStore = create<NodeStore>((set) => ({
-    n_nodes: 10,
+    n_nodes: 5,
     n_algorithm: undefined,
     n_isDirected: false,
     n_isWeighted: false,

@@ -76,6 +76,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --xy-controls-button-background-color-default: oklch(0.556 0 0) !important;
 }
 
 .dark {
@@ -110,6 +111,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --xy-controls-button-background-color-default: oklch(0.708 0 0) !important;
 }
 
 @layer base {
@@ -229,4 +231,106 @@
       transform: scale(1);
     }
   }
+}
+
+.react-flow__controls-button {
+  --xy-controls-button-color-default: var(--foreground) !important;
+  --xy-controls-button-background-color-default: var(--background) !important;
+  --xy-controls-button-border-color-default: var(--ring) !important;
+}
+
+.react-flow__controls-button:hover {
+  --xy-controls-button-background-color-default: oklch(0.85 0 0) !important;
+}
+
+.dark .react-flow__controls-button {
+  --xy-controls-button-color-default: var(--foreground) !important;
+  --xy-controls-button-background-color-default: var(--background) !important;
+  --xy-controls-button-border-color-default: var(--ring) !important;
+}
+
+.dark .react-flow__controls-button:hover {
+  background: oklch(0.25 0 0) !important;
+}
+
+.react-flow__controls {
+  border: 2px solid var(--color-border) !important;
+}
+
+div.react-flow__panel.react-flow__attribution.bottom {
+  display: none !important;
+}
+
+.react-flow__edge-path {
+  stroke-width: 2px;
+}
+
+.customNode {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+  border: 2px solid #4f46e5;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #1e1e2f;
+  cursor: grab; /* 🔥 Make draggable */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customNode:active {
+  cursor: grabbing;
+}
+
+.customNode:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+}
+
+.customNodeIcon {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fff;
+  border: 2px solid #4f46e5;
+  border-radius: 6px;
+  padding: 3px;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  pointer-events: auto; /* optional */
+  transition: transform 0.2s;
+}
+
+.customNodeIcon:hover {
+  transform: scale(1.2);
+}
+
+
+div.sourceHandle {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
+  transform: none;
+  border: none;
+  opacity: 0;
+}
+
+div.targetHandle {
+  width: 100%;
+  height: 100%;
+  background: blue;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0;
+  transform: none;
+  border: none;
+  opacity: 0;
 }

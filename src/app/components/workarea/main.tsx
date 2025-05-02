@@ -1,7 +1,7 @@
 "use client";
 
 import { GridBasedGraph } from "./grid-based";
-import { NodeBasedGraph } from "./node-based";
+import { NodeBasedGraph } from "./nodebased/node-based";
 import { useGraphStore } from "../../store/gridStore";
 
 export function Main() {
