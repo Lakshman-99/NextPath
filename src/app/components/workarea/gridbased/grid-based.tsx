@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGraphStore } from "../../store/gridStore";
+import { useGraphStore } from "@/app/store/gridStore";
 import { GridCell } from "./grid-cell";
-import { calculateCellSize, getRowColBasedCellSize } from "../../utils/util";
+import { calculateCellSize, getRowColBasedCellSize } from "@/app/utils/util";
 import { useMediaQuery } from "usehooks-ts";
 import { Button } from "@/components/ui/button";
 import {
