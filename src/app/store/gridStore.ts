@@ -83,7 +83,7 @@ const initializeGrid = (rows: number, cols: number, startNode: Position, endNode
 };
 
 export const useGraphStore = create<GraphStore>((set) => ({
-    type: "node",
+    type: "grid",
     rows: 10,
     cols: 20,
     cellSize: 50,

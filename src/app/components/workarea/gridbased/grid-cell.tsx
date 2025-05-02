@@ -6,7 +6,7 @@ import {
     ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { Plane, LandPlot, Cloudy, CloudOff } from "lucide-react";
-import { useGraphStore, Node } from "../../store/gridStore";
+import { useGraphStore, Node } from "../../../store/gridStore";
 
 interface GridCellProps {
     node: Node;
