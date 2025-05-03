@@ -2,49 +2,20 @@ import {
     ReactFlow,
     Controls,
     Background,
-    MiniMap,
+    // MiniMap,
     useNodesState,
     useEdgesState,
     addEdge,
     MarkerType,
     OnConnect,
-    Node,
-    Edge,
 } from "@xyflow/react";
+// import { DevTools } from "@/components/devtools";
 import { NodeCell } from "./node-cell";
 import { useCallback } from "react";
 
 import FloatingConnectionLine from "./floating-connection-line";
 import FloatingEdge from "./floating-edge";
-
-const initialNodes: Node[] = [
-    {
-        id: "1",
-        type: "custom",
-        position: { x: 0, y: 0 },
-        data: { label: "Node 1" },
-    },
-    {
-        id: "2",
-        type: "custom",
-        position: { x: 250, y: 320 },
-        data: { label: "Node 2" },
-    },
-    {
-        id: "3",
-        type: "custom",
-        position: { x: 40, y: 300 },
-        data: { label: "Node 3" },
-    },
-    {
-        id: "4",
-        type: "custom",
-        position: { x: 300, y: 0 },
-        data: { label: "Node 4" },
-    },
-];
-
-const initialEdges: Edge[] = [];
+import { useNodeStore } from "@/app/store/nodeStore";
 
 const connectionLineStyle = {
     stroke: "#b1b1b7",
@@ -67,8 +38,10 @@ const defaultEdgeOptions = {
 };
 
 export function NodeBasedGraph() {
-    const [nodes, , onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const { storeNodes, storeEdges } = useNodeStore();
+
+    const [nodes, , onNodesChange] = useNodesState(storeNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
 
     const onConnect: OnConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
@@ -99,12 +72,13 @@ export function NodeBasedGraph() {
                     connectionLineStyle={connectionLineStyle}
                 >
                     <Background gap={16} size={1} />
+                    {/* <DevTools position="top-left" /> */}
                     <Controls />
-                    <MiniMap
+                    {/* <MiniMap
                         nodeColor="#3b82f6"
                         nodeStrokeWidth={3}
                         className="bg-gray-200 dark:bg-gray-800 rounded-lg"
-                    />
+                    /> */}
                 </ReactFlow>
             </div>
         </div>

@@ -1,9 +1,6 @@
 import { Position, MarkerType } from "@xyflow/react";
 
-// this helper function returns the intersection point
-// of the line between the center of the intersectionNode and the target node
 function getNodeIntersection(intersectionNode, targetNode) {
-    // https://math.stackexchange.com/questions/1724792/an-algorithm-for-finding-the-intersection-point-between-a-center-of-vision-and-a
     const { width: intersectionNodeWidth, height: intersectionNodeHeight } =
         intersectionNode.measured;
     const intersectionNodePosition =
@@ -29,7 +26,6 @@ function getNodeIntersection(intersectionNode, targetNode) {
     return { x, y };
 }
 
-// returns the position (top,right,bottom or right) passed node compared to the intersection point
 function getEdgePosition(node, intersectionPoint) {
     const n = { ...node.internals.positionAbsolute, ...node };
     const nx = Math.round(n.x);
@@ -103,3 +99,227 @@ export function createNodesAndEdges() {
 
     return { nodes, edges };
 }
+
+export const getInitialNodes = () => {
+    const nodes = [
+        {
+            id: "0",
+            type: "custom",
+            position: {
+                x: 100,
+                y: 100,
+            },
+            data: {
+                label: "Node 0",
+                isStart: true,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "1",
+            type: "custom",
+            position: {
+                x: 215.5,
+                y: 258,
+            },
+            data: {
+                label: "Node 1",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "2",
+            type: "custom",
+            position: {
+                x: 215.5,
+                y: -46,
+            },
+            data: {
+                label: "Node 2",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "3",
+            type: "custom",
+            position: {
+                x: 302,
+                y: 43,
+            },
+            data: {
+                label: "Node 3",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "4",
+            type: "custom",
+            position: {
+                x: 302,
+                y: 161,
+            },
+            data: {
+                label: "Node 4",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "5",
+            type: "custom",
+            position: {
+                x: 487,
+                y: 100,
+            },
+            data: {
+                label: "Node 5",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "6",
+            type: "custom",
+            position: {
+                x: 642,
+                y: 190,
+            },
+            data: {
+                label: "Node 6",
+                isStart: false,
+                isEnd: false,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+        {
+            id: "7",
+            type: "custom",
+            position: {
+                x: 642,
+                y: 15,
+            },
+            data: {
+                label: "Node 7",
+                isStart: false,
+                isEnd: true,
+                visited: false,
+                isWall: false,
+                isPath: false,
+            },
+        },
+    ];
+    return nodes;
+};
+
+export const getInitialEdges = () => {
+    const edges = [
+        // Node 0 connections
+        {
+            id: "e0-3",
+            source: "0",
+            target: "3",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        {
+            id: "e0-4",
+            source: "0",
+            target: "4",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 1 connections
+        {
+            id: "e1-2",
+            source: "1",
+            target: "2",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        {
+            id: "e4-1",
+            source: "4",
+            target: "1",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 2 connections
+        {
+            id: "e3-2",
+            source: "3",
+            target: "2",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 3 connections
+        {
+            id: "e3-5",
+            source: "3",
+            target: "5",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        {
+            id: "e3-4",
+            source: "3",
+            target: "4",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 4 connections
+        {
+            id: "e4-5",
+            source: "4",
+            target: "5",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 5 connections
+        {
+            id: "e5-6",
+            source: "5",
+            target: "6",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        {
+            id: "e5-7",
+            source: "5",
+            target: "7",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+        // Node 6 connections
+        {
+            id: "e7-6",
+            source: "7",
+            target: "6",
+            type: "floating",
+            markerEnd: { type: MarkerType.Arrow },
+        },
+    ];
+    return edges;
+};

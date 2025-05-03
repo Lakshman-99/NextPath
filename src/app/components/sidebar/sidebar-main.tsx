@@ -177,7 +177,7 @@ export function AppSidebar() {
         <SidebarHeader className="flex shrink-0 items-center justify-center px-4">
             <Image className="dark:invert"
                 src={logo}
-                alt="Next.js logo"
+                alt="NextPath logo"
                 width={200}
                 height={40}
                 priority/>

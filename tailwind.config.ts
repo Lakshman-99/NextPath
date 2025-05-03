@@ -18,6 +18,10 @@ const config: Config = {
                 accent: "hsl(var(--accent))",
                 popover: "hsl(var(--popover))",
                 card: "hsl(var(--card))",
+                edge: {
+                    light: "220 100% 66%", // Indigo-500
+                    dark: "283 100% 80%", // Fuchsia-400
+                },
             },
             borderColor: {
                 DEFAULT: "hsl(var(--border))",

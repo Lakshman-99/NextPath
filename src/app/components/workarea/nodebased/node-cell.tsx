@@ -1,22 +1,25 @@
 import { Handle, Position, useConnection } from "@xyflow/react";
 import { memo } from "react";
-import { Move } from "lucide-react";
+import { Car, MapPinHouse, Move, Trash2 } from "lucide-react";
 import {
     ContextMenu,
     ContextMenuContent,
     ContextMenuItem,
     ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Data } from "@/app/store/nodeStore";
 
-export const NodeCell = memo(function NodeCell({ id }: { id: string }) {
+export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data: Data }) {
     const connection = useConnection();
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
+
+    const baseColor = "bg-[#FF7477] dark:bg-[#F25757]";
 
     return (
         <ContextMenu>
             <ContextMenuTrigger>
-                <div className="customNode">
-                    <div className="customNodeIcon">
+                <div className={`customNode ${baseColor}`}>
+                    <div className={`customNodeIcon ${baseColor}`}>
                         <Move size={12} strokeWidth={2.5} />
                     </div>
                     {!connection.inProgress && (
@@ -45,14 +48,22 @@ export const NodeCell = memo(function NodeCell({ id }: { id: string }) {
                         />
                     )}
                     {/* Label */}
-                    <p className="text-xs text-gray-500">Node ID: {id}</p>
+                    <div className="text-xs font-semibold text-white">{data.label}</div>
                 </div>
             </ContextMenuTrigger>
             <ContextMenuContent>
-                <ContextMenuItem>Delete Node</ContextMenuItem>
-                <ContextMenuItem>Billing</ContextMenuItem>
-                <ContextMenuItem>Team</ContextMenuItem>
-                <ContextMenuItem>Subscription</ContextMenuItem>
+                <ContextMenuItem>
+                    <Car className="h-4 w-4 mr-2" />
+                    Set as Start
+                </ContextMenuItem>
+                <ContextMenuItem>
+                    <MapPinHouse className="h-4 w-4 mr-2" />
+                    Set as End
+                </ContextMenuItem>
+                <ContextMenuItem>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Node
+                </ContextMenuItem>
             </ContextMenuContent>
         </ContextMenu>
     );
