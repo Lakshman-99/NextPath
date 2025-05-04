@@ -20,6 +20,7 @@ import {
 } from "@xyflow/react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Data } from "@/app/store/nodeStore";
 
 export const ViewportLogger = () => {
   const viewport = useStore(
@@ -121,7 +122,7 @@ export const NodeInspector = () => {
               absPosition={absPosition}
               width={node.measured?.width ?? 0}
               height={node.measured?.height ?? 0}
-              data={node.data}
+              data={node.data as Data}
             />
           );
         })}
@@ -138,7 +139,7 @@ type NodeInfoProps = {
   absPosition: XYPosition;
   width?: number;
   height?: number;
-  data: any;
+  data: Data;
 };
 
 const NodeInfo = ({

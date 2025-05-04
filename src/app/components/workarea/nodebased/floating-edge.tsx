@@ -10,6 +10,7 @@ import {
 
 import { getEdgeParams } from "@/app/utils/xyflowUtils/util";
 import { useNodeStore } from "@/app/store/nodeStore";
+import { Plane } from "lucide-react";
 
 type GetSpecialPathParams = {
     sourceX: number;
@@ -96,6 +97,14 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
                     </div>
                 </EdgeLabelRenderer>
             )}
+            <Plane className="h-4 w-4">
+                <animateMotion
+                    dur="2s"
+                    repeatCount="indefinite"
+                    path={path}
+                    rotate="auto"
+                />
+            </Plane>
         </>
     );
 }

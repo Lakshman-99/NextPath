@@ -1,6 +1,6 @@
 import { Handle, Position, useConnection } from "@xyflow/react";
 import { memo } from "react";
-import { Car, MapPinHouse, Move, Trash2 } from "lucide-react";
+import { Move, PlaneTakeoff, Trash2, LandPlot } from "lucide-react";
 import {
     ContextMenu,
     ContextMenuContent,
@@ -10,8 +10,8 @@ import {
 import { Data, useNodeStore } from "@/app/store/nodeStore";
 
 export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data: Data }) {
-    const { label, isStart, isEnd, isPath, isWall, visited } = data;
-    const { setStart, setEnd, toggleWall, deleteNode } = useNodeStore();
+    const { isStart, isEnd, isPath, isWall, visited } = data;
+    const { setStart, setEnd, deleteNode } = useNodeStore();
 
     const connection = useConnection();
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
@@ -29,9 +29,9 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
         : "bg-[#DEDEDE] dark:bg-[#999999] ";
 
     const cellTypeIcon = isStart ? (
-            <Car className="h-5 w-5 animate-pulse" color="#000000" />
+            <PlaneTakeoff className="h-5 w-5 animate-pulse" color="#000000" />
         ) : isEnd ? (
-            <MapPinHouse className="h-5 w-5 animate-pulse" color="#000000" />
+            <LandPlot className="h-5 w-5 animate-pulse" color="#000000" />
         ) : null;
 
     const animateClass = isStart ? "motion-safe:animate-ping bg-green-200 dark:bg-green-400" : isEnd ? "motion-safe:animate-ping bg-red-200 dark:bg-red-400" : "";
@@ -77,11 +77,11 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
             </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuItem onClick={() => setStart(id)}>
-                    <Car className="h-4 w-4 mr-2"/>
+                    <PlaneTakeoff className="h-4 w-4 mr-2"/>
                     Set as Start
                 </ContextMenuItem>
                 <ContextMenuItem onClick={() => setEnd(id)}>
-                    <MapPinHouse className="h-4 w-4 mr-2" />
+                    <LandPlot className="h-4 w-4 mr-2" />
                     Set as End
                 </ContextMenuItem>
                 <ContextMenuItem onClick={() => deleteNode(id)}>

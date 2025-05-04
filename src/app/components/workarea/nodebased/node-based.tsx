@@ -12,6 +12,7 @@ import {
     applyNodeChanges,
     OnNodesChange,
     useReactFlow,
+    OnConnectEnd,
 } from "@xyflow/react";
 import {
     DropdownMenu,
@@ -54,25 +55,61 @@ const defaultEdgeOptions = {
 };
 
 export function NodeBasedGraph() {
-    const { storeNodes, storeEdges, showWeights, setStoreNodes, setStoreEdges, toggleWeights } = useNodeStore();
+    const { storeNodes, storeEdges, showWeights, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID } = useNodeStore();
 
     const [nodes, setNodes] = useNodesState(storeNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
-    const { fitView } = useReactFlow();
+    const { fitView, screenToFlowPosition } = useReactFlow();
 
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     const onConnect: OnConnect = useCallback(
         (params) => {
             setEdges((eds) => {
-                console.log("params", params);
-                console.log("eds", eds);
                 const updatedEdges = addEdge(params, eds);
                 setStoreEdges(updatedEdges);
                 return updatedEdges;
             });
         },
         [setEdges, setStoreEdges]
+    );
+
+    const onConnectEnd: OnConnectEnd = useCallback(
+        (event, connectionState) => {
+            if (!connectionState.isValid) {
+                const id = getID();
+                const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
+                const newNode: Node = {
+                    id: id,
+                    type: "custom",
+                    position: screenToFlowPosition({
+                        x: clientX,
+                        y: clientY,
+                    }),
+                    data: {
+                        label: `Node ${id}`,
+                        isStart: false,
+                        isEnd: false,
+                        visited: false,
+                        isWall: false,
+                        isPath: false,
+                    },
+                };
+        
+                addNode(newNode);
+                setNodes((nds) => nds.concat(newNode));
+                setEdges((eds) => {
+                    const updatedEdges = eds.concat({
+                        id: id, 
+                        source: connectionState.fromNode?.id ?? "0",
+                        target: id,
+                    });
+                    setStoreEdges(updatedEdges);
+                    return updatedEdges;
+                });
+            }
+        },
+        [addNode, getID, screenToFlowPosition, setEdges, setNodes, setStoreEdges],
     );
 
     const handleNodesChange: OnNodesChange = useCallback(
@@ -195,6 +232,7 @@ export function NodeBasedGraph() {
                     onNodesChange={handleNodesChange}
                     onEdgesChange={onEdgesChange}
                     onConnect={onConnect}
+                    onConnectEnd={onConnectEnd}
                     fitView
                     nodeTypes={nodeTypes}
                     edgeTypes={edgeTypes}

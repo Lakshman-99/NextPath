@@ -15,7 +15,7 @@ export type Data = {
 };
 
 interface NodeStore {
-    n_nodes: number;
+    n_id: number;
     n_algorithm: Algorithm;
     n_isDirected: boolean;
     n_isWeighted: boolean;
@@ -42,10 +42,12 @@ interface NodeStore {
     setStoreEdges: (edge: Edge[]) => void;
     toggleWeights: () => void;
     deleteNode: (id: string) => void;
+    addNode: (node: Node) => void;
+    getID: () => string;
 }
 
 export const useNodeStore = create<NodeStore>((set) => ({
-    n_nodes: 8,
+    n_id: 8,
     n_algorithm: undefined,
     n_isDirected: true,
     n_isWeighted: false,
@@ -180,7 +182,26 @@ export const useNodeStore = create<NodeStore>((set) => ({
             produce((state) => {
                 state.storeNodes = state.storeNodes.filter((node: Node) => node.id !== id);
                 state.storeEdges = state.storeEdges.filter((edge: Edge) => edge.source !== id && edge.target !== id);
-                state.n_nodes -= 1;
             })
         ),
+
+    addNode: (node) =>
+        set(
+            produce((state) => {
+                state.storeNodes.push(node);
+                state.n_id += 1;
+            })
+        ),
+    
+    getID: () => {
+        let id: number;
+        set(
+            produce((state) => {
+                state.n_id += 1;
+                id = state.n_id;
+            })
+        );
+        return String(id!);
+    },
+    
 }));
