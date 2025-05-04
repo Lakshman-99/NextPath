@@ -5,9 +5,11 @@ import {
     BaseEdge,
     type EdgeProps,
     type ReactFlowState,
+    EdgeLabelRenderer,
 } from "@xyflow/react";
 
 import { getEdgeParams } from "@/app/utils/xyflowUtils/util";
+import { useNodeStore } from "@/app/store/nodeStore";
 
 type GetSpecialPathParams = {
     sourceX: number;
@@ -19,22 +21,24 @@ type GetSpecialPathParams = {
 const getSpecialPath = (
     { sourceX, sourceY, targetX, targetY }: GetSpecialPathParams,
     offset: number
-) => {
+): [string, number, number] => {
     const centerX = (sourceX + targetX) / 2;
     const centerY = (sourceY + targetY) / 2;
 
-    return `M ${sourceX} ${sourceY} Q ${centerX} ${
+    const path = `M ${sourceX} ${sourceY} Q ${centerX} ${
         centerY + offset
     } ${targetX} ${targetY}`;
+
+    // Label position is at the control point of the quadratic Bezier curve
+    const labelX = centerX;
+    const labelY = centerY + offset + (offset < 0 ? 12 : -12); // Adjust label position based on offset
+
+    return [path, labelX, labelY];
 };
 
-export default function FloatingEdgeWithBidirectionalSupport({
-    id,
-    source,
-    target,
-    markerEnd,
-    style,
-}: EdgeProps) {
+export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label,}: EdgeProps) {
+    const { n_isDirected, showWeights } = useNodeStore();
+
     const sourceNode = useInternalNode(source);
     const targetNode = useInternalNode(target);
 
@@ -55,15 +59,17 @@ export default function FloatingEdgeWithBidirectionalSupport({
     );
 
     let path: string;
+    let labelX: number = 0;
+    let labelY: number = 0;
 
-    if (isBiDirectionEdge) {
+    if (isBiDirectionEdge && n_isDirected) {
         const offset = sx < tx ? 25 : -25;
-        path = getSpecialPath(
+        [path, labelX, labelY] = getSpecialPath(
             { sourceX: sx, sourceY: sy, targetX: tx, targetY: ty },
             offset
         );
     } else {
-        [path] = getBezierPath({
+        [path, labelX, labelY] = getBezierPath({
             sourceX: sx,
             sourceY: sy,
             sourcePosition: sourcePos,
@@ -73,5 +79,23 @@ export default function FloatingEdgeWithBidirectionalSupport({
         });
     }
 
-    return <BaseEdge path={path} markerEnd={markerEnd} style={style} />;
+    const markerEndType = n_isDirected ? markerEnd : undefined;
+
+    return (
+        <>
+            <BaseEdge path={path} markerEnd={markerEndType} style={style} />
+            {showWeights && label && (
+                <EdgeLabelRenderer>
+                    <div
+                    style={{
+                        position: 'absolute',
+                        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+                    }}
+                    className="nodrag nopan bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm px-1 rounded-full shadow-sm border border-gray-200 dark:border-gray-700" >
+                        {label}
+                    </div>
+                </EdgeLabelRenderer>
+            )}
+        </>
+    );
 }

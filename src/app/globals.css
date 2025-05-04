@@ -233,6 +233,10 @@
   }
 }
 
+button {
+  cursor: pointer;
+}
+
 .react-flow__controls-button {
   --xy-controls-button-color-default: var(--foreground) !important;
   --xy-controls-button-background-color-default: var(--background) !important;
@@ -303,7 +307,7 @@ div.react-flow__panel.react-flow__attribution.bottom {
   transform: translate(-50%, -50%) rotate(0deg);
   z-index: -1;
 }
- 
+
 @keyframes spinner {
   100% {
     transform: translate(-50%, -50%) rotate(-360deg);
@@ -360,20 +364,19 @@ div.sourceHandle, div.targetHandle {
   opacity: 0;
 }
 
-
 .customNode:hover:before {
   content: "";
   background: linear-gradient(
     45deg,
-    #ff0000,
-    #ff7300,
-    #fffb00,
-    #48ff00,
-    #00ffd5,
-    #002bff,
-    #7a00ff,
-    #ff00c8,
-    #ff0000
+    #00bfff, /* Vivid Sky Blue */
+    #ff00ff, /* Bright Magenta (Hot Pink) */
+    #00ffff, /* Cyan (Neon Blue) */
+    #ff1493, /* Deep Pink */
+    #8a2be2, /* Electric Blue (Blue Violet) */
+    #00ffcc, /* Bright Teal (Neon Greenish Blue) */
+    #7f00ff, /* Electric Purple */
+    #ff69b4, /* Hot Pink */
+    #00bfff  /* Vivid Sky Blue (back to start) */
   );
   position: absolute;
   top: -2px;

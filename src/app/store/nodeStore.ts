@@ -24,17 +24,24 @@ interface NodeStore {
 
     storeNodes: Node[];
     storeEdges: Edge[];
+    StartNodeId: string;
+    EndNodeId: string;
 
-    setNodes: (nodes: number) => void;
+    showWeights: boolean;
+
     setNodeAlgorithm: (algo: Algorithm) => void;
     setNodeDirected: (isDirected: boolean) => void;
     setNodeWeighted: (isWeighted: boolean) => void;
     setNodeSpeed: (speed: number) => void;
     setNodeLoading: (isLoading: boolean) => void;
-    toggleStart: (id: string) => void;
-    toggleEnd: (id: string) => void;
+    setStart: (id: string) => void;
+    setEnd: (id: string) => void;
     toggleWall: (id: string) => void;
     toggleVisited: (id: string) => void;
+    setStoreNodes: (nodes: Node[]) => void;
+    setStoreEdges: (edge: Edge[]) => void;
+    toggleWeights: () => void;
+    deleteNode: (id: string) => void;
 }
 
 export const useNodeStore = create<NodeStore>((set) => ({
@@ -47,13 +54,10 @@ export const useNodeStore = create<NodeStore>((set) => ({
 
     storeNodes: getInitialNodes(),
     storeEdges: getInitialEdges(),
+    StartNodeId: "0",
+    EndNodeId: "7",
 
-    setNodes: (nodes) =>
-        set(
-            produce((state) => {
-                state.n_nodes = nodes;
-            })
-        ),
+    showWeights: false,
 
     setNodeAlgorithm: (algo) =>
         set(
@@ -73,6 +77,16 @@ export const useNodeStore = create<NodeStore>((set) => ({
         set(
             produce((state) => {
                 state.n_isWeighted = isWeighted;
+                if (isWeighted) {
+                    state.storeEdges.forEach((edge: Edge) => {
+                        edge.label = Math.floor(Math.random() * 10) + 1;
+                    });
+                }
+                else {
+                    state.storeEdges.forEach((edge: Edge) => {
+                        edge.label = 1;
+                    });
+                }
             })
         ),
 
@@ -90,20 +104,30 @@ export const useNodeStore = create<NodeStore>((set) => ({
             })
         ),
 
-    toggleStart: (id) =>
+    setStart: (id) =>
         set(
             produce((state) => {
-                const node = state.nodes.find((n: Node) => n.id === id);
+                const prevNode = state.storeNodes.find((n: Node) => n.data.isStart);
+                if (prevNode) {
+                    prevNode.data.isStart = false;
+                }
+                state.StartNodeId = id;
+                const node = state.storeNodes.find((n: Node) => n.id === id);
                 if (node) {
                     node.data.isStart = !node.data.isStart;
                 }
             })
         ),
 
-    toggleEnd: (id) =>
+    setEnd: (id) =>
         set(
             produce((state) => {
-                const node = state.nodes.find((n: Node) => n.id === id);
+                const prevNode = state.storeNodes.find((n: Node) => n.data.isEnd);
+                if (prevNode) {
+                    prevNode.data.isEnd = false;
+                }
+                state.EndNodeId = id;
+                const node = state.storeNodes.find((n: Node) => n.id === id);
                 if (node) {
                     node.data.isEnd = !node.data.isEnd;
                 }
@@ -127,6 +151,36 @@ export const useNodeStore = create<NodeStore>((set) => ({
                 if (node) {
                     node.data.visited = !node.data.visited;
                 }
+            })
+        ),
+
+    setStoreNodes: (new_nodes) =>
+        set(
+            produce((state) => {
+                state.storeNodes = new_nodes;
+            })
+        ),
+
+    setStoreEdges: (new_edges) =>
+        set(
+            produce((state) => {
+                state.storeEdges = new_edges;
+            })
+        ),
+
+    toggleWeights: () =>
+        set(
+            produce((state) => {
+                state.showWeights = !state.showWeights;
+            })
+        ),
+
+    deleteNode: (id) =>
+        set(
+            produce((state) => {
+                state.storeNodes = state.storeNodes.filter((node: Node) => node.id !== id);
+                state.storeEdges = state.storeEdges.filter((edge: Edge) => edge.source !== id && edge.target !== id);
+                state.n_nodes -= 1;
             })
         ),
 }));

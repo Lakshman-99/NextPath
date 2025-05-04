@@ -82,13 +82,11 @@ export function AppSidebar() {
     } = useGraphStore();
 
     const {
-        n_nodes,
         n_algorithm,
         n_isDirected,
         n_isWeighted,
         n_speed,
 
-        setNodes,
         setNodeAlgorithm,
         setNodeDirected,
         setNodeWeighted,
@@ -384,31 +382,7 @@ export function AppSidebar() {
                             </div>
                         </TabsContent>
                         <TabsContent value="node" className="space-y-6">
-                            <div className="grid w-full items-center gap-4 space-y-2.5"> {/* No. of nodes */}
-                                <div className="flex flex-col space-y-2.5">
-                                    <Label>
-                                        <Waypoints className="h-4 w-4"/>
-                                        No. of Nodes
-                                    </Label>
-                                    <Input type="number" placeholder="e.g., 10"
-                                        defaultValue={n_nodes}
-                                        min={1}
-                                        max={50}
-                                        onChange={(e) => {
-                                            const value = Number(e.target.value);
-                                            if (value < 1) {
-                                                setNodes(1);
-                                                e.target.value = "1";
-                                            } else if (value > 50) {
-                                                setNodes(50);
-                                                e.target.value = "50";
-                                            } else {
-                                                setNodes(value);
-                                            }
-                                        }}
-                                    />
-                                </div>
-                                
+                            <div className="grid w-full items-center gap-4 space-y-2.5">                               
                                 {/* Algorithm */}
                                 <div className="flex flex-col space-y-2.5">
                                     <Label>
