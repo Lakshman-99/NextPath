@@ -131,29 +131,55 @@ export function AppSidebar() {
         setHighlightAlgorithm(false);
     };
     const handleVisualize = async () => {
-        if (algorithm === undefined) {
-            setHighlightAlgorithm(true);
-            return;
+        if (type === "grid") {
+            if (algorithm === undefined) {
+                setHighlightAlgorithm(true);
+                return;
+            }
+            if (isMobile) {
+                setOpenMobile(false);
+            }
+            if (isLoading) 
+                return;
+            
+            setLoading(true);
+            setIsSettingsDisabled(true);
+            clearPaths();
+            let isVisualized = false;
+            if (algorithm === "bfs") {
+                isVisualized = await applyBFSAlgorithm();
+            } else if (algorithm === "dfs") {
+                isVisualized = await applyDFSAlgorithm();
+            } else if (algorithm === "dijkstra") {
+                isVisualized = await applyDijkstraAlgorithm();
+            }
+            setLoading(false);
+            setIsSettingsDisabled(! isVisualized);
         }
-        if (isMobile) {
-            setOpenMobile(false);
+        else if (type === "node") {
+            if (n_algorithm === undefined) {
+                setHighlightAlgorithm(true);
+                return;
+            }
+            if (isMobile) {
+                setOpenMobile(false);
+            }
+            if (isLoading) 
+                return;
+            
+            setLoading(true);
+            setIsSettingsDisabled(true);
+            let isVisualized = false;
+            if (n_algorithm === "bfs") {
+                isVisualized = await applyBFSAlgorithm();
+            } else if (n_algorithm === "dfs") {
+                isVisualized = await applyDFSAlgorithm();
+            } else if (n_algorithm === "dijkstra") {
+                isVisualized = await applyDijkstraAlgorithm();
+            }
+            setLoading(false);
+            setIsSettingsDisabled(! isVisualized);
         }
-        if (isLoading) 
-            return;
-        
-        setLoading(true);
-        setIsSettingsDisabled(true);
-        clearPaths();
-        let isVisualized = false;
-        if (algorithm === "bfs") {
-            isVisualized = await applyBFSAlgorithm();
-        } else if (algorithm === "dfs") {
-            isVisualized = await applyDFSAlgorithm();
-        } else if (algorithm === "dijkstra") {
-            isVisualized = await applyDijkstraAlgorithm();
-        }
-        setLoading(false);
-        setIsSettingsDisabled(! isVisualized);
     };
     const handleWeighted = (value : string) => {
         const isWeighted = value === "weighted";
@@ -381,7 +407,13 @@ export function AppSidebar() {
                                 </div>
                             </div>
                         </TabsContent>
-                        <TabsContent value="node" className="space-y-6">
+                        <TabsContent value="node"  className={
+                            `space-y-6 ${
+                                isSettingsDisabled
+                                    ? "opacity-50 pointer-events-none"
+                                    : ""
+                                }`
+                            }>
                             <div className="grid w-full items-center gap-4 space-y-2.5">                               
                                 {/* Algorithm */}
                                 <div className="flex flex-col space-y-2.5">

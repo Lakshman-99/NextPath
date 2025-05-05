@@ -37,7 +37,7 @@ const getSpecialPath = (
     return [path, labelX, labelY];
 };
 
-export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label,}: EdgeProps) {
+export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label, animated}: EdgeProps) {
     const { n_isDirected, showWeights } = useNodeStore();
 
     const sourceNode = useInternalNode(source);
@@ -97,14 +97,17 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
                     </div>
                 </EdgeLabelRenderer>
             )}
-            <Plane className="h-4 w-4">
-                <animateMotion
-                    dur="2s"
-                    repeatCount="indefinite"
-                    path={path}
-                    rotate="auto"
-                />
-            </Plane>
+            {animated && (
+                <Plane width={17} height={17} color="none" fill="black">
+                    <animateMotion
+                        dur="2s"
+                        repeatCount="10"
+                        fill="freeze"
+                        path={path}
+                        rotate="auto"
+                    />
+                </Plane>
+            )}
         </>
     );
 }

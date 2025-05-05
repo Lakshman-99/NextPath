@@ -243,6 +243,7 @@ export const getInitialEdges = () => {
             target: "3",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         {
@@ -251,6 +252,7 @@ export const getInitialEdges = () => {
             target: "4",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 1 connections
@@ -260,6 +262,7 @@ export const getInitialEdges = () => {
             target: "2",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         {
@@ -268,6 +271,7 @@ export const getInitialEdges = () => {
             target: "1",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 2 connections
@@ -277,6 +281,7 @@ export const getInitialEdges = () => {
             target: "2",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 3 connections
@@ -286,6 +291,7 @@ export const getInitialEdges = () => {
             target: "5",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         {
@@ -294,6 +300,7 @@ export const getInitialEdges = () => {
             target: "4",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 4 connections
@@ -303,6 +310,7 @@ export const getInitialEdges = () => {
             target: "5",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 5 connections
@@ -312,6 +320,7 @@ export const getInitialEdges = () => {
             target: "6",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         {
@@ -320,6 +329,7 @@ export const getInitialEdges = () => {
             target: "7",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
         // Node 6 connections
@@ -329,6 +339,7 @@ export const getInitialEdges = () => {
             target: "6",
             type: "floating",
             label: "1",
+            animated: false,
             markerEnd: { type: MarkerType.ArrowClosed },
         },
     ];
