@@ -1,7 +1,7 @@
 "use client";
 
 import { useGraphStore, Node, Position } from "../../store/gridStore";
-import { constructAdjacencyList, directions, isValidPosition } from "../util";
+import { constructAdjacencyList, directions, getEdgesForNodes, isValidPosition } from "../util";
 import { addVisitedWithDelay, addPathsWithDelay, addVisitedWithDelayForNodes, addPathsWithDelayForNodes, addAnimationForEdges } from "../animation";
 import { useNodeStore } from "@/app/store/nodeStore";
 
@@ -131,15 +131,7 @@ export async function applyBFSAlgorithmForNodes(): Promise<boolean> {
         path.reverse();
         addPathsWithDelayForNodes(path, n_speed, toggleVisited, togglePath);
 
-        const PathEdges: string[] = [];
-        for (let i = 1; i < path.length; i++) {
-            let edgeId = `xy-edge__${path[i-1]}-${path[i]}`;
-            if (!storeEdges.some((edge) => edge.id === edgeId)) {
-                edgeId = `xy-edge__${path[i]}-${path[i-1]}`;
-                toggleEdgeReverse(edgeId);
-            }
-            PathEdges.push(edgeId);
-        }
+        const PathEdges: string[] = getEdgesForNodes(path, storeEdges, toggleEdgeReverse);
         addAnimationForEdges(PathEdges, n_speed, toggleAnimatedEdge);
     }
 

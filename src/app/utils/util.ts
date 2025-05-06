@@ -66,4 +66,19 @@ export function constructAdjacencyList(nodes: Node[], edges: Edge[], isDirected:
     });
 
     return adjacencyList;
+};
+
+export function getEdgesForNodes(path: string[], storeEdges: Edge[], toggleEdgeReverse: (id: string) => void) {
+    const PathEdges: string[] = [];
+
+    for (let i = 1; i < path.length; i++) {
+        let edgeId = `xy-edge__${path[i - 1]}-${path[i]}`;
+        if (!storeEdges.some((edge) => edge.id === edgeId)) {
+            edgeId = `xy-edge__${path[i]}-${path[i - 1]}`;
+            toggleEdgeReverse(edgeId);
+        }
+        PathEdges.push(edgeId);
+    }
+
+    return PathEdges;
 }

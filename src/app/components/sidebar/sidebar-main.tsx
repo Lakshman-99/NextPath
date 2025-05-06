@@ -46,7 +46,7 @@ import {useGraphStore, Maze, Algorithm} from "@/app/store/gridStore";
 import {getGridDefaults, getRowColBasedCellSize} from "../../utils/util";
 import {applyRandomMage, applyRecursiveDivision} from "@/app/utils/maze";
 import {applyBFSAlgorithm, applyBFSAlgorithmForNodes} from "@/app/utils/algorithms/bfs";
-import {applyDFSAlgorithm} from "@/app/utils/algorithms/dfs";
+import {applyDFSAlgorithm, applyDFSAlgorithmForNodes} from "@/app/utils/algorithms/dfs";
 import {useEffect, useState} from "react";
 import {applyDijkstraAlgorithm} from "@/app/utils/algorithms/dijkstra";
 import { useNodeStore } from "@/app/store/nodeStore";
@@ -179,7 +179,7 @@ export function AppSidebar() {
             if (n_algorithm === "bfs") {
                 isVisualized = await applyBFSAlgorithmForNodes();
             } else if (n_algorithm === "dfs") {
-                isVisualized = await applyDFSAlgorithm();
+                isVisualized = await applyDFSAlgorithmForNodes();
             } else if (n_algorithm === "dijkstra") {
                 isVisualized = await applyDijkstraAlgorithm();
             }

@@ -1,8 +1,9 @@
 "use client";
 
 import { Position, useGraphStore, Node } from "@/app/store/gridStore";
-import { addPathsWithDelay, addVisitedWithDelay } from "../animation";
-import { directions, isValidPosition } from "../util";
+import { addAnimationForEdges, addPathsWithDelay, addPathsWithDelayForNodes, addVisitedWithDelay, addVisitedWithDelayForNodes } from "../animation";
+import { constructAdjacencyList, directions, getEdgesForNodes, isValidPosition } from "../util";
+import { useNodeStore } from "@/app/store/nodeStore";
 
 function dfsHelper(
     row: number,
@@ -69,6 +70,65 @@ export async function applyDFSAlgorithm(): Promise<boolean> {
     await addVisitedWithDelay(visitedNodesInOrder, speed, toggleVisited);
     if (isEndReached) {
         await addPathsWithDelay(path, speed, toggleVisited, togglePath);
+    }
+
+    return true;
+}
+
+function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, visitedNodesInOrder: string[], path: string[],adjacencyList: { [key: string]: string[] }, EndNodeId: string): boolean {
+    if(visited[node]) {
+        return false;
+    }
+    if (node === EndNodeId) {
+        path.push(node);
+        return true;
+    }
+
+    visited[node] = true;
+    visitedNodesInOrder.push(node);
+    path.push(node);
+    console.log("Visited Node:", node);
+
+    
+    const neighbors = adjacencyList[node] || [];
+    for (const neighbor of neighbors) {
+        if (dfsHelperForNodes(neighbor, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId)) {
+            return true;
+        }
+    }
+
+    path.pop();
+    return false;
+}
+
+export async function applyDFSAlgorithmForNodes(): Promise<boolean> {
+    const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
+
+    const adjacencyList: { [key: string]: string[] } = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
+    const visitedNodesInOrder: string[] = [];
+    const path: string[] = [];
+    const visited: { [key: string]: boolean } = { [StartNodeId]: true };
+    
+    let isEndReached = false;
+
+    for (const node of adjacencyList[StartNodeId]) {
+        path.push(StartNodeId);
+        console.log("Checking neighbor:", node);
+
+        if (dfsHelperForNodes(node, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId)) {
+            isEndReached = true;
+            break;
+        }
+        path.length = 0; // Clear path for next iteration
+    }
+    console.log("Path after iteration:", path);
+
+    await addVisitedWithDelayForNodes(visitedNodesInOrder, n_speed, toggleVisited);
+    if (isEndReached) {
+        await addPathsWithDelayForNodes(path, n_speed, toggleVisited, togglePath);
+        
+        const PathEdges: string[] = getEdgesForNodes(path, storeEdges, toggleEdgeReverse);
+        addAnimationForEdges(PathEdges, n_speed, toggleAnimatedEdge);
     }
 
     return true;

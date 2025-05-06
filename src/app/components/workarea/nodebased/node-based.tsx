@@ -13,6 +13,7 @@ import {
     OnNodesChange,
     useReactFlow,
     OnConnectEnd,
+    BackgroundVariant,
 } from "@xyflow/react";
 import {
     DropdownMenu,
@@ -260,7 +261,7 @@ export function NodeBasedGraph() {
                     connectionLineComponent={FloatingConnectionLine}
                     connectionLineStyle={connectionLineStyle}
                 >
-                    <Background gap={16} size={1} />
+                    <Background gap={25} size={1} variant={BackgroundVariant.Dots} />
                     <ZoomSlider position="bottom-right" />
                 </ReactFlow>
             </div>
