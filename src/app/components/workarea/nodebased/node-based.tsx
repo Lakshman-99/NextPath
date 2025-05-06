@@ -107,7 +107,7 @@ export function NodeBasedGraph() {
                 setNodes((nds) => nds.concat(newNode));
                 setEdges((eds) => {
                     const updatedEdges = eds.concat({
-                        id: id, 
+                        id: `xy-edge__${connectionState.fromNode?.id}-${id}`, 
                         source: connectionState.fromNode?.id ?? "0",
                         target: id,
 
