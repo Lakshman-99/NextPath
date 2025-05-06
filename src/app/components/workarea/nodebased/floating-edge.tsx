@@ -37,7 +37,7 @@ const getSpecialPath = (
     return [path, labelX, labelY];
 };
 
-export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label, animated}: EdgeProps) {
+export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label, animated, data }: EdgeProps) {
     const { n_isDirected, showWeights } = useNodeStore();
 
     const sourceNode = useInternalNode(source);
@@ -69,6 +69,15 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
             { sourceX: sx, sourceY: sy, targetX: tx, targetY: ty },
             offset
         );
+    } else if (data && data.isReversed){
+        [path, labelX, labelY] = getBezierPath({
+            sourceX: tx,
+            sourceY: ty,
+            sourcePosition: targetPos,
+            targetX: sx,
+            targetY: sy,
+            targetPosition: sourcePos,
+        });
     } else {
         [path, labelX, labelY] = getBezierPath({
             sourceX: sx,
@@ -98,10 +107,10 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
                 </EdgeLabelRenderer>
             )}
             {animated && (
-                <Plane width={17} height={17} color="none" fill="black">
+                <Plane width={17} height={17} color="none" className="fill-black dark:fill-white">
                     <animateMotion
                         dur="2s"
-                        repeatCount="10"
+                        repeatCount="indefinite"
                         fill="freeze"
                         path={path}
                         rotate="auto"

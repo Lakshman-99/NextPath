@@ -1,8 +1,9 @@
 "use client";
 
 import { useGraphStore, Node, Position } from "../../store/gridStore";
-import { directions, isValidPosition } from "../util";
-import { addVisitedWithDelay, addPathsWithDelay } from "../animation";
+import { constructAdjacencyList, directions, isValidPosition } from "../util";
+import { addVisitedWithDelay, addPathsWithDelay, addVisitedWithDelayForNodes, addPathsWithDelayForNodes, addAnimationForEdges } from "../animation";
+import { useNodeStore } from "@/app/store/nodeStore";
 
 function reconstructPath(
     cameFrom: (Position | null)[][],
@@ -86,4 +87,61 @@ export async function applyBFSAlgorithm(): Promise<boolean> {
     }
 
     return true;
-}
+};
+
+export async function applyBFSAlgorithmForNodes(): Promise<boolean> {
+    const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
+
+    const adjacencyList: { [key: string]: string[] } = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
+
+    const queue: string[] = [StartNodeId];
+    const visited: { [key: string]: boolean } = { [StartNodeId]: true };
+    const parent: { [key: string]: string | null } = { [StartNodeId]: null };
+    const visitedNodesInOrder: string[] = [];
+
+    let endReached = false;
+    while (queue.length > 0) {
+        const currentNodeId = queue.shift()!;
+        visitedNodesInOrder.push(currentNodeId);
+
+        if (currentNodeId === EndNodeId) {
+            endReached = true;
+            break;
+        }
+
+        for (const neighbor of adjacencyList[currentNodeId]) {
+            if (!visited[neighbor]) {
+                queue.push(neighbor);
+                visited[neighbor] = true;
+                parent[neighbor] = currentNodeId;
+            }
+        }
+    }
+
+    await addVisitedWithDelayForNodes(visitedNodesInOrder, n_speed, toggleVisited);
+    if (endReached) {
+        const path: string[] = [];
+
+        let currentNodeId: string | null = EndNodeId;
+        while (currentNodeId !== null) {
+            path.push(currentNodeId);
+            currentNodeId = parent[currentNodeId];
+        }
+
+        path.reverse();
+        addPathsWithDelayForNodes(path, n_speed, toggleVisited, togglePath);
+
+        const PathEdges: string[] = [];
+        for (let i = 1; i < path.length; i++) {
+            let edgeId = `xy-edge__${path[i-1]}-${path[i]}`;
+            if (!storeEdges.some((edge) => edge.id === edgeId)) {
+                edgeId = `xy-edge__${path[i]}-${path[i-1]}`;
+                toggleEdgeReverse(edgeId);
+            }
+            PathEdges.push(edgeId);
+        }
+        addAnimationForEdges(PathEdges, n_speed, toggleAnimatedEdge);
+    }
+
+    return true;
+};

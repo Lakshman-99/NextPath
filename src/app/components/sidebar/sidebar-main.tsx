@@ -45,7 +45,7 @@ import logo from "@/assets/image/logo.png";
 import {useGraphStore, Maze, Algorithm} from "@/app/store/gridStore";
 import {getGridDefaults, getRowColBasedCellSize} from "../../utils/util";
 import {applyRandomMage, applyRecursiveDivision} from "@/app/utils/maze";
-import {applyBFSAlgorithm} from "@/app/utils/algorithms/bfs";
+import {applyBFSAlgorithm, applyBFSAlgorithmForNodes} from "@/app/utils/algorithms/bfs";
 import {applyDFSAlgorithm} from "@/app/utils/algorithms/dfs";
 import {useEffect, useState} from "react";
 import {applyDijkstraAlgorithm} from "@/app/utils/algorithms/dijkstra";
@@ -91,6 +91,7 @@ export function AppSidebar() {
         setNodeDirected,
         setNodeWeighted,
         setNodeSpeed,
+        clearNodePaths,
     } = useNodeStore();
 
     const {isMobile, setOpenMobile} = useSidebar();
@@ -128,6 +129,10 @@ export function AppSidebar() {
     };
     const onAlgorithmChange = (value : Algorithm) => {
         setAlgorithm(value);
+        setHighlightAlgorithm(false);
+    };
+    const onNodeAlgorithmChange = (value : Algorithm) => {
+        setNodeAlgorithm(value);
         setHighlightAlgorithm(false);
     };
     const handleVisualize = async () => {
@@ -169,9 +174,10 @@ export function AppSidebar() {
             
             setLoading(true);
             setIsSettingsDisabled(true);
+            clearNodePaths();
             let isVisualized = false;
             if (n_algorithm === "bfs") {
-                isVisualized = await applyBFSAlgorithm();
+                isVisualized = await applyBFSAlgorithmForNodes();
             } else if (n_algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithm();
             } else if (n_algorithm === "dijkstra") {
@@ -421,8 +427,8 @@ export function AppSidebar() {
                                         <Workflow className="h-4 w-4"/>
                                         Algorithm
                                     </Label>
-                                    <Select onValueChange={(value) => setNodeAlgorithm(value as Algorithm)} value={n_algorithm}>
-                                        <SelectTrigger className={`w-full transition-all duration-300`}>
+                                    <Select onValueChange={(value) => onNodeAlgorithmChange(value as Algorithm)} value={n_algorithm}>
+                                        <SelectTrigger className={`w-full transition-all duration-300 ${highlightAlgorithm ? "ring-3 ring-red-400" : ""}`}>
                                             <SelectValue placeholder="Choose an algorithm"/>
                                         </SelectTrigger>
                                         <SelectContent>

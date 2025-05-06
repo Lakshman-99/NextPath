@@ -29,8 +29,9 @@ import { useNodeStore } from "@/app/store/nodeStore";
 import { useCallback, useEffect } from "react";
 import ELK from "elkjs/lib/elk.bundled.js";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, LayoutDashboard, Settings } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, Route, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
+import { useGraphStore } from "@/app/store/gridStore";
 
 const elk = new ELK();
 
@@ -49,14 +50,19 @@ const edgeTypes = {
 const defaultEdgeOptions = {
     type: "floating",
     animated: false,
+    label: "1",
     markerEnd: {
         type: MarkerType.ArrowClosed,
         color: "#b1b1b7",
     },
+    data: {
+        isReversed: false,
+    }
 };
 
 export function NodeBasedGraph() {
-    const { storeNodes, storeEdges, showWeights, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID } = useNodeStore();
+    const { storeNodes, storeEdges, showWeights, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths } = useNodeStore();
+    const { isLoading } = useGraphStore();
 
     const [nodes, setNodes] = useNodesState(storeNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges);
@@ -104,6 +110,7 @@ export function NodeBasedGraph() {
                         id: id, 
                         source: connectionState.fromNode?.id ?? "0",
                         target: id,
+
                     });
                     setStoreEdges(updatedEdges);
                     return updatedEdges;
@@ -179,9 +186,9 @@ export function NodeBasedGraph() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-40">
-                                <DropdownMenuItem onClick={handleAutoLayout}>
-                                    <LayoutDashboard className="h-4 w-4" />
-                                    Beautify
+                                <DropdownMenuItem onClick={clearNodePaths} disabled={isLoading}>
+                                    <Route className="h-4 w-4" />
+                                    Clear Path
                                 </DropdownMenuItem>
                                 <DropdownMenuItem onClick={() => toggleWeights()}>
                                     {showWeights ? (
@@ -200,10 +207,22 @@ export function NodeBasedGraph() {
                                         </>
                                     )}
                                 </DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleAutoLayout}>
+                                    <LayoutDashboard className="h-4 w-4" />
+                                    Beautify
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
                         <div className="flex gap-1">
+                            <Button
+                                variant="outline"
+                                onClick={clearNodePaths}
+                                disabled={isLoading}
+                            >
+                                <Route className="h-4 w-4" />
+                                Clear Path
+                            </Button>
                             <Button variant="outline" onClick={() => toggleWeights()} >
                                 {showWeights ? (
                                     <>

@@ -1,3 +1,5 @@
+import { Node, Edge } from "@xyflow/react";
+
 export const directions = [
     { row: 0, col: 1 }, // Right
     { row: 1, col: 0 }, // Down
@@ -48,3 +50,20 @@ export const getGridDefaults = () => {
 
     return { defRows: 10, defCols: 20, defCellSize: 50 };
 };
+
+export function constructAdjacencyList(nodes: Node[], edges: Edge[], isDirected: boolean): { [key: string]: string[] } {
+    const adjacencyList: { [key: string]: string[] } = {};
+
+    nodes.forEach((node) => {
+        adjacencyList[node.id] = [];
+    });
+
+    edges.forEach((edge) => {
+        adjacencyList[edge.source].push(edge.target);
+        if (!isDirected) {
+            adjacencyList[edge.target].push(edge.source);
+        }
+    });
+
+    return adjacencyList;
+}

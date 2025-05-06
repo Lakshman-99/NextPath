@@ -38,6 +38,10 @@ interface NodeStore {
     setEnd: (id: string) => void;
     toggleWall: (id: string) => void;
     toggleVisited: (id: string) => void;
+    togglePath: (id: string) => void;
+    clearNodePaths: () => void;
+    toggleAnimatedEdge: (id: string) => void;
+    toggleEdgeReverse: (id: string) => void;
     setStoreNodes: (nodes: Node[]) => void;
     setStoreEdges: (edge: Edge[]) => void;
     toggleWeights: () => void;
@@ -139,7 +143,7 @@ export const useNodeStore = create<NodeStore>((set) => ({
     toggleWall: (id) =>
         set(
             produce((state) => {
-                const node = state.nodes.find((n: Node) => n.id === id);
+                const node = state.storeNodes.find((n: Node) => n.id === id);
                 if (node) {
                     node.data.isWall = !node.data.isWall;
                 }
@@ -149,9 +153,56 @@ export const useNodeStore = create<NodeStore>((set) => ({
     toggleVisited: (id) =>
         set(
             produce((state) => {
-                const node = state.nodes.find((n: Node) => n.id === id);
+                const node = state.storeNodes.find((n: Node) => n.id === id);
                 if (node) {
                     node.data.visited = !node.data.visited;
+                }
+            })
+        ),
+
+    togglePath: (id) =>
+        set(
+            produce((state) => {
+                const node = state.storeNodes.find((n: Node) => n.id === id);
+                if (node) {
+                    node.data.isPath = !node.data.isPath;
+                }
+            })
+        ),
+
+    clearNodePaths: () =>
+        set(
+            produce((state) => {
+                state.storeNodes.forEach((node: Node) => {
+                    node.data.isPath = false;
+                    node.data.visited = false;
+                });
+                state.storeEdges.forEach((edge: Edge) => {
+                    edge.animated = false;
+                    if (edge.data) {
+                        edge.data.isReversed = false;
+                    }
+                });
+            })
+        ),
+
+    toggleAnimatedEdge: (id) =>
+        set(
+            produce((state) => {
+                const edge = state.storeEdges.find((e: Edge) => e.id === id);
+                if (edge) {
+                    edge.animated = !edge.animated;
+                }
+            })
+        ),
+
+    toggleEdgeReverse: (id) =>
+        set(
+            produce((state) => {
+                const edge = state.storeEdges.find((e: Edge) => e.id === id);
+                if (edge) {
+                    console.log("Toggling edge reverse:", edge.id);
+                    edge.data.isReversed = !edge.data.isReversed;
                 }
             })
         ),
