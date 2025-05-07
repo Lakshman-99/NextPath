@@ -111,7 +111,16 @@ export function NodeBasedGraph() {
                         id: `xy-edge__${connectionState.fromNode?.id}-${id}`, 
                         source: connectionState.fromNode?.id ?? "0",
                         target: id,
-
+                        type: "floating",
+                        animated: false,
+                        label: "1",
+                        markerEnd: {
+                            type: MarkerType.ArrowClosed,
+                            color: "#b1b1b7",
+                        },
+                        data: {
+                            isReversed: false,
+                        },
                     });
                     setStoreEdges(updatedEdges);
                     return updatedEdges;
@@ -137,9 +146,8 @@ export function NodeBasedGraph() {
         const layouted = await elk.layout({
             id: "root",
             layoutOptions: {
-                "elk.algorithm": "force", // or "force", "mrtree", etc.
-                "elk.direction": isMobile ? "DOWN" : "RIGHT",
-                "elk.spacing.nodeNode": "20",
+                'elk.algorithm': 'stress',
+                'elk.stress.desiredEdgeLength': '150', // Longer edges
             },
             children: nodes.map((node) => ({
                 id: node.id,

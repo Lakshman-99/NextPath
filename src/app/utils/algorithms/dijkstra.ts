@@ -133,7 +133,6 @@ export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
             }
         }
     }
-    console.log("Visited Nodes in Order:", visitedNodesInOrder);
 
     await addVisitedWithDelayForNodes(visitedNodesInOrder, n_speed, toggleVisited);
     if (endReached) {

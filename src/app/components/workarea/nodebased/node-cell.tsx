@@ -70,7 +70,7 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
                         />
                     )}
                     {/* Label */}
-                    <div className="flex items-center justify-center h-full w-full">
+                    <div className="flex items-center justify-center h-full w-full pointer-events-none">
                         {cellTypeIcon}
                     </div>
                 </div>

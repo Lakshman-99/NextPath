@@ -156,6 +156,8 @@ export function AppSidebar() {
             } else if (algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithm();
             } else if (algorithm === "dijkstra") {
+                setWeighted(true);
+                setRandomWeights();
                 isVisualized = await applyDijkstraAlgorithm();
             }
             setLoading(false);
@@ -181,6 +183,7 @@ export function AppSidebar() {
             } else if (n_algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithmForNodes();
             } else if (n_algorithm === "dijkstra") {
+                setNodeWeighted(true);
                 isVisualized = await applyDijkstraAlgorithmForNodes();
             }
             setLoading(false);
@@ -379,7 +382,7 @@ export function AppSidebar() {
                                         <Weight className="h-4 w-4"/>
                                         Type
                                     </Label>
-                                    <RadioGroup defaultValue={isWeighted ? "weighted":"unweighted"} className="flex gap-4"
+                                    <RadioGroup defaultValue={isWeighted ? "weighted":"unweighted"} value={isWeighted ? "weighted":"unweighted"} className="flex gap-4"
                                         onValueChange={handleWeighted}>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="unweighted" id="unweighted"/>
@@ -473,7 +476,7 @@ export function AppSidebar() {
                                         <Weight className="h-4 w-4"/>
                                         Type
                                     </Label>
-                                    <RadioGroup defaultValue={n_isWeighted ? "weighted":"unweighted"} className="flex gap-4" onValueChange={(value) => setNodeWeighted(value === "weighted")}>
+                                    <RadioGroup defaultValue={n_isWeighted ? "weighted":"unweighted"} value={n_isWeighted ? "weighted":"unweighted"} className="flex gap-4" onValueChange={(value) => setNodeWeighted(value === "weighted")}>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="unweighted" id="unweighted"/>
                                             <Label htmlFor="unweighted">

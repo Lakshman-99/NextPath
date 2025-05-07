@@ -87,8 +87,6 @@ function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, vi
     visited[node] = true;
     visitedNodesInOrder.push(node);
     path.push(node);
-    console.log("Visited Node:", node);
-
     
     const neighbors = adjacencyList[node] || [];
     for (const neighbor of neighbors) {
@@ -113,7 +111,6 @@ export async function applyDFSAlgorithmForNodes(): Promise<boolean> {
 
     for (const node of adjacencyList[StartNodeId]) {
         path.push(StartNodeId);
-        console.log("Checking neighbor:", node);
 
         if (dfsHelperForNodes(node, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId)) {
             isEndReached = true;
@@ -121,7 +118,6 @@ export async function applyDFSAlgorithmForNodes(): Promise<boolean> {
         }
         path.length = 0; // Clear path for next iteration
     }
-    console.log("Path after iteration:", path);
 
     await addVisitedWithDelayForNodes(visitedNodesInOrder, n_speed, toggleVisited);
     if (isEndReached) {

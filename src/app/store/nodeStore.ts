@@ -201,7 +201,6 @@ export const useNodeStore = create<NodeStore>((set) => ({
             produce((state) => {
                 const edge = state.storeEdges.find((e: Edge) => e.id === id);
                 if (edge) {
-                    console.log("Toggling edge reverse:", edge.id);
                     edge.data.isReversed = !edge.data.isReversed;
                 }
             })
