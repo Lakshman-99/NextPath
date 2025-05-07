@@ -107,7 +107,7 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
                 </EdgeLabelRenderer>
             )}
             {animated && (
-                <Plane width={17} height={17} color="none" className="fill-black dark:fill-white">
+                <Plane width={17} height={17} color="none" fill="#000000" className="fill-black dark:fill-white">
                     <animateMotion
                         dur="2s"
                         repeatCount="indefinite"
