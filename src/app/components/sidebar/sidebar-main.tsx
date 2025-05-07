@@ -48,7 +48,7 @@ import {applyRandomMage, applyRecursiveDivision} from "@/app/utils/maze";
 import {applyBFSAlgorithm, applyBFSAlgorithmForNodes} from "@/app/utils/algorithms/bfs";
 import {applyDFSAlgorithm, applyDFSAlgorithmForNodes} from "@/app/utils/algorithms/dfs";
 import {useEffect, useState} from "react";
-import {applyDijkstraAlgorithm} from "@/app/utils/algorithms/dijkstra";
+import {applyDijkstraAlgorithm, applyDijkstraAlgorithmForNodes} from "@/app/utils/algorithms/dijkstra";
 import { useNodeStore } from "@/app/store/nodeStore";
 
 export function AppSidebar() {
@@ -181,7 +181,7 @@ export function AppSidebar() {
             } else if (n_algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithmForNodes();
             } else if (n_algorithm === "dijkstra") {
-                isVisualized = await applyDijkstraAlgorithm();
+                isVisualized = await applyDijkstraAlgorithmForNodes();
             }
             setLoading(false);
             setIsSettingsDisabled(! isVisualized);
