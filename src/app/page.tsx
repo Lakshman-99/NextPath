@@ -1,16 +1,15 @@
-"use client";
-
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { AppSidebar } from "./components/sidebar/sidebar-main"
 import { Header } from "./components/header/header-main"
 import { Main } from "./components/workarea/main"
-import { useMediaQuery } from "usehooks-ts";
+import { cookies } from "next/headers"
 
-export default function Home() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+export default async function Home() {
+  const cookieStore = await cookies()
+  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
 
   return (
-    <SidebarProvider defaultOpen={!isMobile}>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <SidebarInset>
         <Header />
