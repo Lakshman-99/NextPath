@@ -11,7 +11,7 @@ import { Data, useNodeStore } from "@/app/store/nodeStore";
 
 export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data: Data }) {
     const { isStart, isEnd, isPath, isWall, visited } = data;
-    const { map, setStart, setEnd, deleteNode } = useNodeStore();
+    const { map, showLabels, setStart, setEnd, deleteNode } = useNodeStore();
 
     const connection = useConnection();
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
@@ -42,9 +42,11 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
             <ContextMenuTrigger>
                 <div className={`customNode ${baseColor}`}>
                     <div className={`absolute inline-flex h-full w-full rounded-lg opacity-75 ${animateClass}`} />
-                    <div className={`customNodeIcon ${baseColor}`}>
-                        <Move size={12} strokeWidth={2.5} />
-                    </div>
+                    {isFreeFlow && (
+                        <div className={`customNodeIcon ${baseColor}`}>
+                            <Move size={12} strokeWidth={2.5} />
+                        </div>
+                    )}
                     {!connection.inProgress && (
                         <Handle
                             className="targetHandle"
@@ -74,6 +76,11 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
                     <div className="flex items-center justify-center h-full w-full pointer-events-none">
                         {cellTypeIcon}
                     </div>
+                    {!isFreeFlow && showLabels && (
+                        <div className="absolute text-xl font-bold text-gray-800 dark:text-gray-200 pointer-events-none whitespace-nowrap text-shadow-lg">
+                            {data.label}
+                        </div>
+                    )}
                 </div>
             </ContextMenuTrigger>
             <ContextMenuContent>

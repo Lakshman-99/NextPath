@@ -28,6 +28,7 @@ interface NodeStore {
     EndNodeId: string;
 
     showWeights: boolean;
+    showLabels: boolean;
     map: string;
 
     setNodeAlgorithm: (algo: Algorithm) => void;
@@ -50,6 +51,7 @@ interface NodeStore {
     addNode: (node: Node) => void;
     getID: () => string;
     setMap: (map: string) => void;
+    toggleLabels: () => void;
 }
 
 export const useNodeStore = create<NodeStore>((set) => ({
@@ -66,6 +68,7 @@ export const useNodeStore = create<NodeStore>((set) => ({
     EndNodeId: "7",
 
     showWeights: false,
+    showLabels: true,
     map: "freeFlow",
 
     setNodeAlgorithm: (algo) =>
@@ -260,6 +263,13 @@ export const useNodeStore = create<NodeStore>((set) => ({
         set(
             produce((state) => {
                 state.map = map;
+            })
+        ),
+
+    toggleLabels: () =>
+        set(
+            produce((state) => {
+                state.showLabels = !state.showLabels;
             })
         ),
     

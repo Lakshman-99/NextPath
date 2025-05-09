@@ -64,7 +64,7 @@ const defaultEdgeOptions = {
 };
 
 export function NodeBasedGraph() {
-    const { storeNodes, storeEdges, showWeights, map, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths, setStart, setEnd } = useNodeStore();
+    const { storeNodes, storeEdges, showWeights, map, showLabels, toggleLabels, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths, setStart, setEnd } = useNodeStore();
     const { isLoading } = useGraphStore();
 
     const [nodes, setNodes] = useNodesState(storeNodes);
@@ -237,6 +237,21 @@ export function NodeBasedGraph() {
                                         </>
                                     )}
                                 </DropdownMenuItem>
+                                {!isFreeFlow && (
+                                    <DropdownMenuItem onClick={() => toggleLabels()}>
+                                        {showLabels ? (
+                                            <>
+                                                <EyeOff className="h-4 w-4" />
+                                                <span className="">Hide Labels</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Eye className="h-4 w-4" />
+                                                <span className="">Show Labels</span>
+                                            </>
+                                        )}
+                                    </DropdownMenuItem> 
+                                )}
                                 {isFreeFlow && (
                                     <DropdownMenuItem onClick={handleAutoLayout}>
                                         <LayoutDashboard className="h-4 w-4" />
@@ -268,6 +283,21 @@ export function NodeBasedGraph() {
                                     </>
                                 )}
                             </Button>
+                            {!isFreeFlow && (
+                                <Button variant="outline" onClick={() => toggleLabels()} >
+                                    {showLabels ? (
+                                        <>
+                                            <EyeOff className="h-4 w-4" />
+                                            <span className="">Hide Labels</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Eye className="h-4 w-4" />
+                                            <span className="">Show Labels</span>
+                                        </>
+                                    )}
+                                </Button> 
+                            )}
                             {isFreeFlow && (
                                 <Button variant="outline" onClick={handleAutoLayout} >
                                     <LayoutDashboard className="h-4 w-4 mr-2" />
