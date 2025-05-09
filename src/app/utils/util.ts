@@ -51,17 +51,19 @@ export const getGridDefaults = () => {
     return { defRows: 10, defCols: 20, defCellSize: 50 };
 };
 
-export function constructAdjacencyList(nodes: Node[], edges: Edge[], isDirected: boolean): { [key: string]: string[] } {
-    const adjacencyList: { [key: string]: string[] } = {};
+export function constructAdjacencyList(nodes: Node[], edges: Edge[], isDirected: boolean) {
+    const adjacencyList = new Map<string, Array<{ neighbor: string; weight: number }>>();
 
     nodes.forEach((node) => {
-        adjacencyList[node.id] = [];
+        adjacencyList.set(node.id, []);
     });
 
     edges.forEach((edge) => {
-        adjacencyList[edge.source].push(edge.target);
+        const weight = edge.label ? parseInt(String(edge.label)) : 1;
+
+        adjacencyList.get(edge.source)!.push({ neighbor: edge.target, weight });
         if (!isDirected) {
-            adjacencyList[edge.target].push(edge.source);
+            adjacencyList.get(edge.target)!.push({ neighbor: edge.source, weight });
         }
     });
 

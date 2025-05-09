@@ -3,7 +3,6 @@
 import { useGraphStore, Node, Position } from "../../store/gridStore";
 import { constructAdjacencyList, directions, getEdgesForNodes, isValidPosition } from "../util";
 import { addVisitedWithDelay, addPathsWithDelay, addVisitedWithDelayForNodes, addPathsWithDelayForNodes, addAnimationForEdges } from "../animation";
-import { Edge } from "@xyflow/react";
 import { useNodeStore } from "@/app/store/nodeStore";
 
 function reconstructPath(
@@ -99,37 +98,54 @@ export async function applyDijkstraAlgorithm(): Promise<boolean> {
 
 export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
     const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
-    console.log(n_isDirected);
-    const adjacencyList: { [key: string]: string[] } = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
+    
+    if (!StartNodeId || !EndNodeId || !storeNodes.find((node) => node.id === StartNodeId) || !storeNodes.find((node) => node.id === EndNodeId)) {
+        return false;
+    }
 
-    const distances: { [key: string]: number } = { [StartNodeId]: 0 };
-    const parent: { [key: string]: string | null } = { [StartNodeId]: null };
-    const queue: string[] = [StartNodeId];
-    const visited: { [key: string]: boolean } = { [StartNodeId]: true };
+    const adjacencyList = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
+    const distances = new Map<string, number>();
+    const previous  = new Map<string, string | null>();
+    const visited = new Set<string>();
     const visitedNodesInOrder: string[] = [];
+
+    storeNodes.forEach(node => {
+        distances.set(node.id, Infinity);
+        previous.set(node.id, null);
+    });
+    distances.set(StartNodeId, 0);
 
     let endReached = false;
 
-    while (queue.length > 0) {
-        queue.sort((a, b) => (distances[a] || Infinity) - (distances[b] || Infinity));
-        const currentNode = queue.shift()!;
-        visitedNodesInOrder.push(currentNode);
+    while (true) {
+        // pick the unvisited node with smallest distance
+        let current: string | null = null;
+        let minDist = Infinity;
+        for (const [id, dist] of distances.entries()) {
+            if (!visited.has(id) && dist < minDist) {
+                minDist = dist;
+                current = id;
+            }
+        }
+        visitedNodesInOrder.push(current!);
 
-        if (currentNode === EndNodeId) {
+        if (current === null) {
+            break;
+        }
+        if (current === EndNodeId) {
             endReached = true;
             break;
         }
 
-        for (const neighbor of adjacencyList[currentNode]) {
-            if (!visited[neighbor]) {
-                const weight = storeEdges.find((edge: Edge) => edge.source === currentNode && edge.target === neighbor)?.label ?? 1;
-                const newDistance = distances[currentNode] + Number(weight);
+        visited.add(current);
 
-                if (newDistance < (distances[neighbor] || Infinity)) {
-                    distances[neighbor] = newDistance;
-                    parent[neighbor] = currentNode;
-                    queue.push(neighbor);
-                }
+        for (const { neighbor, weight } of adjacencyList.get(current)!) {
+            if (visited.has(neighbor)) {continue;}
+            const alt = distances.get(current)! + weight;
+            
+            if (alt < distances.get(neighbor)!) {
+                distances.set(neighbor, alt);
+                previous.set(neighbor, current);
             }
         }
     }
@@ -137,13 +153,13 @@ export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
     await addVisitedWithDelayForNodes(visitedNodesInOrder, n_speed, toggleVisited);
     if (endReached) {
         const path: string[] = [];
-
-        let currentNode: string | null = EndNodeId;
-        while (currentNode !== null) {
-            path.push(currentNode);
-            currentNode = parent[currentNode];
+        let u: string | null = EndNodeId;
+        if (previous.get(u) !== null || u === StartNodeId) {
+            while (u) {
+                path.unshift(u);
+                u = previous.get(u)!;
+            }
         }
-        path.reverse();
         await addPathsWithDelayForNodes(path, n_speed, toggleVisited, togglePath);
 
         const PathEdges: string[] = getEdgesForNodes(path, storeEdges, toggleEdgeReverse);
