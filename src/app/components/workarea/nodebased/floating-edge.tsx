@@ -1,6 +1,7 @@
 import {
     useInternalNode,
     getBezierPath,
+    getStraightPath,
     useStore,
     BaseEdge,
     type EdgeProps,
@@ -38,10 +39,11 @@ const getSpecialPath = (
 };
 
 export default function FloatingEdgeWithBidirectionalSupport({ id, source, target, markerEnd, style, label, animated, data }: EdgeProps) {
-    const { n_isDirected, showWeights } = useNodeStore();
+    const { n_isDirected, showWeights, map } = useNodeStore();
 
     const sourceNode = useInternalNode(source);
     const targetNode = useInternalNode(target);
+    const isFreeFlow = map === "freeFlow";
 
     const isBiDirectionEdge = useStore((s: ReactFlowState) =>
         s.edges.some(
@@ -69,24 +71,42 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
             { sourceX: sx, sourceY: sy, targetX: tx, targetY: ty },
             offset
         );
-    } else if (data && data.isReversed){
-        [path, labelX, labelY] = getBezierPath({
-            sourceX: tx,
-            sourceY: ty,
-            sourcePosition: targetPos,
-            targetX: sx,
-            targetY: sy,
-            targetPosition: sourcePos,
-        });
+    } else if (isFreeFlow) {
+        if (data && data.isReversed){
+            [path, labelX, labelY] = getBezierPath({
+                sourceX: tx,
+                sourceY: ty,
+                sourcePosition: targetPos,
+                targetX: sx,
+                targetY: sy,
+                targetPosition: sourcePos,
+            });
+        } else {
+            [path, labelX, labelY] = getBezierPath({
+                sourceX: sx,
+                sourceY: sy,
+                sourcePosition: sourcePos,
+                targetX: tx,
+                targetY: ty,
+                targetPosition: targetPos,
+            });
+        }
     } else {
-        [path, labelX, labelY] = getBezierPath({
-            sourceX: sx,
-            sourceY: sy,
-            sourcePosition: sourcePos,
-            targetX: tx,
-            targetY: ty,
-            targetPosition: targetPos,
-        });
+        if (data && data.isReversed){
+            [path, labelX, labelY] = getStraightPath({
+                sourceX: tx,
+                sourceY: ty,
+                targetX: sx,
+                targetY: sy,
+            });
+        } else {
+            [path, labelX, labelY] = getStraightPath({
+                sourceX: sx,
+                sourceY: sy,
+                targetX: tx,
+                targetY: ty,
+            });
+        }
     }
 
     const markerEndType = n_isDirected ? markerEnd : undefined;

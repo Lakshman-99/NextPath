@@ -34,7 +34,8 @@ import {
     Rows2,
     Weight,
     Clapperboard,
-    Compass
+    Compass,
+    Map
 } from "lucide-react";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Button} from "@/components/ui/button";
@@ -54,6 +55,7 @@ import { useNodeStore } from "@/app/store/nodeStore";
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
     const [isSettingsDisabled, setIsSettingsDisabled] = useState(false);
+    const [isDirectionEdgeDisbled, setIsDirectionEdgeDisabled] = useState(false);
     const {
         rows,
         cols,
@@ -86,12 +88,14 @@ export function AppSidebar() {
         n_isDirected,
         n_isWeighted,
         n_speed,
+        map,
 
         setNodeAlgorithm,
         setNodeDirected,
         setNodeWeighted,
         setNodeSpeed,
         clearNodePaths,
+        setMap,
     } = useNodeStore();
 
     const {isMobile, setOpenMobile} = useSidebar();
@@ -183,7 +187,9 @@ export function AppSidebar() {
             } else if (n_algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithmForNodes();
             } else if (n_algorithm === "dijkstra") {
-                setNodeWeighted(true);
+                if (map === "freeFlow") {
+                    setNodeWeighted(true);
+                }
                 isVisualized = await applyDijkstraAlgorithmForNodes();
             }
             setLoading(false);
@@ -199,6 +205,14 @@ export function AppSidebar() {
             setWeightsToOne();
         }
     };
+    const updateMap = (value : string) => {
+        setMap(value);
+        setIsDirectionEdgeDisabled(value === "freeFlow" ? false : true);
+        setNodeDirected(value === "freeFlow");
+        setNodeWeighted(value === "freeFlow" ? false : true);
+        clearNodePaths();
+    };
+
     useEffect(() => {
         const {defRows, defCols, defCellSize} = getGridDefaults();
         setDefaultSize(defRows, defCols, defCellSize);
@@ -366,12 +380,10 @@ export function AppSidebar() {
                                                 Recursive Division
                                             </SelectItem>
                                             <SelectItem value="recursive-vertical">
-                                                Recursive Vertical
-                                                                                                            Division
+                                                Recursive Vertical Division
                                             </SelectItem>
                                             <SelectItem value="recursive-horizontal">
-                                                Recursive Horizontal
-                                                                                                            Division
+                                                Recursive Horizontal Division
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
@@ -423,7 +435,28 @@ export function AppSidebar() {
                                     : ""
                                 }`
                             }>
-                            <div className="grid w-full items-center gap-4 space-y-2.5">                               
+                            <div className="grid w-full items-center gap-4 space-y-2.5">   
+                                {/* Map */}
+                                <div className="flex flex-col space-y-2.5">
+                                    <Label>
+                                        <Map className="h-4 w-4"/>
+                                        Map
+                                    </Label>
+                                    <Select onValueChange={(value) => updateMap(value as string)} value={map}>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Choose a map type"/>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="freeFlow">
+                                                Free Flow
+                                            </SelectItem>
+                                            <SelectItem value="usa">
+                                                United States
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
                                 {/* Algorithm */}
                                 <div className="flex flex-col space-y-2.5">
                                     <Label>
@@ -449,12 +482,12 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Graph Direction */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `}>
                                     <Label>
                                         <Compass className="h-4 w-4"/>
                                         Direction
                                     </Label>
-                                    <RadioGroup defaultValue={n_isDirected ? "directed":"undirected"} className="flex gap-4" onValueChange={(value) => setNodeDirected(value === "directed")}>
+                                    <RadioGroup defaultValue={n_isDirected ? "directed":"undirected"} value={n_isDirected ? "directed":"undirected"} className="flex gap-4" onValueChange={(value) => setNodeDirected(value === "directed")}>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="undirected" id="undirected"/>
                                             <Label htmlFor="undirected">
@@ -471,7 +504,7 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Graph Type */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `}>
                                     <Label>
                                         <Weight className="h-4 w-4"/>
                                         Type

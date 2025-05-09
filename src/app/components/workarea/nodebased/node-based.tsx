@@ -13,7 +13,7 @@ import {
     OnNodesChange,
     useReactFlow,
     OnConnectEnd,
-    BackgroundVariant,
+    BackgroundVariant
 } from "@xyflow/react";
 import {
     DropdownMenu,
@@ -33,6 +33,8 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, LayoutDashboard, Route, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useGraphStore } from "@/app/store/gridStore";
+import { getRandomEndNode, getRandomStartNode, getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
+import { getInitialEdges, getInitialNodes } from "@/app/utils/xyflowUtils/util";
 
 const elk = new ELK();
 
@@ -62,7 +64,7 @@ const defaultEdgeOptions = {
 };
 
 export function NodeBasedGraph() {
-    const { storeNodes, storeEdges, showWeights, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths } = useNodeStore();
+    const { storeNodes, storeEdges, showWeights, map, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths, setStart, setEnd } = useNodeStore();
     const { isLoading } = useGraphStore();
 
     const [nodes, setNodes] = useNodesState(storeNodes);
@@ -70,6 +72,7 @@ export function NodeBasedGraph() {
     const { fitView, screenToFlowPosition } = useReactFlow();
 
     const isMobile = useMediaQuery("(max-width: 768px)");
+    const isFreeFlow = map === "freeFlow";
 
     const onConnect: OnConnect = useCallback(
         (params) => {
@@ -84,7 +87,7 @@ export function NodeBasedGraph() {
 
     const onConnectEnd: OnConnectEnd = useCallback(
         (event, connectionState) => {
-            if (!connectionState.isValid) {
+            if (!connectionState.isValid && isFreeFlow) {
                 const id = getID();
                 const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
                 const newNode: Node = {
@@ -127,18 +130,19 @@ export function NodeBasedGraph() {
                 });
             }
         },
-        [addNode, getID, screenToFlowPosition, setEdges, setNodes, setStoreEdges],
+        [addNode, getID, isFreeFlow, screenToFlowPosition, setEdges, setNodes, setStoreEdges],
     );
 
     const handleNodesChange: OnNodesChange = useCallback(
         (changes) => {
+            if (!isFreeFlow) return; // Prevent changes in map mode
             setNodes((nds) => {
                 const updatedNodes = applyNodeChanges(changes, nds);
                 setStoreNodes(updatedNodes); // Update the store with the new nodes
                 return updatedNodes;
             });
         },
-        [setNodes, setStoreNodes]
+        [isFreeFlow, setNodes, setStoreNodes]
     );
 
     // Auto Layout using ELK
@@ -147,7 +151,7 @@ export function NodeBasedGraph() {
             id: "root",
             layoutOptions: {
                 'elk.algorithm': 'stress',
-                'elk.stress.desiredEdgeLength': '150', // Longer edges
+                'elk.stress.desiredEdgeLength': '175', // Longer edges
             },
             children: nodes.map((node) => ({
                 id: node.id,
@@ -181,6 +185,23 @@ export function NodeBasedGraph() {
         setNodes(storeNodes);
         setEdges(storeEdges);
     }, [storeNodes, storeEdges, setNodes, setEdges]);
+
+    useEffect(() => {
+        if (map === "freeFlow") {
+            setStoreNodes(getInitialNodes());
+            setStoreEdges(getInitialEdges());
+            setStart("0");
+            setEnd("7");
+        }
+        else if (map === "usa") {
+            setStoreNodes(getUSANodes());
+            setStoreEdges(getUSALinks());
+            setStart(getRandomStartNode());
+            setEnd(getRandomEndNode());
+        }
+
+        fitView();
+    }, [map, fitView, setStoreNodes, setStoreEdges, setStart, setEnd]);
 
     return (
         <div className="p-5 h-full flex flex-col gap-4">
@@ -216,10 +237,12 @@ export function NodeBasedGraph() {
                                         </>
                                     )}
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleAutoLayout}>
-                                    <LayoutDashboard className="h-4 w-4" />
-                                    Beautify
-                                </DropdownMenuItem>
+                                {isFreeFlow && (
+                                    <DropdownMenuItem onClick={handleAutoLayout}>
+                                        <LayoutDashboard className="h-4 w-4" />
+                                        Beautify
+                                    </DropdownMenuItem>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
@@ -245,10 +268,12 @@ export function NodeBasedGraph() {
                                     </>
                                 )}
                             </Button>
-                            <Button variant="outline" onClick={handleAutoLayout} >
-                                <LayoutDashboard className="h-4 w-4 mr-2" />
-                                Beautify
-                            </Button>
+                            {isFreeFlow && (
+                                <Button variant="outline" onClick={handleAutoLayout} >
+                                    <LayoutDashboard className="h-4 w-4 mr-2" />
+                                    Beautify
+                                </Button>
+                            )}
                         </div>
                     )}
                 </div>
@@ -268,9 +293,20 @@ export function NodeBasedGraph() {
                     defaultEdgeOptions={defaultEdgeOptions}
                     connectionLineComponent={FloatingConnectionLine}
                     connectionLineStyle={connectionLineStyle}
+                    nodesDraggable={isFreeFlow}
+                    nodesConnectable={isFreeFlow}
+                    nodesFocusable={isFreeFlow}
+                    panOnDrag={isFreeFlow}
+                    panOnScroll={isFreeFlow}
+                    zoomOnPinch={isFreeFlow}
+                    zoomOnScroll={isFreeFlow}
+                    zoomOnDoubleClick={isFreeFlow}
+                    minZoom={0.0000001}
                 >
                     <Background gap={25} size={1} variant={BackgroundVariant.Dots} />
-                    <ZoomSlider position="bottom-right" />
+                    {isFreeFlow && (
+                        <ZoomSlider position="bottom-right" />
+                    )}
                 </ReactFlow>
             </div>
         </div>

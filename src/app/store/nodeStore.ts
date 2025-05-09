@@ -28,6 +28,7 @@ interface NodeStore {
     EndNodeId: string;
 
     showWeights: boolean;
+    map: string;
 
     setNodeAlgorithm: (algo: Algorithm) => void;
     setNodeDirected: (isDirected: boolean) => void;
@@ -48,6 +49,7 @@ interface NodeStore {
     deleteNode: (id: string) => void;
     addNode: (node: Node) => void;
     getID: () => string;
+    setMap: (map: string) => void;
 }
 
 export const useNodeStore = create<NodeStore>((set) => ({
@@ -64,6 +66,7 @@ export const useNodeStore = create<NodeStore>((set) => ({
     EndNodeId: "7",
 
     showWeights: false,
+    map: "freeFlow",
 
     setNodeAlgorithm: (algo) =>
         set(
@@ -239,7 +242,6 @@ export const useNodeStore = create<NodeStore>((set) => ({
         set(
             produce((state) => {
                 state.storeNodes.push(node);
-                state.n_id += 1;
             })
         ),
     
@@ -253,5 +255,12 @@ export const useNodeStore = create<NodeStore>((set) => ({
         );
         return String(id!);
     },
+
+    setMap: (map) =>
+        set(
+            produce((state) => {
+                state.map = map;
+            })
+        ),
     
 }));

@@ -11,10 +11,11 @@ import { Data, useNodeStore } from "@/app/store/nodeStore";
 
 export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data: Data }) {
     const { isStart, isEnd, isPath, isWall, visited } = data;
-    const { setStart, setEnd, deleteNode } = useNodeStore();
+    const { map, setStart, setEnd, deleteNode } = useNodeStore();
 
     const connection = useConnection();
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
+    const isFreeFlow = map === "freeFlow";
 
     const baseColor = isStart
         ? "bg-[#ADF7B6] dark:bg-[#C1FF9B] "
@@ -84,10 +85,12 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
                     <LandPlot className="h-4 w-4 mr-2" />
                     Set as End
                 </ContextMenuItem>
-                <ContextMenuItem onClick={() => deleteNode(id)}>
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Node
-                </ContextMenuItem>
+                {isFreeFlow && (
+                    <ContextMenuItem onClick={() => deleteNode(id)}>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete Node
+                    </ContextMenuItem>
+                )}
             </ContextMenuContent>
         </ContextMenu>
     );

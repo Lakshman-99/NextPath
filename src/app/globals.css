@@ -363,3 +363,9 @@ div.sourceHandle, div.targetHandle {
   border: none;
   opacity: 0;
 }
+
+.canvasBackground {
+  background-image: url('../assets/image/usa.png');
+  background-size: cover;
+  background-repeat: round;
+}

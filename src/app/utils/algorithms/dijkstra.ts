@@ -99,7 +99,7 @@ export async function applyDijkstraAlgorithm(): Promise<boolean> {
 
 export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
     const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
-    
+    console.log(n_isDirected);
     const adjacencyList: { [key: string]: string[] } = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
 
     const distances: { [key: string]: number } = { [StartNodeId]: 0 };

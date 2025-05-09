@@ -29,6 +29,6 @@
         ".next/types/**/*.ts",
         "src/app/components/workarea/nodebased/node-based.tsx",
         "src/app/utils/xyflowUtils/util.js"
-    ],
+, "src/app/utils/xyflowUtils/usa-map.js"    ],
     "exclude": ["node_modules"]
 }
