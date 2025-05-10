@@ -198,7 +198,7 @@ export function NodeBasedGraph() {
         const startNodeId = getAndRemove("startNodeId");
         const endNodeId = getAndRemove("endNodeId");
 
-        if (map === "freeFlow") {
+        if (map === "freeFlow" && storeNodes[0].data.label === "Vancouver") {
             if (nodes && edges) {
                 try {
                     setStoreNodes(JSON.parse(nodes));

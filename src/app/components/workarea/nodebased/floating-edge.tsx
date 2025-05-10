@@ -127,15 +127,18 @@ export default function FloatingEdgeWithBidirectionalSupport({ id, source, targe
                 </EdgeLabelRenderer>
             )}
             {animated && (
-                <Plane width={17} height={17} color="none" fill="#000000" className="fill-black dark:fill-white">
-                    <animateMotion
-                        dur="2s"
-                        repeatCount="indefinite"
-                        fill="freeze"
-                        path={path}
-                        rotate="auto"
-                    />
-                </Plane>
+                <svg width={17} height={17} xmlns="http://www.w3.org/2000/svg">
+                    <g>
+                        <Plane width={17} height={17} color="none" fill="#000000" className="fill-black dark:fill-white" />
+                        <animateMotion
+                            dur="2s"
+                            repeatCount="indefinite"
+                            fill="freeze"
+                            path={path}
+                            rotate="auto"
+                        />
+                    </g>
+                </svg>
             )}
         </>
     );
