@@ -20,10 +20,19 @@ import {
 } from '@/components/ui/tooltip';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { constructLinkData } from "@/app/utils/util";
 
 export function ExportGraph() {
     const [copied, setCopied] = useState(false);
-    const link = "https://ui.shadcn.com/docs/installation";
+    const [link, setLink] = useState("");
+
+    const constructLink = async () => {
+        const baseUrl = window.location.origin;
+        const linkData = await constructLinkData();
+        const link = `${baseUrl}/graph?data=${linkData}`;
+        
+        setLink(link);
+    };
 
     const handleCopyClick = async  () => {
         try {
@@ -37,7 +46,7 @@ export function ExportGraph() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="cursor-pointer">
+                <Button variant="outline" size="sm" onClick={constructLink}>
                     <Share className="mr-2 h-4 w-4" />
                     Export
                 </Button>

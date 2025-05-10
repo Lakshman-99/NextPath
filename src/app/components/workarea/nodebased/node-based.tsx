@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, LayoutDashboard, Route, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useGraphStore } from "@/app/store/gridStore";
-import { getRandomEndNode, getRandomStartNode, getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
+import { getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
 import { getInitialEdges, getInitialNodes } from "@/app/utils/xyflowUtils/util";
 
 const elk = new ELK();
@@ -187,17 +187,41 @@ export function NodeBasedGraph() {
     }, [storeNodes, storeEdges, setNodes, setEdges]);
 
     useEffect(() => {
+        const getAndRemove = (key: string): string | null => {
+            const value = localStorage.getItem(key);
+            if (value) localStorage.removeItem(key);
+            return value;
+        };
+
+        const nodes = getAndRemove("nodes");
+        const edges = getAndRemove("edges");
+        const startNodeId = getAndRemove("startNodeId");
+        const endNodeId = getAndRemove("endNodeId");
+
         if (map === "freeFlow") {
-            setStoreNodes(getInitialNodes());
-            setStoreEdges(getInitialEdges());
-            setStart("0");
-            setEnd("7");
+            if (nodes && edges) {
+                try {
+                    setStoreNodes(JSON.parse(nodes));
+                    setStoreEdges(JSON.parse(edges));
+                } catch {
+                    setStoreNodes(getInitialNodes());
+                    setStoreEdges(getInitialEdges());
+                }
+                setStart(startNodeId ?? "0");
+                setEnd(endNodeId ?? "7");
+            } else {
+                setStoreNodes(getInitialNodes());
+                setStoreEdges(getInitialEdges());
+                setStart("0");
+                setEnd("7");
+            }
         }
-        else if (map === "usa") {
+
+        if (map === "usa") {
             setStoreNodes(getUSANodes());
             setStoreEdges(getUSALinks());
-            setStart(getRandomStartNode());
-            setEnd(getRandomEndNode());
+            setStart(startNodeId ?? "0");
+            setEnd(endNodeId ?? "1");
         }
 
         fitView();

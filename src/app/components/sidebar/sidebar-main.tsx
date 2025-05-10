@@ -80,7 +80,9 @@ export function AppSidebar() {
         clearPaths,
         setLoading,
         setRandomWeights,
-        setWeightsToOne
+        setWeightsToOne,
+        setStartNode,
+        setEndNode,
     } = useGraphStore();
 
     const {
@@ -214,11 +216,52 @@ export function AppSidebar() {
     };
 
     useEffect(() => {
-        const {defRows, defCols, defCellSize} = getGridDefaults();
-        setDefaultSize(defRows, defCols, defCellSize);
-        setSize(defRows, defCols);
-        setCellSize(defCellSize);
-    }, [setDefaultSize, setCellSize, setSize]);
+        const { defRows, defCols, defCellSize } = getGridDefaults();
+
+        const getAndRemove = (key: string): string | null => {
+            const value = localStorage.getItem(key);
+            if (value) localStorage.removeItem(key);
+            return value;
+        };
+
+        const parseNumber = (value: string | null, fallback: number): number =>
+            value !== null && !isNaN(Number(value)) ? parseInt(value, 10) : fallback;
+
+        // Cell Size
+        const savedCellSize = getAndRemove("cellSize");
+        setCellSize(parseNumber(savedCellSize, defCellSize));
+
+        // Default Size
+        const defaultRows = parseNumber(getAndRemove("defaultRows"), defRows);
+        const defaultCols = parseNumber(getAndRemove("defaultCols"), defCols);
+        const defaultCellSize = parseNumber(getAndRemove("defaultCellSize"), defCellSize);
+        setDefaultSize(defaultRows, defaultCols, defaultCellSize);
+
+        // Grid Size
+        const rows = parseNumber(getAndRemove("rows"), defRows);
+        const cols = parseNumber(getAndRemove("cols"), defCols);
+        setSize(rows, cols);
+
+        // Start Node
+        const savedStartNode = getAndRemove("startNode");
+        if (savedStartNode) {
+            try {
+            const [row, col] = JSON.parse(savedStartNode);
+            setStartNode(row, col);
+            } catch {}
+        }
+
+        // End Node
+        const savedEndNode = getAndRemove("endNode");
+        if (savedEndNode) {
+            try {
+            const [row, col] = JSON.parse(savedEndNode);
+            setEndNode(row, col);
+            } catch {}
+        }
+
+    }, [setDefaultSize, setCellSize, setSize, setStartNode, setEndNode]);
+
     return (
     <Sidebar>
         <SidebarHeader className="flex shrink-0 items-center justify-center px-4">
@@ -278,6 +321,7 @@ export function AppSidebar() {
                                                 </Label>
                                                 <Input type="number" placeholder="e.g., 10"
                                                     defaultValue={rows}
+                                                    value={rows}
                                                     min={2}
                                                     max={25}
                                                     onChange={
@@ -302,6 +346,7 @@ export function AppSidebar() {
                                             </Label>
                                             <Input type="number" placeholder="e.g., 15"
                                                 defaultValue={cols}
+                                                value={cols}
                                                 min={2}
                                                 max={50}
                                                 onChange={

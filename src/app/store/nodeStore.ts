@@ -52,6 +52,7 @@ interface NodeStore {
     getID: () => string;
     setMap: (map: string) => void;
     toggleLabels: () => void;
+    setId: (id: number) => void;
 }
 
 export const useNodeStore = create<NodeStore>((set) => ({
@@ -270,6 +271,13 @@ export const useNodeStore = create<NodeStore>((set) => ({
         set(
             produce((state) => {
                 state.showLabels = !state.showLabels;
+            })
+        ),
+
+    setId: (id) =>
+        set(
+            produce((state) => {
+                state.n_id = id;
             })
         ),
     

@@ -1,4 +1,9 @@
 import { Node, Edge } from "@xyflow/react";
+import { useGraphStore } from "../store/gridStore";
+import { useNodeStore } from "../store/nodeStore";
+import pako from 'pako';
+import { Buffer } from 'buffer';
+import base64url from 'base64url';
 
 export const directions = [
     { row: 0, col: 1 }, // Right
@@ -83,4 +88,59 @@ export function getEdgesForNodes(path: string[], storeEdges: Edge[], toggleEdgeR
     }
 
     return PathEdges;
+}
+
+export async function constructLinkData() {
+    const { type, rows, cols, cellSize, maze, speed, algorithm, isWeighted, startNode, endNode, walls, defaultRows, defaultCols, defaultCellSize } = useGraphStore.getState();
+    const { n_id, n_algorithm, n_isDirected, n_isWeighted, n_speed, storeNodes, storeEdges, StartNodeId, EndNodeId, map } = useNodeStore.getState();
+
+    const processedWalls = walls.map((wall) => {
+        return [wall.row, wall.col];
+    });
+
+    const processedNodes = storeNodes.map((node) => {
+        return [node.id, node.position.x, node.position.y, node.data.label, node.data.isStart ? 1 : 0, node.data.isEnd ? 1 : 0];
+    });
+
+    const processedEdges = storeEdges.map((edge) => {
+        return [edge.id, edge.source, edge.target, edge.label];
+    });
+
+    const data = {
+        grid: {
+            t: type,
+            r: rows,
+            c: cols,
+            cs: cellSize,
+            m: maze,
+            s: speed,
+            alg: algorithm,
+            isw: isWeighted ? 1 : 0,
+            sn: [startNode.row, startNode.col],
+            en: [endNode.row, endNode.col],
+            w: processedWalls,
+            dr: defaultRows,
+            dc: defaultCols,
+            dcs: defaultCellSize
+        },
+        node: {
+            id: n_id,
+            alg: n_algorithm,
+            isd: n_isDirected ? 1 : 0,
+            isw: n_isWeighted ? 1 : 0,
+            s: n_speed,
+            n: map === "freeFlow" ? processedNodes : [],
+            e: map === "freeFlow" ? processedEdges : [],
+            sn: StartNodeId,
+            en: EndNodeId,
+            m: map
+        }
+    };
+
+    const linkData = data;
+    const stringedLinkData = JSON.stringify(linkData);
+    const compressed = pako.deflate(stringedLinkData, { level: 9 });
+    const encoded = base64url.encode(Buffer.from(compressed));
+
+    return encoded;
 }
