@@ -225,6 +225,7 @@ export function NodeBasedGraph() {
         }
 
         fitView();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [map, fitView, setStoreNodes, setStoreEdges, setStart, setEnd]);
 
     return (
