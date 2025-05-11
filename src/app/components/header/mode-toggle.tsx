@@ -4,10 +4,12 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useMediaQuery } from "usehooks-ts";
 
 export function ModeToggle() {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
+    const isMobile = useMediaQuery("(max-width: 768px)");
 
     useEffect(() => {
         setMounted(true);
@@ -19,11 +21,17 @@ export function ModeToggle() {
         setTheme(theme === "dark" ? "light" : "dark");
     };
 
-    return (
+    return !isMobile ? (
         <Button variant="outline" size="icon" onClick={toggleTheme}>
-            <Sun className="h-[1.2rem] w-[1.2rem] transition-all dark:scale-0 dark:hidden" />
-            <Moon className="h-[1.2rem] w-[1.2rem] transition-all hidden dark:block" />
+            <Sun className="h-4 w-4 transition-all dark:scale-0 dark:hidden" />
+            <Moon className="h-4 w-4 transition-all hidden dark:block" />
             <span className="sr-only">Toggle theme</span>
         </Button>
-    );
+    ) : (
+        <div onClick={toggleTheme} className="flex items-center gap-2">
+            <Sun className="h-4 w-4 transition-all dark:scale-0 dark:hidden" />
+            <Moon className="h-4 w-4 transition-all hidden dark:block" />
+            Toggle theme
+        </div>
+    )
 }

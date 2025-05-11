@@ -4,10 +4,27 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "./mode-toggle";
 import { ExportGraph } from "./export-graph";
 import { useGraphStore } from "@/app/store/gridStore";
+import { useMediaQuery } from "usehooks-ts";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Menu, Rocket } from "lucide-react";
+import { useOnborda } from "onborda";
 
 export function Header() {
     const { type } = useGraphStore();
     const isMatrix = type === "grid";
+    const isMobile = useMediaQuery("(max-width: 768px)");
+
+    const { startOnborda } = useOnborda();
+
+    const handleStart = () => {
+        startOnborda("onboarding-tour");
+    };
 
     return (
         <header className="flex h-16 md:h-20 shrink-0 items-center justify-between border-b px-4 backdrop-blur-md bg-background/80">
@@ -27,8 +44,35 @@ export function Header() {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-2 ml-auto">
-                <ExportGraph />
-                <ModeToggle />
+                    {isMobile ? (
+                        <>
+                            <ExportGraph />
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" size="icon">
+                                        <Menu className="h-5 w-5 " />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-40">
+                                    <DropdownMenuItem >
+                                        <ModeToggle />
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={handleStart}>
+                                        <Rocket className="h-4 w-4" />
+                                        Start Tour
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="outline" size="icon" onClick={handleStart}>
+                                <Rocket className="h-4 w-4" />
+                            </Button>
+                            <ModeToggle />
+                            <ExportGraph />
+                        </>
+                    )}
             </div>
         </header>
     );

@@ -21,10 +21,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { constructLinkData } from "@/app/utils/util";
+import { useMediaQuery } from "usehooks-ts";
 
 export function ExportGraph() {
     const [copied, setCopied] = useState(false);
     const [link, setLink] = useState("");
+    const isMobile = useMediaQuery("(max-width: 768px)");
 
     const constructLink = async () => {
         const baseUrl = window.location.origin;
@@ -46,9 +48,9 @@ export function ExportGraph() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" onClick={constructLink} id="export-graph">
-                    <Share className="mr-2 h-4 w-4" />
-                    Export
+                <Button variant="outline" size={isMobile ? "icon" : "default"} onClick={constructLink} id="export-graph">
+                    <Share className={`w-4 ${isMobile ? "h3" : "h-4"}`} />
+                    {isMobile ? "" : "Export" }
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
