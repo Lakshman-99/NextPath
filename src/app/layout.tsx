@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from './components/theme-provider'
+import { ThemeProvider } from './components/theme-provider';
+import { OnbordaProvider, Onborda } from "onborda";
+import { getOnboardingSteps } from "./utils/onboarding-steps";
 import "@xyflow/react/dist/style.css";
 import "./globals.css";
 
@@ -24,7 +26,11 @@ export default function RootLayout({children, }: Readonly<{children: React.React
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <OnbordaProvider>
+            <Onborda steps={getOnboardingSteps()} >
+              {children}
+            </Onborda>
+          </OnbordaProvider>
         </ThemeProvider>
       </body>
     </html>
