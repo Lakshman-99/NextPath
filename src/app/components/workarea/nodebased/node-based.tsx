@@ -76,18 +76,20 @@ export function NodeBasedGraph() {
 
     const onConnect: OnConnect = useCallback(
         (params) => {
+            if (!isFreeFlow) return; // Prevent connections in map mode
             setEdges((eds) => {
                 const updatedEdges = addEdge(params, eds);
                 setStoreEdges(updatedEdges);
                 return updatedEdges;
             });
         },
-        [setEdges, setStoreEdges]
+        [isFreeFlow, setEdges, setStoreEdges]
     );
 
     const onConnectEnd: OnConnectEnd = useCallback(
         (event, connectionState) => {
-            if (!connectionState.isValid && isFreeFlow) {
+            if (!isFreeFlow) return; // Prevent connections in map mode
+            if (!connectionState.isValid) {
                 const id = getID();
                 const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
                 const newNode: Node = {
