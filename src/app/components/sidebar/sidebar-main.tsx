@@ -320,7 +320,6 @@ export function AppSidebar() {
                                                     Rows (m)
                                                 </Label>
                                                 <Input type="number" placeholder="e.g., 10"
-                                                    defaultValue={rows}
                                                     value={rows}
                                                     min={2}
                                                     max={25}
@@ -345,7 +344,6 @@ export function AppSidebar() {
                                                 Columns (n)
                                             </Label>
                                             <Input type="number" placeholder="e.g., 15"
-                                                defaultValue={cols}
                                                 value={cols}
                                                 min={2}
                                                 max={50}
