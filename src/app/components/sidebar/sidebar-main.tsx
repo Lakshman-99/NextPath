@@ -274,9 +274,8 @@ export function AppSidebar() {
         </SidebarHeader>
         <SidebarContent>
             <SidebarGroup>
-                <Tabs className="w-full p-2"
-                    value={type}>
-                    <TabsList className={
+                <Tabs id="settings" className="w-full p-2" value={type}>
+                    <TabsList id="graphType" className={
                         `grid grid-cols-2 w-full ${
                             isSettingsDisabled
                                 ? "opacity-50 pointer-events-none"
