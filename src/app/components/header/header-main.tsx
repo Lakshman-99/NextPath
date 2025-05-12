@@ -11,6 +11,12 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { Menu, Rocket } from "lucide-react";
 import { useOnborda } from "onborda";
@@ -66,9 +72,18 @@ export function Header() {
                         </>
                     ) : (
                         <>
-                            <Button variant="outline" size="icon" onClick={handleStart}>
-                                <Rocket className="h-4 w-4" />
-                            </Button>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <Button variant="outline" size="icon" onClick={handleStart}>
+                                            <Rocket className="h-4 w-4" />
+                                        </Button>
+                                        </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Start Tour</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                             <ModeToggle />
                             <ExportGraph />
                         </>
