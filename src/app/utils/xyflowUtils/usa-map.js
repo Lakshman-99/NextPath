@@ -1,13 +1,12 @@
 import { MarkerType } from "@xyflow/react";
 
 export const getRandomStartNode = () => {
-    const startNode = Math.floor(Math.random() * 19);
+    const startNode = Math.floor(Math.random() * 10);
     return startNode.toString();
 };
 
 export const getRandomEndNode = () => {
-    let endNode = Math.floor(Math.random() * 36);
-    endNode = endNode === 25 ? 26 : endNode;
+    let endNode = Math.floor(Math.random() * (36 - 28 + 1)) + 28;
     return endNode.toString();
 };
 

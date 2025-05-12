@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, LayoutDashboard, Route, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useGraphStore } from "@/app/store/gridStore";
-import { getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
+import { getRandomEndNode, getRandomStartNode, getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
 import { getInitialEdges, getInitialNodes } from "@/app/utils/xyflowUtils/util";
 
 const elk = new ELK();
@@ -222,8 +222,8 @@ export function NodeBasedGraph() {
         if (map === "usa") {
             setStoreNodes(getUSANodes());
             setStoreEdges(getUSALinks());
-            setStart(startNodeId ?? "0");
-            setEnd(endNodeId ?? "1");
+            setStart(startNodeId ?? getRandomStartNode());
+            setEnd(endNodeId ?? getRandomEndNode());
         }
 
         fitView();
