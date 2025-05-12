@@ -253,7 +253,7 @@ export function WelcomeDialog() {
                                                     </motion.div>
                                                 </DialogTitle>
 
-                                                <DialogDescription className="mt-3 text-base">
+                                                <DialogDescription className="mt-3 text-base" asChild>
                                                     <motion.div
                                                         variants={{
                                                             hidden: {

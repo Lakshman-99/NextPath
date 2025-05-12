@@ -186,7 +186,8 @@ export function NodeBasedGraph() {
     useEffect(() => {
         setNodes(storeNodes);
         setEdges(storeEdges);
-    }, [storeNodes, storeEdges, setNodes, setEdges]);
+        fitView({ duration: 500 });
+    }, [storeNodes, storeEdges, setNodes, setEdges, fitView]);
 
     useEffect(() => {
         const getAndRemove = (key: string): string | null => {
