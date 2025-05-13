@@ -37,8 +37,8 @@ export function ModeToggle() {
                         <span className="sr-only">Toggle theme</span>
                     </Button>
                 </TooltipTrigger>
-                <TooltipContent asChild>
-                    <p>Toggle Theme</p>
+                <TooltipContent>
+                    Toggle Theme
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

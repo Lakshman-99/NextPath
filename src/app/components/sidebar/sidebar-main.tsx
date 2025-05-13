@@ -311,7 +311,7 @@ export function AppSidebar() {
                                                 : ""
                                             }`
                                 }>
-                                    <div className="grid w-full items-center gap-4 space-y-2.5"> {/* Grid Size */}
+                                    <div className="grid w-full items-center gap-4 space-y-2.5" id="rows-cols"> {/* Grid Size */}
                                         <div className="flex gap-4 justify-between">
                                             <div className="flex flex-col space-y-2.5">
                                                 <Label>
@@ -337,33 +337,34 @@ export function AppSidebar() {
                                                         }
                                                     }/>
                                             </div>
-                                        <div className="flex flex-col space-y-2.5">
-                                            <Label>
-                                                <Columns2 className="h-4 w-4"/>
-                                                Columns (n)
-                                            </Label>
-                                            <Input type="number" placeholder="e.g., 15"
-                                                value={cols}
-                                                min={2}
-                                                max={50}
-                                                onChange={
-                                                    (e) => {
-                                                        const value = Number(e.target.value);
-                                                        if (value < 2) {
-                                                            updateCell(rows, 2);
-                                                            e.target.value = "2";
-                                                        } else if (value > 50) {
-                                                            updateCell(rows, 50);
-                                                            e.target.value = "50";
-                                                        } else {
-                                                            updateCell(rows, value);
+                                            <div className="flex flex-col space-y-2.5">
+                                                <Label>
+                                                    <Columns2 className="h-4 w-4"/>
+                                                    Columns (n)
+                                                </Label>
+                                                <Input type="number" placeholder="e.g., 15"
+                                                    value={cols}
+                                                    min={2}
+                                                    max={50}
+                                                    onChange={
+                                                        (e) => {
+                                                            const value = Number(e.target.value);
+                                                            if (value < 2) {
+                                                                updateCell(rows, 2);
+                                                                e.target.value = "2";
+                                                            } else if (value > 50) {
+                                                                updateCell(rows, 50);
+                                                                e.target.value = "50";
+                                                            } else {
+                                                                updateCell(rows, value);
+                                                            }
                                                         }
-                                                    }
-                                                }/>
+                                                    }/>
+                                            </div>
                                         </div>
-                                </div>
+                                    </div>
                                 {/* Algorithm */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="algorithm-selector">
                                     <Label>
                                         <Workflow className="h-4 w-4"/>
                                         Algorithm
@@ -399,7 +400,7 @@ export function AppSidebar() {
                                     </Select>
                                 </div>
                                 {/* Maze Generator */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="maze-generator">
                                     <Label>
                                         <TableCellsSplit className="h-4 w-4"/>
                                         Maze Generator
@@ -431,12 +432,12 @@ export function AppSidebar() {
                                     </Select>
                                 </div>
                                 {/* Graph Type */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="type-selector">
                                     <Label>
                                         <Weight className="h-4 w-4"/>
                                         Type
                                     </Label>
-                                    <RadioGroup defaultValue={isWeighted ? "weighted":"unweighted"} value={isWeighted ? "weighted":"unweighted"} className="flex gap-4"
+                                    <RadioGroup defaultValue={isWeighted ? "weighted":"unweighted"} value={isWeighted ? "weighted":"unweighted"} className="flex justify-between gap-4"
                                         onValueChange={handleWeighted}>
                                         <div className="flex items-center space-x-2">
                                             <RadioGroupItem value="unweighted" id="unweighted"/>
@@ -453,7 +454,7 @@ export function AppSidebar() {
                                     </RadioGroup>
                                 </div>
                                 {/* Speed */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="animation-speed">
                                     <Label>
                                         <Gauge className="h-4 w-4"/>
                                         Animation Speed
@@ -468,7 +469,6 @@ export function AppSidebar() {
                                             (value) => setSpeed(value[0])
                                         }/>
                                 </div>
-                            </div>
                         </TabsContent>
                         <TabsContent value="node"  className={
                             `space-y-6 ${
@@ -479,7 +479,7 @@ export function AppSidebar() {
                             }>
                             <div className="grid w-full items-center gap-4 space-y-2.5">   
                                 {/* Map */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="map-selector">
                                     <Label>
                                         <Map className="h-4 w-4"/>
                                         Map
@@ -500,7 +500,7 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Algorithm */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="algorithm-selector">
                                     <Label>
                                         <Workflow className="h-4 w-4"/>
                                         Algorithm
@@ -524,7 +524,7 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Graph Direction */}
-                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `}>
+                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `} id="direction-toggle">
                                     <Label>
                                         <Compass className="h-4 w-4"/>
                                         Direction
@@ -546,7 +546,7 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Graph Type */}
-                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `}>
+                                <div className={`flex flex-col space-y-2.5 ${isDirectionEdgeDisbled ? "opacity-50 pointer-events-none" : ""} `} id="weight-toggle">
                                     <Label>
                                         <Weight className="h-4 w-4"/>
                                         Type
@@ -568,7 +568,7 @@ export function AppSidebar() {
                                 </div>
 
                                 {/* Speed */}
-                                <div className="flex flex-col space-y-2.5">
+                                <div className="flex flex-col space-y-2.5" id="animation-nspeed">
                                     <Label>
                                         <Gauge className="h-4 w-4"/>
                                         Animation Speed
@@ -584,7 +584,7 @@ export function AppSidebar() {
                         </TabsContent>
                     </CardContent>
                     <CardFooter>
-                        <Button className="w-full cursor-pointer"
+                        <Button className="w-full cursor-pointer" id="visualize-btn"
                             onClick={handleVisualize}> {
                             isLoading
                                 ? (<UseAnimations animation={loading2}

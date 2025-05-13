@@ -84,6 +84,7 @@ export const GridCell = memo(function GridCell({
                         margin: "1px",
                     }}
                     title={`Cell (${row}, ${col})`}
+                    id={`cell-${row}-${col}`}
                     onClick={toggleWallOnClick}
                 >
                     {showWeight ? weightText : cellTypeIcon}

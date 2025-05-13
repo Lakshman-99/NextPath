@@ -234,7 +234,7 @@ export function NodeBasedGraph() {
     return (
         <div className="p-5 h-full flex flex-col gap-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Building..</h2>
+                <h2 className="text-lg font-semibold"></h2>
                 <div className="flex items-center gap-1">
                     {isMobile ? (
                         <DropdownMenu>
@@ -294,11 +294,12 @@ export function NodeBasedGraph() {
                                 variant="outline"
                                 onClick={clearNodePaths}
                                 disabled={isLoading}
+                                id="clear-path-btn"
                             >
                                 <Route className="h-4 w-4" />
                                 Clear Path
                             </Button>
-                            <Button variant="outline" onClick={() => toggleWeights()} >
+                            <Button variant="outline" onClick={() => toggleWeights()} id="toggle-weights-btn">
                                 {showWeights ? (
                                     <>
                                         <EyeOff className="h-4 w-4" />
@@ -327,7 +328,7 @@ export function NodeBasedGraph() {
                                 </Button> 
                             )}
                             {isFreeFlow && (
-                                <Button variant="outline" onClick={handleAutoLayout} >
+                                <Button variant="outline" onClick={handleAutoLayout} id="beautify-btn">
                                     <LayoutDashboard className="h-4 w-4 mr-2" />
                                     Beautify
                                 </Button>
@@ -339,6 +340,7 @@ export function NodeBasedGraph() {
 
             <div className="react-flow-wrapper w-full h-full flex-col items-center justify-center overflow-auto p-0 rounded-lg outline color-ring">
                 <ReactFlow
+                    id="node-canvas"
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={handleNodesChange}
@@ -363,7 +365,7 @@ export function NodeBasedGraph() {
                 >
                     <Background gap={25} size={1} variant={BackgroundVariant.Dots} />
                     {isFreeFlow && (
-                        <ZoomSlider position="bottom-right" />
+                        <ZoomSlider position="bottom-right" id="zoom-controls" />
                     )}
                 </ReactFlow>
             </div>

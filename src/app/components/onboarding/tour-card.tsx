@@ -30,6 +30,8 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
         });
     };
 
+    const width = step.selector === "#node-canvas" ? 300 : 350;
+
     return (
         <AnimatePresence mode="wait">
         <motion.div
@@ -37,9 +39,9 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
         >
-        <Card className="relative z-[999] w-[350px] shadow-xl rounded-2xl bg-background border border-muted overflow-hidden">
+        <Card className={`relative z-[999] w-[${width}px] shadow-xl rounded-2xl bg-background border border-muted overflow-hidden`}>
             <div className="absolute top-0 inset-x-0 h-[2px] bg-primary/30" />
-            <CardHeader className="pb-2">
+            <CardHeader >
                 <div className="flex items-center justify-between">
                     <motion.div layout>
                         <CardDescription className="text-muted-foreground text-xs font-medium tracking-wider flex items-center">
@@ -102,7 +104,7 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
                 </motion.div>
             </CardContent>
 
-            <CardFooter className="pt-4">
+            <CardFooter >
                 <div className="flex justify-between items-center w-full space-x-3">
                     {currentStep !== 0 && (
                         <motion.div whileHover={{ x: -4 }} whileTap={{ scale: 0.97 }}>

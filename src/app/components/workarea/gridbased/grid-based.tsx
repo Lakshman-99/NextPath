@@ -116,6 +116,7 @@ export function GridBasedGraph() {
                                 variant="outline"
                                 onClick={clearPath}
                                 disabled={isLoading}
+                                id="clear-path"
                             >
                                 <Route className="h-4 w-4" />
                                 Clear Path
@@ -124,6 +125,7 @@ export function GridBasedGraph() {
                                 variant="outline"
                                 onClick={clearObstacle}
                                 disabled={isLoading}
+                                id="clear-obstacle"
                             >
                                 <CloudOff className="h-4 w-4" />
                                 Clear Obstacle
@@ -132,6 +134,7 @@ export function GridBasedGraph() {
                                 variant="outline"
                                 onClick={() => setShowWeight(!showWeight)}
                                 disabled={isLoading}
+                                id="toggle-weights"
                             >
                                 {showWeight ? (
                                     <>
@@ -155,7 +158,7 @@ export function GridBasedGraph() {
                     !isMobile ? "h-full" : ""
                 } w-full flex-col items-center justify-center overflow-auto p-0`}
             >
-                <div className="outline-none" tabIndex={0}>
+                <div className="outline-none" tabIndex={0} id="grid-canvas">
                     {grid.map((row, rowIndex) => (
                         <div key={rowIndex} className="flex">
                             {row.map((node) => (

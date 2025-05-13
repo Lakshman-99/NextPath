@@ -40,7 +40,7 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
     return (
         <ContextMenu>
             <ContextMenuTrigger>
-                <div className={`customNode ${baseColor}`}>
+                <div className={`customNode ${baseColor}`} id={`node-${id}`}>
                     <div className={`absolute inline-flex h-full w-full rounded-lg opacity-75 ${animateClass}`} />
                     {isFreeFlow && (
                         <div className={`customNodeIcon ${baseColor}`}>

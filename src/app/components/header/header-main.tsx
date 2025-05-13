@@ -78,9 +78,9 @@ export function Header() {
                                         <Button variant="outline" size="icon" onClick={handleStart}>
                                             <Rocket className="h-4 w-4" />
                                         </Button>
-                                        </TooltipTrigger>
-                                    <TooltipContent asChild>
-                                        <p>Start Tour</p>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        Start Tour
                                     </TooltipContent>
                                 </Tooltip>
                             </TooltipProvider>
