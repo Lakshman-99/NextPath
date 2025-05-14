@@ -20,6 +20,7 @@ import confetti from "canvas-confetti";
 export default function TourCard({ step, currentStep, totalSteps, nextStep, prevStep, }: CardComponentProps) {
     const { closeOnborda } = useOnborda();
     const progress = ((currentStep + 1) / totalSteps) * 100;
+    const width = step.selector === "#node-canvas" ? "300" : "350";
 
     const handleFinish = () => {
         closeOnborda();
@@ -30,7 +31,6 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
         });
     };
 
-    const width = step.selector === "#node-canvas" ? 300 : 350;
 
     return (
         <AnimatePresence mode="wait">
