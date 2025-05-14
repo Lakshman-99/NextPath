@@ -22,13 +22,14 @@ import { Menu, Rocket } from "lucide-react";
 import { useOnborda } from "onborda";
 
 export function Header() {
-    const { type } = useGraphStore();
+    const { type, setType } = useGraphStore();
     const isMatrix = type === "grid";
     const isMobile = useMediaQuery("(max-width: 768px)");
 
     const { startOnborda } = useOnborda();
 
     const handleStart = () => {
+        setType("grid");
         startOnborda("onboarding-tour");
     };
 

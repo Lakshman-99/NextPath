@@ -19,6 +19,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
             <OnbordaProvider>
                 <Onborda
                     steps={steps}
+                    shadowRgb="50, 50, 50"
                     shadowOpacity="0.6"
                     cardComponent={TourCard}
                 >

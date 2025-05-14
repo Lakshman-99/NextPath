@@ -16,48 +16,76 @@ import {
 
 import { ChevronLeft, ChevronRight, PartyPopper, X } from "lucide-react";
 import confetti from "canvas-confetti";
+import { useGraphStore } from "@/app/store/gridStore";
+
+const fireConfetti = () => {
+    const count = 200;
+    const defaults = {
+        origin: { y: 0.7 },
+    };
+    const fire = (particleRatio: number, opts: confetti.Options) => {
+        confetti({
+            ...defaults,
+            ...opts,
+            particleCount: Math.floor(count * particleRatio),
+        });
+    }
+    fire(0.25, {
+        spread: 26,
+        startVelocity: 55,
+    });
+    fire(0.2, {
+        spread: 60,
+    });
+    fire(0.35, {
+        spread: 100,
+        decay: 0.91,
+        scalar: 1.2,
+    });
+    fire(0.1, {
+        spread: 120,
+        startVelocity: 25,
+        decay: 0.92,
+        scalar: 1.4,
+    });
+    fire(0.1, {
+        spread: 120,
+        startVelocity: 45,
+    });
+}
 
 export default function TourCard({ step, currentStep, totalSteps, nextStep, prevStep, }: CardComponentProps) {
     const { closeOnborda } = useOnborda();
+    const { setType } = useGraphStore();
     const progress = ((currentStep + 1) / totalSteps) * 100;
     const width = step.selector === "#node-canvas" ? "w-[300px]" : "w-[350px]";
 
     const handleFinish = () => {
         closeOnborda();
+        fireConfetti();
+        setType("grid");
+    };
 
-        const count = 200;
-        const defaults = {
-            origin: { y: 0.7 },
-        };
-        const fire = (particleRatio: number, opts: confetti.Options) => {
-            confetti({
-                ...defaults,
-                ...opts,
-                particleCount: Math.floor(count * particleRatio),
-            });
+    const onPrev = () => {
+        if (step.selector === "#map-selector") {
+            setType("grid");
+            setTimeout(() => {
+                prevStep();
+            }, 100);
+        } else {
+            prevStep();
         }
-        fire(0.25, {
-            spread: 26,
-            startVelocity: 55,
-        });
-        fire(0.2, {
-            spread: 60,
-        });
-        fire(0.35, {
-            spread: 100,
-            decay: 0.91,
-            scalar: 1.2,
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 25,
-            decay: 0.92,
-            scalar: 1.4,
-        });
-        fire(0.1, {
-            spread: 120,
-            startVelocity: 45,
-        });
+    }
+
+    const onNext = () => {
+        if (step.selector === "#graphType") {
+            setType("node");
+            setTimeout(() => {
+                nextStep();
+            }, 100);
+        } else {
+            nextStep();
+        }
     };
 
 
@@ -140,7 +168,7 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
                             <Button
                                 variant="outline"
                                 className="text-xs px-4 py-2 rounded-full border-muted"
-                                onClick={prevStep}
+                                onClick={onPrev}
                             >
                                 <ChevronLeft className="w-4 h-4 mr-1" />
                                 Previous
@@ -151,7 +179,7 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
                         <motion.div whileHover={{ x: 4 }} whileTap={{ scale: 0.97 }} className="ml-auto">
                             <Button
                                 className="ml-auto bg-primary text-primary-foreground text-xs px-4 py-2 rounded-full shadow-md hover:bg-primary/90"
-                                onClick={nextStep}
+                                onClick={onNext}
                             >
                                 Next
                                 <ChevronRight className="w-4 h-4 ml-1" />

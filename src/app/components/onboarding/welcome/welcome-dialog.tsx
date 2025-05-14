@@ -66,6 +66,7 @@ export function WelcomeDialog() {
 
     // Button handlers
     const handleStart = () => {
+        setType("grid");
         startOnborda("onboarding-tour");
         setOpen(false);
     };
