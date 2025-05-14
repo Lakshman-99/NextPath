@@ -35,7 +35,6 @@ export default function CatchAllRedirect() {
         };
 
         const updateNodeStates = (data: any) => {
-            console.log("updateNodeStates", data);
             const { id, alg, isd, isw, s, n, e, sn, en, m } = data;
             setId(id);
             setMap(m);

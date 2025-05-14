@@ -201,7 +201,7 @@ export function NodeBasedGraph() {
         const startNodeId = getAndRemove("startNodeId");
         const endNodeId = getAndRemove("endNodeId");
 
-        if (map === "freeFlow" && storeNodes[0].data.label === "Vancouver") {
+        if (map === "freeFlow") {
             if (nodes && edges) {
                 try {
                     setStoreNodes(JSON.parse(nodes));
@@ -212,7 +212,7 @@ export function NodeBasedGraph() {
                 }
                 setStart(startNodeId ?? "0");
                 setEnd(endNodeId ?? "7");
-            } else {
+            } else if(storeNodes[0].data.label === "Vancouver") {
                 setStoreNodes(getInitialNodes());
                 setStoreEdges(getInitialEdges());
                 setStart("0");
