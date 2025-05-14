@@ -1,5 +1,29 @@
 import { Tour } from "onborda/dist/types";
-import { Wrench, FastForward, BrickWall, Scale, Proportions, Brain, Tv, Dumbbell, Construction, RouteOff, Puzzle, Plane, LandPlot, Cloudy, ChevronsLeftRightEllipsis, Map, SignpostBig, SendToBack, Network, Option } from 'lucide-react';
+import {
+    Wrench,
+    FastForward,
+    BrickWall,
+    Scale,
+    Proportions,
+    Brain,
+    Tv,
+    Dumbbell,
+    Construction,
+    RouteOff,
+    Puzzle,
+    Plane,
+    LandPlot,
+    Cloudy,
+    ChevronsLeftRightEllipsis,
+    Map,
+    SignpostBig,
+    SendToBack,
+    Network,
+    Option,
+    Link,
+    SunMoon,
+    Repeat,
+} from "lucide-react";
 import React from "react";
 
 export const getOnboardingSteps = (): Tour[] => {
@@ -92,7 +116,7 @@ export const getOnboardingSteps = (): Tour[] => {
                         "Use this to show or hide edge weights—especially useful for weighted algorithms.",
                     side: "bottom-right",
                     showControls: true,
-                    pointerPadding: 20,
+                    pointerPadding: 10,
                     pointerRadius: 11,
                 },
                 {
@@ -103,7 +127,7 @@ export const getOnboardingSteps = (): Tour[] => {
                         "Remove all maze walls and reset the grid to a clean state.",
                     side: "bottom-right",
                     showControls: true,
-                    pointerPadding: 20,
+                    pointerPadding: 10,
                     pointerRadius: 11,
                 },
                 {
@@ -114,7 +138,7 @@ export const getOnboardingSteps = (): Tour[] => {
                         "Erase the previously visualized path without affecting walls or weights.",
                     side: "bottom-right",
                     showControls: true,
-                    pointerPadding: 20,
+                    pointerPadding: 10,
                     pointerRadius: 11,
                 },
                 {
@@ -278,6 +302,39 @@ export const getOnboardingSteps = (): Tour[] => {
                     content:
                         "Right-click any node to set it as the start, end, or delete it from the graph. This gives you full control over structure and flow.",
                     side: "left",
+                    showControls: true,
+                    pointerPadding: 10,
+                    pointerRadius: 11,
+                },
+                {
+                    selector: "#export-graph",
+                    icon: React.createElement(Link),
+                    title: "Share Your Graph",
+                    content:
+                        "Generate a shareable link of your current graph setup — great for sharing or continuing later.",
+                    side: "bottom-right",
+                    showControls: true,
+                    pointerPadding: 10,
+                    pointerRadius: 11,
+                },
+                {
+                    selector: "#theme-toggle-btn",
+                    icon: React.createElement(SunMoon),
+                    title: "Toggle Theme",
+                    content:
+                        "Switch between light and dark themes to match your preference or environment.",
+                    side: "bottom-right",
+                    showControls: true,
+                    pointerPadding: 10,
+                    pointerRadius: 11,
+                },
+                {
+                    selector: "#start-tour-btn",
+                    icon: React.createElement(Repeat),
+                    title: "Launch Tour",
+                    content:
+                        "Need a quick refresher? Click here anytime to restart the guided tour and explore the app step by step.",
+                    side: "bottom-right",
                     showControls: true,
                     pointerPadding: 10,
                     pointerRadius: 11,

@@ -31,7 +31,7 @@ export function ModeToggle() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" onClick={toggleTheme}>
+                    <Button variant="outline" size="icon" onClick={toggleTheme} id="theme-toggle-btn">
                         <Sun className="h-4 w-4 transition-all dark:scale-0 dark:hidden" />
                         <Moon className="h-4 w-4 transition-all hidden dark:block" />
                         <span className="sr-only">Toggle theme</span>

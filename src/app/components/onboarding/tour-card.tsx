@@ -20,14 +20,43 @@ import confetti from "canvas-confetti";
 export default function TourCard({ step, currentStep, totalSteps, nextStep, prevStep, }: CardComponentProps) {
     const { closeOnborda } = useOnborda();
     const progress = ((currentStep + 1) / totalSteps) * 100;
-    const width = step.selector === "#node-canvas" ? "300" : "350";
+    const width = step.selector === "#node-canvas" ? "w-[300px]" : "w-[350px]";
 
     const handleFinish = () => {
         closeOnborda();
-        confetti({
-            particleCount: 120,
-            spread: 80,
-            origin: { y: 0.6 },
+
+        const count = 200;
+        const defaults = {
+            origin: { y: 0.7 },
+        };
+        const fire = (particleRatio: number, opts: confetti.Options) => {
+            confetti({
+                ...defaults,
+                ...opts,
+                particleCount: Math.floor(count * particleRatio),
+            });
+        }
+        fire(0.25, {
+            spread: 26,
+            startVelocity: 55,
+        });
+        fire(0.2, {
+            spread: 60,
+        });
+        fire(0.35, {
+            spread: 100,
+            decay: 0.91,
+            scalar: 1.2,
+        });
+        fire(0.1, {
+            spread: 120,
+            startVelocity: 25,
+            decay: 0.92,
+            scalar: 1.4,
+        });
+        fire(0.1, {
+            spread: 120,
+            startVelocity: 45,
         });
     };
 
@@ -39,7 +68,7 @@ export default function TourCard({ step, currentStep, totalSteps, nextStep, prev
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
         >
-        <Card className={`relative z-[999] w-[${width}px] shadow-xl rounded-2xl bg-background border border-muted overflow-hidden`}>
+        <Card className={`relative z-[999] ${width} shadow-xl rounded-2xl bg-background border border-muted overflow-hidden`}>
             <div className="absolute top-0 inset-x-0 h-[2px] bg-primary/30" />
             <CardHeader >
                 <div className="flex items-center justify-between">
