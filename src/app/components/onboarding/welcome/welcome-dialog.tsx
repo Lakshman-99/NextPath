@@ -20,6 +20,7 @@ import { FeatureCard } from "./feature-card";
 import { AlgorithmCard } from "./algorithm-card";
 import { useGraphStore } from "@/app/store/gridStore";
 import { useNodeStore } from "@/app/store/nodeStore";
+import { useSidebar } from "@/components/ui/sidebar";
 
 const algorithmData = [
     {
@@ -58,22 +59,23 @@ const algorithmData = [
 
 // Main component
 export function WelcomeDialog() {
-    const [open, setOpen] = React.useState(true);
+    const [open, setDialogOpen] = React.useState(true);
     const [activeView, setActiveView] = React.useState("welcome");
     const { setType } = useGraphStore();
     const { setMap, setNodeDirected, setNodeWeighted } = useNodeStore();
+    const { setOpen } = useSidebar();
     const { startOnborda } = useOnborda();
 
     // Button handlers
     const handleStart = () => {
         setType("grid");
         startOnborda("onboarding-tour");
-        setOpen(false);
+        setDialogOpen(false);
     };
 
     const handleInteractiveEditor = () => {
         setType("node");
-        setOpen(false);
+        setDialogOpen(false);
     };
 
     const handleMapVisualization = () => {
@@ -81,7 +83,7 @@ export function WelcomeDialog() {
         setMap("usa");
         setNodeDirected(false);
         setNodeWeighted(true);
-        setOpen(false);
+        setDialogOpen(false);
     };
 
     const showAlgorithms = () => {
@@ -92,10 +94,14 @@ export function WelcomeDialog() {
         setActiveView("welcome");
     };
 
+    React.useEffect(() => {
+        setOpen(true);
+    }, [setOpen]);
+
     return (
         <AnimatePresence>
             {open && (
-                <Dialog open={open} onOpenChange={setOpen}>
+                <Dialog open={open} onOpenChange={setDialogOpen}>
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
