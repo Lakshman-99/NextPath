@@ -13,6 +13,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Settings, Eye, EyeOff, Route, CloudOff } from "lucide-react";
+import { HelpCard } from "./help-card";
 
 export function GridBasedGraph() {
     const [showWeight, setShowWeight] = useState(false);
@@ -150,6 +151,7 @@ export function GridBasedGraph() {
                             </Button>
                         </div>
                     )}
+                    <HelpCard />
                 </div>
             </div>
 
