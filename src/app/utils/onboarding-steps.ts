@@ -23,6 +23,7 @@ import {
     Link,
     SunMoon,
     Repeat,
+    BadgeHelp,
 } from "lucide-react";
 import React from "react";
 
@@ -109,6 +110,17 @@ export const getOnboardingSteps = (): Tour[] => {
                     pointerRadius: 11,
                 },
                 {
+                    selector: "#legends-btn",
+                    icon: React.createElement(BadgeHelp),
+                    title: "Graph Legends",
+                    content:
+                        "Click here to view what each color represents — such as start node, end node, walls, visited cells, and paths.",
+                    side: "bottom-right",
+                    showControls: true,
+                    pointerPadding: 10,
+                    pointerRadius: 11,
+                },
+                {
                     selector: "#toggle-weights",
                     icon: React.createElement(Dumbbell),
                     title: "Toggle Weights",
@@ -153,7 +165,7 @@ export const getOnboardingSteps = (): Tour[] => {
                     pointerRadius: 11,
                 },
                 {
-                    selector: "#cell-1-1",
+                    selector: "#cell-2-2",
                     icon: React.createElement(Plane),
                     title: "Start Node",
                     content:
@@ -164,7 +176,7 @@ export const getOnboardingSteps = (): Tour[] => {
                     pointerRadius: 11,
                 },
                 {
-                    selector: "#cell-6-8",
+                    selector: "#cell-7-17",
                     icon: React.createElement(LandPlot),
                     title: "End Node",
                     content:

@@ -35,6 +35,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { useGraphStore } from "@/app/store/gridStore";
 import { getRandomEndNode, getRandomStartNode, getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
 import { getInitialEdges, getInitialNodes } from "@/app/utils/xyflowUtils/util";
+import { HelpCard } from "../help-card";
 
 const elk = new ELK();
 
@@ -62,6 +63,21 @@ const defaultEdgeOptions = {
         isReversed: false,
     }
 };
+
+
+const legends = [
+    { label: "Start Node", color: "bg-[#ADF7B6] dark:bg-[#C1FF9B]" },
+    { label: "End Node", color: "bg-[#FF7477] dark:bg-[#F25757]" },
+    {
+        label: "Shortest Path",
+        color: "bg-[#FAE588] dark:bg-[#F9DC5C]",
+    },
+    {
+        label: "Visited Node",
+        color: "bg-[#BFD8FF] dark:bg-[#7FA7D5]",
+    },
+    { label: "Unvisited", color: "bg-[#DEDEDE] dark:bg-[#999999]" },
+];
 
 export function NodeBasedGraph() {
     const { storeNodes, storeEdges, showWeights, map, showLabels, toggleLabels, addNode, setStoreNodes, setStoreEdges, toggleWeights, getID, clearNodePaths, setStart, setEnd } = useNodeStore();
@@ -333,6 +349,7 @@ export function NodeBasedGraph() {
                                     Beautify
                                 </Button>
                             )}
+                            <HelpCard legends={legends}/>
                         </div>
                     )}
                 </div>

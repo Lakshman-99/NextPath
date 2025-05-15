@@ -14,25 +14,10 @@ import { BadgeHelp } from "lucide-react";
 import { useGraphStore } from "@/app/store/gridStore";
 import { useMediaQuery } from "usehooks-ts";
 
-export function HelpCard() {
+export function HelpCard({ legends }: { legends: { label: string; color: string }[] }) {
     const { cellSize } = useGraphStore();
     const [open, setOpen] = React.useState(false);
     const isMobile = useMediaQuery("(max-width: 768px)");
-
-    const legends = [
-        { label: "Start Node", color: "bg-[#ADF7B6] dark:bg-[#C1FF9B]" },
-        { label: "End Node", color: "bg-[#FF7477] dark:bg-[#F25757]" },
-        { label: "Wall", color: "bg-[#DEDEDE] dark:bg-[#999999]" },
-        {
-            label: "Shortest Path",
-            color: "bg-[#FAE588] dark:bg-[#F9DC5C]",
-        },
-        {
-            label: "Visited Node",
-            color: "bg-[#BFD8FF] dark:bg-[#7FA7D5]",
-        },
-        { label: "Unvisited", color: "bg-transparent border border-muted" },
-    ];
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -41,7 +26,7 @@ export function HelpCard() {
                     variant="outline"
                     size={isMobile ? "icon" : "default"}
                     className="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md shadow-sm"
-                    id="help-card"
+                    id="legends-btn"
                 >
                     <BadgeHelp className="w-4 h-4" />
                     {isMobile ? "" : "Legends" }
