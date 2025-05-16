@@ -357,7 +357,7 @@ export function WelcomeDialog() {
                                             >
                                                 <FeatureCard
                                                     title="Map Visualization" 
-                                                    description="Visualize algorithms on USA, Europe, or custom geographic maps"
+                                                    description="Visualize algorithms on USA, Massachusetts, or custom geographic maps"
                                                     icon="Map"
                                                     color="bg-chart-2"
                                                     onClick={handleMapVisualization}

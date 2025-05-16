@@ -495,6 +495,9 @@ export function AppSidebar() {
                                             <SelectItem value="usa">
                                                 United States
                                             </SelectItem>
+                                            <SelectItem value="ma">
+                                                Massachusetts
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>

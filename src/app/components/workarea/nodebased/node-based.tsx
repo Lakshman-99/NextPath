@@ -34,6 +34,7 @@ import { Eye, EyeOff, LayoutDashboard, Route, Settings } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 import { useGraphStore } from "@/app/store/gridStore";
 import { getRandomEndNode, getRandomStartNode, getUSALinks, getUSANodes } from "@/app/utils/xyflowUtils/usa-map";
+import { getRandomMAStartNode, getRandomMAEndNode, getMANodes, getMALinks } from "@/app/utils/xyflowUtils/ma-map";
 import { getInitialEdges, getInitialNodes } from "@/app/utils/xyflowUtils/util";
 import { HelpCard } from "../help-card";
 
@@ -104,7 +105,10 @@ export function NodeBasedGraph() {
 
     const onConnectEnd: OnConnectEnd = useCallback(
         (event, connectionState) => {
-            if (!isFreeFlow) return; // Prevent connections in map mode
+            if (!isFreeFlow) {
+                fitView({ duration: 500 });
+                return; // Prevent connections in map mode
+            }
             if (!connectionState.isValid) {
                 const id = getID();
                 const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
@@ -148,7 +152,7 @@ export function NodeBasedGraph() {
                 });
             }
         },
-        [addNode, getID, isFreeFlow, screenToFlowPosition, setEdges, setNodes, setStoreEdges],
+        [addNode, getID, isFreeFlow, fitView, screenToFlowPosition, setEdges, setNodes, setStoreEdges],
     );
 
     const handleNodesChange: OnNodesChange = useCallback(
@@ -228,7 +232,7 @@ export function NodeBasedGraph() {
                 }
                 setStart(startNodeId ?? "0");
                 setEnd(endNodeId ?? "7");
-            } else if(storeNodes[0].data.label === "Vancouver") {
+            } else if(!(storeNodes[0].data.label as string).includes("Node")) {
                 setStoreNodes(getInitialNodes());
                 setStoreEdges(getInitialEdges());
                 setStart("0");
@@ -241,6 +245,13 @@ export function NodeBasedGraph() {
             setStoreEdges(getUSALinks());
             setStart(startNodeId ?? getRandomStartNode());
             setEnd(endNodeId ?? getRandomEndNode());
+        }
+
+        if (map === "ma") {
+            setStoreNodes(getMANodes());
+            setStoreEdges(getMALinks());
+            setStart(startNodeId ?? getRandomMAStartNode());
+            setEnd(endNodeId ?? getRandomMAEndNode());
         }
 
         fitView();
