@@ -45,7 +45,7 @@ import Image from "next/image";
 import logo from "@/assets/image/logo.png";
 import {useGraphStore, Maze, Algorithm} from "@/app/store/gridStore";
 import {getGridDefaults, getRowColBasedCellSize} from "../../utils/util";
-import {applyRandomMage, applyRecursiveDivision} from "@/app/utils/maze";
+import {applyRandomMaze, applyRandomTerrain, applyRecursiveDivision} from "@/app/utils/maze";
 import {applyBFSAlgorithm, applyBFSAlgorithmForNodes} from "@/app/utils/algorithms/bfs";
 import {applyDFSAlgorithm, applyDFSAlgorithmForNodes} from "@/app/utils/algorithms/dfs";
 import {useEffect, useState} from "react";
@@ -122,14 +122,12 @@ export function AppSidebar() {
         if (value === "none") {
             isMazed = true;
         } else if (value === "random") {
-            isMazed = await applyRandomMage();
+            isMazed = await applyRandomMaze();
+        } else if (value === "terrain") {
+            isMazed = await applyRandomTerrain();
         } else if (value === "recursive") {
-            isMazed = await applyRecursiveDivision("none");
-        } else if (value === "recursive-vertical") {
-            isMazed = await applyRecursiveDivision("vertical");
-        } else if (value === "recursive-horizontal") {
-            isMazed = await applyRecursiveDivision("horizontal");
-        }
+            isMazed = await applyRecursiveDivision();
+        } 
         setIsSettingsDisabled(! isMazed);
         setLoading(false);
     };
@@ -419,14 +417,11 @@ export function AppSidebar() {
                                             <SelectItem value="random">
                                                 Random Maze
                                             </SelectItem>
+                                            <SelectItem value="terrain">
+                                                Random Terrain
+                                            </SelectItem>
                                             <SelectItem value="recursive">
-                                                Recursive Division
-                                            </SelectItem>
-                                            <SelectItem value="recursive-vertical">
-                                                Recursive Vertical Division
-                                            </SelectItem>
-                                            <SelectItem value="recursive-horizontal">
-                                                Recursive Horizontal Division
+                                                Random Division
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>

@@ -18,7 +18,7 @@ import { HelpCard } from "../help-card";
 const legends = [
     { label: "Start Node", color: "bg-[#ADF7B6] dark:bg-[#C1FF9B]" },
     { label: "End Node", color: "bg-[#FF7477] dark:bg-[#F25757]" },
-    { label: "Wall", color: "bg-[#DEDEDE] dark:bg-[#999999]" },
+    { label: "Obstacle", color: "bg-[#DEDEDE] dark:bg-[#999999]" },
     {
         label: "Shortest Path",
         color: "bg-[#FAE588] dark:bg-[#F9DC5C]",

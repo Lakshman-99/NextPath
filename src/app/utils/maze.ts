@@ -2,8 +2,9 @@
 
 import { Position, Node } from "../store/gridStore";
 import { useGraphStore } from "../store/gridStore";
+import { createNoise2D } from "simplex-noise";
 
-export async function applyRandomMage(): Promise<boolean> {
+export async function applyRandomMaze(): Promise<boolean> {
     const { grid, rows, cols, startNode, endNode, speed, toggleWall } =
         useGraphStore.getState();
 
@@ -86,9 +87,7 @@ async function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function applyRecursiveDivision(
-    orientation: string
-): Promise<boolean> {
+export async function applyRecursiveDivision(): Promise<boolean> {
     const { grid, rows, cols, startNode, endNode, speed, toggleWall } =
         useGraphStore.getState();
     const walls: Position[] = [];
@@ -244,19 +243,65 @@ export async function applyRecursiveDivision(
     }
 
     // start the recursive build on the inner area
-    const initialOrientation =
-        orientation !== "none"
-            ? orientation
-            : cols < rows
-            ? "horizontal"
-            : rows < cols
-            ? "vertical"
-            : Math.random() < 0.5
-            ? "horizontal"
-            : "vertical";
+    const initialOrientation = Math.random() < 0.5 ? "horizontal" : "vertical";
 
     recursiveDivision(1, rows - 2, 1, cols - 2, initialOrientation, false);
     await addWallsWithDelay(grid, walls, speed, toggleWall);
 
+    return true;
+}
+
+export async function applyRandomTerrain(): Promise<boolean> {
+    const { grid, rows, cols, startNode, endNode, speed, toggleWall } =
+        useGraphStore.getState();
+
+    const newWalls: Position[] = [];
+    const SCALE = 0.1; // zoom of the noise
+    const OCTAVES = 10; // how many layers of noise
+    const PERSISTENCE = 0.5; // amplitude falloff per octave
+    const THRESHOLD = 0.05; // cutoff for land (wall) vs water
+
+    const simplex = createNoise2D();
+
+    // fractal (multi‐octave) noise
+    function fractalNoise(x: number, y: number) {
+        let amplitude = 1;
+        let frequency = 1;
+        let sum = 0;
+        let max = 0;
+
+        for (let o = 0; o < OCTAVES; o++) {
+            sum += amplitude * simplex(x * frequency, y * frequency);
+            max += amplitude;
+            amplitude *= PERSISTENCE;
+            frequency *= 2;
+        }
+
+        return sum / max;
+    }
+
+    // ——— Build islands as walls ———
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            // Skip the start and end nodes
+            if ((row === startNode.row && col === startNode.col) || (row === endNode.row && col === endNode.col)) {
+                continue;
+            }
+            const nx = col * SCALE;
+            const ny = row * SCALE;
+            const noiseVal = fractalNoise(nx, ny);
+
+            // radial fade so edges tend to be water
+            const dx = col / cols - 0.5;
+            const dy = row / rows - 0.5;
+            const dist = Math.sqrt(dx * dx + dy * dy) / Math.sqrt(0.5);
+            const islandFactor = 1 - dist;
+
+            if (noiseVal * islandFactor > THRESHOLD) {
+                newWalls.push({ row, col });
+            }
+        }
+    }
+    await addWallsWithDelay(grid, newWalls, speed, toggleWall);
     return true;
 }

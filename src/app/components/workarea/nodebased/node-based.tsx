@@ -69,6 +69,7 @@ const defaultEdgeOptions = {
 const legends = [
     { label: "Start Node", color: "bg-[#ADF7B6] dark:bg-[#C1FF9B]" },
     { label: "End Node", color: "bg-[#FF7477] dark:bg-[#F25757]" },
+    { label: "Obstacle", color: "bg-[#A3A3A3] dark:bg-[#4A4A4A]" },
     {
         label: "Shortest Path",
         color: "bg-[#FAE588] dark:bg-[#F9DC5C]",
