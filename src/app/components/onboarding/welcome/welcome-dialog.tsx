@@ -69,6 +69,7 @@ export function WelcomeDialog() {
     // Button handlers
     const handleStart = () => {
         setType("grid");
+        setMap("freeFlow");
         startOnborda("onboarding-tour");
         setDialogOpen(false);
     };

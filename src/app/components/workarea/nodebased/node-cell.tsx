@@ -1,6 +1,6 @@
 import { Handle, Position, useConnection } from "@xyflow/react";
 import { memo } from "react";
-import { Move, PlaneTakeoff, Trash2, LandPlot } from "lucide-react";
+import { Move, PlaneTakeoff, Trash2, LandPlot, CloudOff, Cloudy } from "lucide-react";
 import {
     ContextMenu,
     ContextMenuContent,
@@ -11,7 +11,7 @@ import { Data, useNodeStore } from "@/app/store/nodeStore";
 
 export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data: Data }) {
     const { isStart, isEnd, isPath, isWall, visited } = data;
-    const { map, showLabels, setStart, setEnd, deleteNode } = useNodeStore();
+    const { map, showLabels, setStart, setEnd, deleteNode, toggleWall } = useNodeStore();
 
     const connection = useConnection();
     const isTarget = connection.inProgress && connection.fromNode.id !== id;
@@ -22,7 +22,7 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
         : isEnd
         ? "bg-[#FF7477] dark:bg-[#F25757] "
         : isWall
-        ? "bg-[#DEDEDE] dark:bg-[#999999] "
+        ? "bg-[#A3A3A3] dark:bg-[#4A4A4A] "
         : isPath
         ? "bg-[#FAE588] dark:bg-[#F9DC5C] animate-short-path dark:animate-short-path-dark"
         : visited
@@ -33,6 +33,8 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
             <PlaneTakeoff className="h-5 w-5 animate-pulse" color="#000000" />
         ) : isEnd ? (
             <LandPlot className="h-5 w-5 animate-pulse" color="#000000" />
+        ) : isWall ? (
+            <Cloudy className="h-5 w-5" color="#000000" />
         ) : null;
 
     const animateClass = isStart ? "motion-safe:animate-ping bg-green-200 dark:bg-green-400" : isEnd ? "motion-safe:animate-ping bg-red-200 dark:bg-red-400" : "";
@@ -91,6 +93,19 @@ export const NodeCell = memo(function NodeCell({ id, data }: { id: string, data:
                 <ContextMenuItem onClick={() => setEnd(id)}>
                     <LandPlot className="h-4 w-4 mr-2" />
                     Set as End
+                </ContextMenuItem>
+                <ContextMenuItem onClick={() => toggleWall(id)}>
+                    {isWall ? (
+                        <>
+                            <CloudOff className="h-4 w-4 mr-2" />
+                            Remove Obstacle
+                        </>
+                    ) : (
+                        <>
+                            <Cloudy className="h-4 w-4 mr-2" />
+                            Mark as Obstacle
+                        </>
+                    )}
                 </ContextMenuItem>
                 {isFreeFlow && (
                     <ContextMenuItem onClick={() => deleteNode(id)}>

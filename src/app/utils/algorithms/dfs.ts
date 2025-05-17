@@ -75,8 +75,8 @@ export async function applyDFSAlgorithm(): Promise<boolean> {
     return true;
 }
 
-function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, visitedNodesInOrder: string[], path: string[], adjacencyList: Map<string, {neighbor: string;weight: number;}[]>, EndNodeId: string): boolean {
-    if(visited[node]) {
+function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, visitedNodesInOrder: string[], path: string[], adjacencyList: Map<string, {neighbor: string;weight: number;}[]>, EndNodeId: string, walls: string[]): boolean {
+    if(visited[node] || walls.includes(node)) {
         return false;
     }
     if (node === EndNodeId) {
@@ -90,7 +90,7 @@ function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, vi
     
     const neighbors = adjacencyList.get(node) || [];
     for (const neighbor of neighbors) {
-        if (dfsHelperForNodes(neighbor.neighbor, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId)) {
+        if (dfsHelperForNodes(neighbor.neighbor, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId, walls)) {
             return true;
         }
     }
@@ -102,6 +102,7 @@ function dfsHelperForNodes(node: string, visited: { [key: string]: boolean }, vi
 export async function applyDFSAlgorithmForNodes(): Promise<boolean> {
     const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
 
+    const walls: string[] = storeNodes.filter((node) => node.data.isWall).map((node) => node.id);
     const adjacencyList = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
     const visitedNodesInOrder: string[] = [];
     const path: string[] = [];
@@ -112,7 +113,7 @@ export async function applyDFSAlgorithmForNodes(): Promise<boolean> {
     for (const node of adjacencyList.get(StartNodeId)!) {
         path.push(StartNodeId);
 
-        if (dfsHelperForNodes(node.neighbor, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId)) {
+        if (dfsHelperForNodes(node.neighbor, visited, visitedNodesInOrder, path, adjacencyList, EndNodeId, walls)) {
             isEndReached = true;
             break;
         }

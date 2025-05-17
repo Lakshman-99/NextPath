@@ -93,6 +93,7 @@ export async function applyBFSAlgorithmForNodes(): Promise<boolean> {
     const { storeNodes, storeEdges, n_isDirected, StartNodeId, EndNodeId, n_speed, toggleVisited, togglePath, toggleAnimatedEdge, toggleEdgeReverse } = useNodeStore.getState();
 
     const adjacencyList = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
+    const walls: string[] = storeNodes.filter((node) => node.data.isWall).map((node) => node.id);
 
     const queue: string[] = [StartNodeId];
     const visited: { [key: string]: boolean } = { [StartNodeId]: true };
@@ -103,6 +104,10 @@ export async function applyBFSAlgorithmForNodes(): Promise<boolean> {
     while (queue.length > 0) {
         const currentNodeId = queue.shift()!;
         visitedNodesInOrder.push(currentNodeId);
+
+        if (walls.includes(currentNodeId)) {
+            continue;
+        }
 
         if (currentNodeId === EndNodeId) {
             endReached = true;

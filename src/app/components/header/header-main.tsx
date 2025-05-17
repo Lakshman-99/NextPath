@@ -20,9 +20,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Menu, Rocket } from "lucide-react";
 import { useOnborda } from "onborda";
+import { useNodeStore } from "@/app/store/nodeStore";
 
 export function Header() {
     const { type, setType } = useGraphStore();
+    const { setMap } = useNodeStore();
     const isMatrix = type === "grid";
     const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -30,6 +32,7 @@ export function Header() {
 
     const handleStart = () => {
         setType("grid");
+        setMap("freeFlow");
         startOnborda("onboarding-tour");
     };
 
