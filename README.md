@@ -10,10 +10,17 @@ Welcome to **NextPath**, the **developer-first graph algorithm visualizer** that
 
 ## 🎥 Sneak Peek
 
-| **Grid Mode** | **Network Mode** |
-|---------------|------------------|
-| ![Grid Mode](./src/assets/image/demo-grid.gif) | ![Network Mode](./src/assets/image/demo-graph.gif) |
-| *A* blazing through an interactive grid with island terrain* | *Traversing the USA map from Vancouver to Miami with A** |
+Explore NextPath’s dynamic visualizations in action:
+
+<div align="center">
+  <h3>Grid Mode</h3>
+  <img src="./src/assets/image/demo-grid.gif" alt="Grid Mode" width="800"/>
+  <p><em>A* blazing through an interactive grid with island terrain</em></p>
+
+  <h3>Network Mode</h3>
+  <img src="./src/assets/image/demo-graph.gif" alt="Network Mode" width="800"/>
+  <p><em>Traversing the USA map from Vancouver to Miami with A*</em></p>
+</div>
 
 ---
 
