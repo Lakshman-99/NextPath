@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from './components/theme-provider';
+import { Analytics } from "@vercel/analytics/next"
 import { AppWrapper } from "./app-wrapper";
 
 import "@xyflow/react/dist/style.css";
@@ -88,6 +89,7 @@ export default function RootLayout({children, }: Readonly<{children: React.React
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AppWrapper>
               {children}
+              <Analytics />
           </AppWrapper>
         </ThemeProvider>
       </body>
