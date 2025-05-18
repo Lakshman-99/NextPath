@@ -14,7 +14,7 @@ Explore NextPath’s dynamic visualizations in action:
 
 <div align="center">
   <h3>Grid Mode</h3>
-  <img src="./src/assets/image/demo-grid.gif" alt="Grid Mode" width="800"/>
+  <img src="./src/assets/image/grid1.gif" alt="Grid Mode" width="800"/>
   <p><em>A* blazing through an interactive grid with island terrain</em></p>
 
   <h3>Network Mode</h3>
