@@ -1,7 +1,7 @@
 "use client";
 
-import { Position, Node } from "../store/gridStore";
-import { useGraphStore } from "../store/gridStore";
+import { Position, Node } from "../../store/gridStore";
+import { useGraphStore } from "../../store/gridStore";
 import { createNoise2D } from "simplex-noise";
 
 export async function applyRandomMaze(): Promise<boolean> {
@@ -284,7 +284,10 @@ export async function applyRandomTerrain(): Promise<boolean> {
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
             // Skip the start and end nodes
-            if ((row === startNode.row && col === startNode.col) || (row === endNode.row && col === endNode.col)) {
+            if (
+                (row === startNode.row && col === startNode.col) ||
+                (row === endNode.row && col === endNode.col)
+            ) {
                 continue;
             }
             const nx = col * SCALE;

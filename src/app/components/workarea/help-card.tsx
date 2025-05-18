@@ -11,13 +11,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { BadgeHelp } from "lucide-react";
-import { useGraphStore } from "@/app/store/gridStore";
 import { useMediaQuery } from "usehooks-ts";
 
 export function HelpCard({ legends }: { legends: { label: string; color: string }[] }) {
-    const { cellSize } = useGraphStore();
     const [open, setOpen] = React.useState(false);
     const isMobile = useMediaQuery("(max-width: 768px)");
+    const cellSize = 20;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
