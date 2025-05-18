@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     siteName: "NextPath",
     images: [
       {
-        url: "https://raw.githubusercontent.com/Lakshman-99/NextPath/refs/heads/main/src/assets/image/screenshot.png", // create a nice preview image
+        url: "/screenshot.png", // create a nice preview image
         width: 1200,
         height: 630,
       },
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NextPath - Interactive Graph Algorithm Playground",
     description: "Visualize graph algorithms like A*, Dijkstra, and BFS in real-time.",
-    images: ["https://raw.githubusercontent.com/Lakshman-99/NextPath/refs/heads/main/src/assets/image/screenshot.png"],
+    images: ["/screenshot.png"],
   },
 };
 
