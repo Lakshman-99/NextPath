@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "NextPath - Interactive Graph Algorithm Playground",
-    description: "Simulate A*, Dijkstra, BFS, and DFS with NextPath’s real-time graph playground. Build and share custom graphs!'",
+    description: "Simulate A*, Dijkstra, BFS, and DFS with NextPath’s real-time graph playground. Build and share custom graphs!",
     url: "https://nextpath-algo.vercel.app",
     siteName: "NextPath",
     images: [
