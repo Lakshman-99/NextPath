@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NextPath - Interactive Graph Algorithm Visualizer",
+  title: "NextPath - Interactive Graph Algorithm Playground",
   description: "Visualize and explore graph algorithms like A*, Dijkstra, BFS, and DFS through interactive simulations built with Next.js, React Flow, and Tailwind CSS.",
   keywords: [
     "Graph Algorithm Visualizer",
@@ -43,14 +43,27 @@ export const metadata: Metadata = {
     "Visual Learning Algorithms",
     "Tailwind CSS UI Graph",
   ],
+  authors: [{ name: 'Lakshman Siva', url: 'https://lakshman-io.vercel.app' }],
+  creator: 'Lakshman Siva',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
     title: "NextPath - Interactive Graph Algorithm Playground",
-    description: "Learn and experiment with graph traversal algorithms through intuitive, animated simulations.",
+    description: "Simulate A*, Dijkstra, BFS, and DFS with NextPath’s real-time graph playground. Build and share custom graphs!'",
     url: "https://nextpath-algo.vercel.app",
     siteName: "NextPath",
     images: [
       {
-        url: "https://github.com/Lakshman-99/NextPath/blob/main/src/assets/image/screenshot.png", // create a nice preview image
+        url: "https://raw.githubusercontent.com/Lakshman-99/NextPath/refs/heads/main/src/assets/image/screenshot.png", // create a nice preview image
         width: 1200,
         height: 630,
       },
@@ -61,7 +74,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "NextPath - Interactive Graph Algorithm Playground",
     description: "Visualize graph algorithms like A*, Dijkstra, and BFS in real-time.",
-    images: ["https://nextpath-algo.vercel.app/og-preview.png"],
+    images: ["https://raw.githubusercontent.com/Lakshman-99/NextPath/refs/heads/main/src/assets/image/screenshot.png"],
   },
 };
 
