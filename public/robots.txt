@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://nextpath-algo.vercel.app
+
+# Sitemaps
+Sitemap: https://nextpath-algo.vercel.app/sitemap.xml
