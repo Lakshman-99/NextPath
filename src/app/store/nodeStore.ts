@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { Edge, Node } from "@xyflow/react";
 import { produce } from "immer";
 import { getInitialEdges, getInitialNodes } from "../utils/xyflowUtils/util";
-
-export type Algorithm = undefined | "bfs" | "dfs" | "dijkstra";
+import { Algorithm } from "./gridStore"
 
 export type Data = {
     label: string;

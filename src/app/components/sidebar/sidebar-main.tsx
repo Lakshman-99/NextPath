@@ -64,6 +64,7 @@ import {
     applyDijkstraAlgorithmForNodes,
 } from "@/app/utils/algorithms/dijkstra";
 import { useNodeStore } from "@/app/store/nodeStore";
+import { applyAStarAlgorithm } from "@/app/utils/algorithms/astart";
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
@@ -177,9 +178,9 @@ export function AppSidebar() {
             } else if (algorithm === "dfs") {
                 isVisualized = await applyDFSAlgorithm();
             } else if (algorithm === "dijkstra") {
-                setWeighted(true);
-                setRandomWeights();
                 isVisualized = await applyDijkstraAlgorithm();
+            } else if (algorithm === "aStar") {
+                isVisualized = await applyAStarAlgorithm();
             }
             setLoading(false);
             setIsSettingsDisabled(!isVisualized);
@@ -463,6 +464,9 @@ export function AppSidebar() {
                                                     <SelectItem value="dijkstra">
                                                         Dijkstra&rsquo;s
                                                         Algorithm
+                                                    </SelectItem>
+                                                    <SelectItem value="aStar">
+                                                        A* Algorithm
                                                     </SelectItem>
                                                 </SelectContent>
                                             </Select>

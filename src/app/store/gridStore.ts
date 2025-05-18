@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { produce } from "immer";
 
 export type GraphType = "grid" | "node";
-export type Algorithm = undefined | "bfs" | "dfs" | "dijkstra";
+export type Algorithm = undefined | "bfs" | "dfs" | "dijkstra" | "aStar";
 export type Maze = undefined | "none" | "random" | "terrain" | "recursive";
 export type Position = { row: number; col: number };
 export type Node = {
