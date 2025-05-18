@@ -103,7 +103,7 @@ export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
         return false;
     }
 
-    const walls: string[] = storeNodes.filter((node) => node.data.isWall).map((node) => node.id);
+    const walls = new Set<string>(storeNodes.filter((node) => node.data.isWall).map((node) => node.id));
     const adjacencyList = constructAdjacencyList(storeNodes, storeEdges, n_isDirected);
     const distances = new Map<string, number>();
     const previous  = new Map<string, string | null>();
@@ -141,7 +141,7 @@ export async function applyDijkstraAlgorithmForNodes(): Promise<boolean> {
         visited.add(current);
 
         for (const { neighbor, weight } of adjacencyList.get(current)!) {
-            if (visited.has(neighbor) || walls.includes(neighbor)) {
+            if (visited.has(neighbor) || walls.has(neighbor)) {
                 continue;
             }
             const alt = distances.get(current)! + weight;

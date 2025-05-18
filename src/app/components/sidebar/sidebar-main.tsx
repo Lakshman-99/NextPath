@@ -64,7 +64,7 @@ import {
     applyDijkstraAlgorithmForNodes,
 } from "@/app/utils/algorithms/dijkstra";
 import { useNodeStore } from "@/app/store/nodeStore";
-import { applyAStarAlgorithm } from "@/app/utils/algorithms/astar";
+import { applyAStarAlgorithm, applyAStarAlgorithmForNodes } from "@/app/utils/algorithms/astar";
 
 export function AppSidebar() {
     const [highlightAlgorithm, setHighlightAlgorithm] = useState(false);
@@ -204,6 +204,8 @@ export function AppSidebar() {
                 isVisualized = await applyDFSAlgorithmForNodes();
             } else if (n_algorithm === "dijkstra") {
                 isVisualized = await applyDijkstraAlgorithmForNodes();
+            } else if (n_algorithm === "aStar") {
+                isVisualized = await applyAStarAlgorithmForNodes();
             }
             setLoading(false);
             setIsSettingsDisabled(!isVisualized);
