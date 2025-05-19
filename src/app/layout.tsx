@@ -77,6 +77,10 @@ export const metadata: Metadata = {
     description: "Visualize graph algorithms like A*, Dijkstra, and BFS in real-time.",
     images: ["/screenshot.png"],
   },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({children, }: Readonly<{children: React.ReactNode;}>) {
