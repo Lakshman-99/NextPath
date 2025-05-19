@@ -24,6 +24,7 @@ import {
     SunMoon,
     Repeat,
     BadgeHelp,
+    Coffee,
 } from "lucide-react";
 import React from "react";
 
@@ -319,6 +320,17 @@ export const getOnboardingSteps = (): Tour[] => {
                     pointerRadius: 11,
                 },
                 {
+                    selector: "#bmc-button",
+                    icon: React.createElement(Coffee),
+                    title: "Fuel the Journey!",
+                    content:
+                        "Love the app? Support its creator with a coffee! Every bit helps me build better tools and features.",
+                    side: "bottom-right",
+                    showControls: true,
+                    pointerPadding: 10,
+                    pointerRadius: 11,
+                },
+                {
                     selector: "#export-graph",
                     icon: React.createElement(Link),
                     title: "Share with a Click",
@@ -354,6 +366,6 @@ export const getOnboardingSteps = (): Tour[] => {
             ],
         },
     ];
-    
+
     return steps;
 };

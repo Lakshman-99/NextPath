@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, Rocket } from "lucide-react";
 import { useOnborda } from "onborda";
 import { useNodeStore } from "@/app/store/nodeStore";
+import BuyMeCoffeeImageButton from "./buymeacoffee";
 
 export function Header() {
     const { type, setType } = useGraphStore();
@@ -73,6 +74,7 @@ export function Header() {
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
+                            <BuyMeCoffeeImageButton />
                         </>
                     ) : (
                         <>
@@ -90,6 +92,7 @@ export function Header() {
                             </TooltipProvider>
                             <ModeToggle />
                             <ExportGraph />
+                            <BuyMeCoffeeImageButton />
                         </>
                     )}
             </div>
