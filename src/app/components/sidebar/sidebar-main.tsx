@@ -159,6 +159,7 @@ export function AppSidebar() {
         setHighlightAlgorithm(false);
     };
     const handleVisualize = async () => {
+        setSize(rows, cols);
         if (type === "grid") {
             if (algorithm === undefined) {
                 setHighlightAlgorithm(true);

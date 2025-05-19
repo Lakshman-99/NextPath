@@ -21,11 +21,11 @@ export const GridCell = memo(function GridCell({
     const { cellSize, setStartNode, setEndNode, toggleWall } =
         useGraphStore.getState();
     const updateCellType = (type: "start" | "end" | "wall") => {
-        if (type === "start") {
+        if (type === "start" && !isWall) {
             setStartNode(row, col);
-        } else if (type === "end") {
+        } else if (type === "end" && !isWall) {
             setEndNode(row, col);
-        } else {
+        } else if (type === "wall") {
             toggleWall(row, col);
         }
     };
