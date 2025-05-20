@@ -314,7 +314,7 @@ export function AppSidebar() {
                                 onClick={() => setType("node")}
                             >
                                 <Waypoints className="h-4 w-4" />
-                                Node-Based
+                                Network-Based
                             </TabsTrigger>
                         </TabsList>
                         <div className="relative z-10 h-full">
