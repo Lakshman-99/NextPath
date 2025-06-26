@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 const config = {
-    siteUrl: "https://nextpath-algo.vercel.app",
+    siteUrl: "https://nexpath.lakshman.me",
     generateRobotsTxt: true,
     generateIndexSitemap: false,
     outDir: "./public",

@@ -2,9 +2,9 @@
 
 > Built with ⚙️ **Next.js 15** · 🧠 **React Flow** · 🎯 **TypeScript** · 🎨 **Tailwind CSS v4**
 
-Welcome to **NextPath**, the **developer-first graph algorithm visualizer** that’s anything but ordinary. This isn’t just a tool—it’s a **real-time, interactive graph engine** designed to help you **simulate, test, and master graph algorithms** with unparalleled clarity. Whether you’re debugging A*, exploring BFS, or crafting custom graphs, NextPath turns theory into an **intuitive, hands-on experience**.
+Welcome to **NextPath**, the **developer-first graph algorithm visualizer** that’s anything but ordinary. This isn’t just a tool—it’s a **real-time, interactive graph engine** designed to help you **simulate, test, and master graph algorithms** with unparalleled clarity. Whether you’re debugging A\*, exploring BFS, or crafting custom graphs, NextPath turns theory into an **intuitive, hands-on experience**.
 
-🌟 **Try it live** → [nextpath-algo.vercel.app](https://nextpath-algo.vercel.app)
+🌟 **Try it live** → [nexpath.lakshman.me](https://nexpath.lakshman.me)
 
 ---
 
@@ -28,13 +28,13 @@ Explore NextPath’s dynamic visualizations in action:
 
 Forget static diagrams and boring textbooks. NextPath is your playground for graph algorithms, packed with features to spark your curiosity:
 
-- 🏗️ **Build graphs your way**: Drag, drop, and connect nodes with precision.
-- 🔄 **Grid or network? You choose**: Seamlessly switch modes to match your vibe.
-- 🎬 **Watch algorithms come alive**: Visualize A*, Dijkstra, BFS, and DFS with smooth animations.
-- 🌍 **Real-world templates**: Experiment with USA maps or custom regions.
-- 🌊 **Organic terrain generation**: Create solvable mazes with island-style walls.
-- 🌗 **Light or dark mode**: Customize themes, speed, weights, and directions.
-- 🔗 **Share your creations**: Export and collaborate with stateful URLs.
+-   🏗️ **Build graphs your way**: Drag, drop, and connect nodes with precision.
+-   🔄 **Grid or network? You choose**: Seamlessly switch modes to match your vibe.
+-   🎬 **Watch algorithms come alive**: Visualize A\*, Dijkstra, BFS, and DFS with smooth animations.
+-   🌍 **Real-world templates**: Experiment with USA maps or custom regions.
+-   🌊 **Organic terrain generation**: Create solvable mazes with island-style walls.
+-   🌗 **Light or dark mode**: Customize themes, speed, weights, and directions.
+-   🔗 **Share your creations**: Export and collaborate with stateful URLs.
 
 Built for **performance, extensibility, and a slick UX**, NextPath is your go-to for mastering graphs.
 
@@ -44,13 +44,13 @@ Built for **performance, extensibility, and a slick UX**, NextPath is your go-to
 
 **Tech stack that packs a punch:**
 
-| Layer | Tech |
-|-------|------|
-| **Framework** | [Next.js 15 App Router](https://nextjs.org/) |
-| **UI** | [React Flow](https://reactflow.dev/), Tailwind CSS v4, Framer Motion |
-| **State** | Zustand |
-| **Typing** | TypeScript |
-| **Hosting** | Vercel |
+| Layer         | Tech                                                                 |
+| ------------- | -------------------------------------------------------------------- |
+| **Framework** | [Next.js 15 App Router](https://nextjs.org/)                         |
+| **UI**        | [React Flow](https://reactflow.dev/), Tailwind CSS v4, Framer Motion |
+| **State**     | Zustand                                                              |
+| **Typing**    | TypeScript                                                           |
+| **Hosting**   | Vercel                                                               |
 
 > This isn’t a toy—it’s a **modular, scalable system** ready for your wildest graph experiments.
 
@@ -60,12 +60,12 @@ Built for **performance, extensibility, and a slick UX**, NextPath is your go-to
 
 NextPath brings classic algorithms to life with vibrant visualizations:
 
-| Algorithm | Mode | Weighted | Directed |
-|-----------|------|----------|----------|
-| **A*** | Grid + Network | ✅ | ✅ |
-| **Dijkstra** | Grid + Network | ✅ | ✅ |
-| **BFS** | Grid + Network | ❌ | ✅ |
-| **DFS** | Grid + Network | ❌ | ✅ |
+| Algorithm    | Mode           | Weighted | Directed |
+| ------------ | -------------- | -------- | -------- |
+| **A\***      | Grid + Network | ✅       | ✅       |
+| **Dijkstra** | Grid + Network | ✅       | ✅       |
+| **BFS**      | Grid + Network | ❌       | ✅       |
+| **DFS**      | Grid + Network | ❌       | ✅       |
 
 🚀 **Coming soon**: Floyd-Warshall, Bellman-Ford, Topological Sort, Kruskal’s, and more!
 
@@ -73,12 +73,11 @@ NextPath brings classic algorithms to life with vibrant visualizations:
 
 ## ⚡ Power Features for Devs
 
-- 🎥 **Real-time animations**: Control traversal speed for crystal-clear insights.
-- 🧱 **Smart terrain generation**: Walls and mazes that always guarantee a solution.
-- 🌐 **Flexible graph types**: Freeform, grid-based, or location-driven maps.
-- 🧮 **Customizable graphs**: Tweak weights, directions, and adjacency models.
-- 🔄 **Share instantly**: Serialize graphs into URLs for easy collaboration.
-
+-   🎥 **Real-time animations**: Control traversal speed for crystal-clear insights.
+-   🧱 **Smart terrain generation**: Walls and mazes that always guarantee a solution.
+-   🌐 **Flexible graph types**: Freeform, grid-based, or location-driven maps.
+-   🧮 **Customizable graphs**: Tweak weights, directions, and adjacency models.
+-   🔄 **Share instantly**: Serialize graphs into URLs for easy collaboration.
 
 🔗 Open `http://localhost:3000` and start exploring!
 
@@ -88,17 +87,17 @@ NextPath brings classic algorithms to life with vibrant visualizations:
 
 We’re just getting started! Here’s what’s on the horizon:
 
-- ⛓️ **Full weighted directed graph support** for all algorithms.
-- 🧠 **AI-powered hints** to guide you through algorithms step-by-step.
-- 📦 **JSON exports** for real-world datasets.
-- 🧭 **New algorithms**: Floyd-Warshall, Bellman-Ford, Prim, Kruskal.
-- 📱 **Mobile app + PWA** for on-the-go graph fun.
+-   ⛓️ **Full weighted directed graph support** for all algorithms.
+-   🧠 **AI-powered hints** to guide you through algorithms step-by-step.
+-   📦 **JSON exports** for real-world datasets.
+-   🧭 **New algorithms**: Floyd-Warshall, Bellman-Ford, Prim, Kruskal.
+-   📱 **Mobile app + PWA** for on-the-go graph fun.
 
 ---
 
 ## 👨‍💻 Meet the Creator
 
-**[Lakshman Siva](https://lakshman-io.vercel.app/)** – Full-stack engineer, ML enthusiast, and visualization nerd.  
+**[Lakshman Siva](https://lakshman.me/)** – Full-stack engineer, ML enthusiast, and visualization nerd.  
 🔗 [GitHub](https://github.com/Lakshman-99) | [LinkedIn](https://linkedin.com/in/lakshman18)
 
 ---
@@ -119,7 +118,7 @@ Submit a PR and become a **NextPath legend**. Have suggestions? [Open an issue](
 
 **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**  
 ✅ Use, remix, and build upon NextPath for **non-commercial projects** with proper credit.  
-❌ Commercial use requires explicit permission.  
+❌ Commercial use requires explicit permission.
 
 Details → [creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
 

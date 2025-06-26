@@ -45,7 +45,7 @@ export function Header() {
 
                 <div className="flex flex-col overflow-hidden">
                     <h1 className="text-lg md:text-2xl font-extrabold tracking-tight truncate text-foreground max-w-[10rem] sm:max-w-[16rem] md:max-w-none">
-                        {isMatrix ? "Grid-Based Graph" : "Node-Based Graph"}
+                        {isMatrix ? "Grid-Based Graph" : "Network-Based Graph"}
                     </h1>
                     <p className="hidden sm:block text-[10px] md:text-xs font-medium text-muted-foreground truncate">
                         Build, visualize and explore algorithms interactively.

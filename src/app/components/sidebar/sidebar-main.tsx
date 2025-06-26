@@ -282,14 +282,16 @@ export function AppSidebar() {
     return (
         <Sidebar>
             <SidebarHeader className="flex shrink-0 items-center justify-center px-4">
-                <Image
-                    className="dark:invert"
-                    src={logo}
-                    alt="NextPath logo"
-                    width={200}
-                    height={40}
-                    priority
-                />
+                <a href="https://github.com/Lakshman-99/NextPath" target="_blank" rel="noopener noreferrer">
+                    <Image
+                        className="dark:invert"
+                        src={logo}
+                        alt="NextPath logo"
+                        width={200}
+                        height={40}
+                        priority
+                    />
+                </a>
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
